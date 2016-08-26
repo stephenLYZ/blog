@@ -27,7 +27,8 @@ a {
   .header .banner {
     position: relative; }
     .header .banner .banner-image {
-      width: 100%; }
+      width: 100%;
+      height: 350px; }
     .header .banner .avatar {
       width: 200px;
       height: 200px;
@@ -148,7 +149,7 @@ main.post {
     border-top: 1px solid #ebebeb;
     position: relative;
     margin-top: 50px;
-    padding-left: 110px;
+    padding-left: 140px;
     line-height: 1.7rem; }
   main.post .article-title {
     font-family: "Titillium Web", "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", sans-serif; }
@@ -317,7 +318,7 @@ pre .javascript .function {
   .archive .article:before {
     content: '';
     position: absolute;
-    height: 18%;
+    height: 20%;
     width: 6px;
     left: 150px;
     background: #3eb3a5; }
@@ -338,7 +339,8 @@ pre .javascript .function {
     top: 0; }
   .archive .article-title {
     display: inline-block;
-    vertical-align: middle; }
+    vertical-align: middle;
+    max-width: 70%; }
     .archive .article-title a {
       color: #afafaf; }
     .archive .article-title a:hover {
