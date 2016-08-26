@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Head tag -->
+
+<head>
+ 	 <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <title>初识WebPageTest（一） | hexo-theme-fresh</title>
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/favicon.ico" type="image/ico">
+
+    <!-- css files -->
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+
+    <!-- font -->
+	<link rel="stylesheet" type="text/css" href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css">
+</head>
+
+<body>
+	<!-- header -->
+	<header class="header">
+    <section class="banner">
+        <img class="banner-image" src="/img/banner.png" alt="banner">
+        <img class="avatar" src="/img/avatar.png" alt="avatar" >
+    </section>
+
+    <nav class="nav">
+    	<a href="/">Home </a>
+
+    	<a href="/archives">Archives</a>
+    </nav>
+    	
+    <div class="subtitle"> Just Do Heck!!! </div>
+    
+</header>
+
+	<!-- Main content -->
+	<main class="post">
+
+	<article>
+	<h1 class="article-title">
+	   初识WebPageTest（一）
+	</h1>
+
+	<section class="post-time">
+		<span class="post-date">07-27</span>
+	</section>
+
+	<section class="article-entry">
+	    <p>基本上在讨论网站性能分析工具的时候，就一定会提到<a href="http://www.webpagetest.org" target="_blank" rel="external">WebpageTest</a>这个工具，顾名思义，它的核心是测量以及分析一个网站的性能，下面以我参与的一个产品<a href="book.muxistudio.com">木犀图书</a>为例，介绍一下WebPageTest的内容。  </p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>当你输入你想要测量的网站后，等待一段时间（可能是喝一口咖啡的时间），就会出现网站一些关键数据信息的展示，右上角是对一些重要的性能优化评分，其中包括Keep-alive Enabled、Compress Text、Compress Images、Cache Static Content、Combine JS/CSS Files以及Use of CDN。<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage1.png" alt="">  </p>
+<ul>
+<li>下方就是一些关键的数据信息展示，包含 Load Time、First Byte、Start Render、DOM Elements 等 ，其中最大的特点就是会分为 <strong>首次加载以及再次加载</strong></li>
+</ul>
+<blockquote>
+<p>note: 首次加载是指浏览器中的缓存以及cookie全部清除，即第一次浏览该网页；再次加载是指在首次加载的基础上没有清除任何东西的加载网页。</p>
+</blockquote>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage2.png" alt="">  </p>
+<ul>
+<li>除此之外，detail选项中会展现每个请求不同阶段占用时间对比，类似于Chrome浏览器的瀑布流，以及每个请求的 detail、request、response、object 信息。</li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage3.png" alt="">  </p>
+<ul>
+<li>Performance Review,一些刚提过的必要性能检查，关于每个性能的解释可以查看<a href="https://sites.google.com/a/webpagetest.org/docs/using-webpagetest/quick-start-quide#TOC-Optimization-Grades:" target="_blank" rel="external">文档</a>  </li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage4.png" alt=""></p>
+<ul>
+<li>Content breakdown, 不同资源的请求数以及请求类型 </li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage5.png" alt=""></p>
+<ul>
+<li>Domains,域名分析，域名越多消耗的 DNS 查询时间就越长。由于这个产品只有一个域名，所以只显示一个</li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage6.png" alt=""></p>
+<p>个人认为，这个工具的优点有这几点:</p>
+<ul>
+<li>内容上，首次加载以及再次加载的对比可以让性能优化更具有针对性，测量标准也是按照最佳实践，比如Compress Images、Cache Static Content等。</li>
+<li>展示上，各项加载时间指标以及图表、瀑布图的使用让数据更为直观。</li>
+</ul>
+
+	</section>	
+</article>
+
+	
+</main>
+
+	<!-- footer -->
+	<footer>
+	<div class="social">
+		<a href="">
+			<i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="https://github.com/stephenLYao">
+			<i class="fa fa-github fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="">
+			<i class="fa fa-weibo fa-2x" aria-hidden="true"></i>
+		</a>
+	</div>
+	<p>@2016.Power by <a rel="nofollow"  href="https://hexo.io">Hexo</a>. Theme <a rel="nofollow" href="https://github.com/stephenLYao/hexo-theme-fresh.git">fresh</p>
+</footer>
+</body>
+</html>

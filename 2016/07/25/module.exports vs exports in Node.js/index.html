@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Head tag -->
+
+<head>
+ 	 <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <title>Module.exports vs Exports in Node.js | hexo-theme-fresh</title>
+    <!-- Favicon, (keep icon in root folder) -->
+    <link rel="Shortcut Icon" href="/favicon.ico" type="image/ico">
+
+    <!-- css files -->
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+
+    <!-- font -->
+	<link rel="stylesheet" type="text/css" href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css">
+</head>
+
+<body>
+	<!-- header -->
+	<header class="header">
+    <section class="banner">
+        <img class="banner-image" src="/img/banner.png" alt="banner">
+        <img class="avatar" src="/img/avatar.png" alt="avatar" >
+    </section>
+
+    <nav class="nav">
+    	<a href="/">Home </a>
+
+    	<a href="/archives">Archives</a>
+    </nav>
+    	
+    <div class="subtitle"> Just Do Heck!!! </div>
+    
+</header>
+
+	<!-- Main content -->
+	<main class="post">
+
+	<article>
+	<h1 class="article-title">
+	   Module.exports vs Exports in Node.js
+	</h1>
+
+	<section class="post-time">
+		<span class="post-date">07-25</span>
+	</section>
+
+	<section class="article-entry">
+	    <p>最近在折腾node.js的时候，经常会看到类似<code>exports.xxx = yyy</code>以及<code>module.exports = yyy</code>这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？<br>关于两者的区别，了解了下面几点就会非常的清楚:</p>
+<ul>
+<li><code>exports</code> 是 <code>module.exports</code> 的一个引用 <code>exports = module.exports = {}</code></li>
+<li><code>require()</code>返回的是<code>module.exports</code> 而不是 <code>exports</code></li>
+<li><code>exports.xxx</code> 相当于在导出对象上挂属性，该属性对调用模块直接可见</li>
+<li><code>exports =</code>相当于给exports对象重新赋值，调用模块不能访问<code>exports</code> 对象及其属性</li>
+<li>如果此模块是一个类，就应该直接赋值给<code>module.exports</code>,这样调用者就是一个类构造器，可以直接使用new实例化；如果只导出简单的属性，可以直接挂载到<code>exports</code>上</li>
+</ul>
+<p>比如以下代码计算圆的面积：</p>
+<p><strong>使用exports</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// circle.js</span></div><div class="line">exports.area = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125; ;</div><div class="line"></div><div class="line"><span class="comment">//app.js</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> circle = <span class="built_in">require</span>(<span class="string">'./circle'</span>)</div><div class="line"><span class="built_in">console</span>.log(circle.area(<span class="number">2</span>))</div><div class="line"></div><div class="line"><span class="comment">//输出 '12'</span></div></pre></td></tr></table></figure>
+<p><strong>使用module.exports</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// area.js</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//app.js</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> area = <span class="built_in">require</span>(<span class="string">'./area'</span>)</div><div class="line"><span class="built_in">console</span>.log(area(<span class="number">2</span>))</div><div class="line"></div><div class="line"><span class="comment">//输出 '12'</span></div></pre></td></tr></table></figure>
+<p>两者输出是一样的，因为<code>exports</code>是<code>module.exports</code>的一个引用，所以两者指向的内存地址是一样的，可是如果你这样写:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// area.js</span></div><div class="line">exports = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//app.js</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> area = <span class="built_in">require</span>(<span class="string">'./area'</span>)</div><div class="line"><span class="built_in">console</span>.log(area(<span class="number">2</span>))</div><div class="line"></div><div class="line"><span class="comment">//输出 'TypeError: object is not a function'</span></div></pre></td></tr></table></figure>
+<p>我们可以看到是报错的，原因在于，之前说过<code>require()</code>返回的只是<code>module.exports</code>,而<code>exports</code>是<code>module.exports</code>的一个引用，上面代码给<code>exports</code>重新赋值，使其指向了新的内存地址，此时<code>exports</code>和<code>module.exports</code>毫无关系，也就是说此时<code>module.exports</code>的值为默认值{}，所以导出的是一个空对象。   </p>
+<p>也就是说，<code>module.exports</code>才是关键，而<code>exports</code>只是起辅助的作用,最终导出来的是<code>module.exports</code>上挂载的对象，当<code>module.exports</code>没有任何值时，<code>exports</code>挂载的属性会赋值给<code>module.exports</code>, 当<code>module.exports</code>具有挂载的对象时，<code>exports</code>上的所有值会被忽略，比如以下代码只输出了<code>module.exports</code>所挂载的属性:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//rock.js</span></div><div class="line"><span class="built_in">module</span>.exports.name = <span class="string">'Stephen'</span></div><div class="line">exports.name = <span class="string">'Mike'</span></div><div class="line"></div><div class="line"><span class="comment">//app.js</span></div><div class="line"><span class="keyword">var</span> rock = <span class="built_in">require</span>(<span class="string">'./rock.js'</span>)</div><div class="line">rock.name</div><div class="line"></div><div class="line"><span class="comment">//输出</span></div><div class="line"><span class="string">'Stephen'</span></div></pre></td></tr></table></figure>
+<p>总结一下:</p>
+<ul>
+<li>如果要导出非对象接口（属性），可以直接使用<code>exports</code></li>
+<li>如果要导出对象接口(类)，应该将其挂载到<code>module.exports</code>上面，从而可以直接让调用者new实例化对象</li>
+</ul>
+<p>参考：<br><a href="https://cnodejs.org/topic/5231a630101e574521e45ef8" target="_blank" rel="external">exports 和 module.exports 的区别</a><br><a href="http://www.hacksparrow.com/node-js-exports-vs-module-exports.html" target="_blank" rel="external">node-js-exports-vs-module-exports</a><br><a href="http://www.ghostchina.com/module-exports-and-exports-in-node-js/" target="_blank" rel="external">module-exports-and-exports-in-node-js</a></p>
+
+	</section>	
+</article>
+
+	
+</main>
+
+	<!-- footer -->
+	<footer>
+	<div class="social">
+		<a href="">
+			<i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="https://github.com/stephenLYao">
+			<i class="fa fa-github fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="">
+			<i class="fa fa-weibo fa-2x" aria-hidden="true"></i>
+		</a>
+	</div>
+	<p>@2016.Power by <a rel="nofollow"  href="https://hexo.io">Hexo</a>. Theme <a rel="nofollow" href="https://github.com/stephenLYao/hexo-theme-fresh.git">fresh</p>
+</footer>
+</body>
+</html>

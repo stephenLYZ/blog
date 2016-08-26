@@ -1,0 +1,60 @@
+<!DOCTYPE html><html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>Web Real-time Connection | Stephen'blog</title><link rel="stylesheet" type="text/css" href="/css/normalize.css"><link rel="stylesheet" type="text/css" href="/css/highlight.css"><link rel="stylesheet" type="text/css" href="/css/very-simple.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"></head><body><!-- include the sidebar--><!-- include ./includes/sidebar.jade--><!-- Blog title and subtitle--><header><div class="container header"><a id="logo" href="/." class="title">Stephen'blog</a><span class="subtitle">Just do It</span><label id="toggle-menu" for="menu" onclick><i class="fa fa-bars"></i></label></div></header><!-- use checkbox hack for toggle nav-bar on small screens--><input id="menu" type="checkbox"><!-- Navigation Links--><nav id="nav"><div class="container"><a href="/" class="sidebar-nav-item active">Home</a><a href="/archives" class="sidebar-nav-item">Archives</a></div></nav><div id="header-margin-bar"></div><!-- gallery that comes before the header--><div class="wrapper"><div class="container post-header"><h1>Web Real-time Connection</h1></div></div><div class="wrapper"><div class="container meta"><div class="post-time">2016-08-02</div><div class="post-tags"><a class="post-tag-link" href="/tags/Web/">Web</a></div></div></div><article><div class="container post"><p>本文是对几种web实时通信进行简单的总结，笔者水平有限，仅供参考。</p>
+<h3 id="Ajax-long-polling"><a href="#Ajax-long-polling" class="headerlink" title="Ajax long polling"></a>Ajax long polling</h3><p>关于web实时通信，通常是使用长轮询或者长连接这种方式。<br>而传统的轮询方式是客户端定时(一般使用setInterval)向服务器发送ajax请求，服务器收到请求后马上响应信息。这种方式在客户端和服务端都很好实现，但是会造成很多无用的请求，当服务器没有可返回的数据时，这次请求就浪费了。<br>而长轮询，则是客户端向服务器发送Ajax请求，<strong>服务器接到请求后保持住连接</strong>，直到有新消息才返回响应信息，客户端处理完响应信息后再向服务器发送新的请求。<br>当然使用长轮询，客户端和服务端需要具备以下的条件:  </p>
+<ul>
+<li>客户端在收到服务器的响应后，需要向服务器发送新的请求，从而达到轮询的效果  </li>
+<li>服务器端要能够一直保持住客户端的请求，直到有响应消息；同时服务器对请求的处理要支持非阻塞模式  </li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/websocket1.png" alt=""></p>
+<h3 id="Server-sent-Events-SSE"><a href="#Server-sent-Events-SSE" class="headerlink" title="Server-sent Events(SSE)"></a>Server-sent Events(SSE)</h3><p>SSE是HTML5规范的一个组成部分，简单点说，就是客户端向服务端发送一个HTTP请求，然后服务端不断<strong>单向</strong>地向客户端推送信息(message)。这种信息在格式上也很简单，就是“信息”加上前缀“data: ”，然后以“\n\n”结尾: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ curl http://example.com/dates</div><div class="line">data: 1394572346452</div><div class="line"></div><div class="line">data: 1394572347457</div><div class="line"></div><div class="line">data: 1394572348463</div><div class="line"></div><div class="line">^C</div></pre></td></tr></table></figure>
+<p>也就是说，当数据源有新数据的时候，服务器端能立刻发送给一个或多个客户端，而不用等客户端来请求，这些新数据可能是实时新闻、最新股票、上线朋友的聊天信息等等。<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/websocket2.png" alt=""></p>
+<h3 id="Websocket"><a href="#Websocket" class="headerlink" title="Websocket"></a>Websocket</h3><p>在HTML5中，还提供了一种叫做Websocket的技术，它不仅仅是一种web通信方式，而且也是一种应用层的协议。 它和前文提到的SSE一样都是用来建立客户端和服务端之间的通信渠道，不过两者最大的区别在于： </p>
+<ul>
+<li><p>Websocket提供了客户端和服务端之间的全双工跨域通信，在同一时刻能够实现客户端到服务器和服务器到客户端的数据发送;而SSE是单向通道，只能服务器向浏览器端发送;</p>
+</li>
+<li><p>Websocket是一个新的协议（其实是基于TCP协议），需要服务端的支持；而SSE则是部署在HTTP协议之上的</p>
+</li>
+<li>SSE是一个轻量级协议，相对简单；WebSocket是一种较重的协议，相对复杂。</li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/websocket3.png" alt="">  </p>
+<p>可以看出，两者虽然功能相似，但是各有特点，适合于不同的场合。关于更多websocket的内容，可以参考<a href="http://www.websocket.org/aboutwebsocket.html" target="_blank" rel="external">websocket.org</a>   </p>
+<h3 id="Socket-io"><a href="#Socket-io" class="headerlink" title="Socket.io"></a>Socket.io</h3><p>因为不是所有浏览器都支持Websocket标准，所以为了解决这个问题，Socket.io便诞生了。<br>Socket.io是基于node.js生态系统，是对Node.js关于支持WebSocket协议所有API的封装和拓展，完全由js实现。<br>同时，Socket.io设计的目标是支持任何的浏览器和任何设备。于是在接口方面，Socket.io统一了通信的API，在内部支持一系列降级功能：  </p>
+<ul>
+<li>WebSocket</li>
+<li>AJAX long-polling </li>
+<li>AJAX multipart streaming</li>
+<li>Forever Iframe</li>
+<li>Adobe® Flash® Socket</li>
+<li>JSONP Polling</li>
+</ul>
+<p>也就是说，Socket.io会根据环境来选择适合的通信方式。这点是十分强大的。<br>而搭建Socket.io环境也十分简单，首先需要创建一个作为工作空间的目录，然后安装Node.js，并在工作空间下安装Socket.io(命令：npm install socket.io)，这样环境已经搭建完成。还可以安装基于Node.js框架(如Express.js等)以协助应用的服务器端开发。   具体可以参考我用<a href="http://socket.io" target="_blank" rel="external">socket.io</a> &amp;&amp; express 写的一个<a href="https://github.com/stephenLYao/chatroom" target="_blank" rel="external">简易的聊天室</a>程序。</p>
+</div><!-- comment system--><div class="container"><hr><div data-thread-key="2016/08/02/Web-Real-time-Engine-Socket-io/" data-title="Web Real-time Connection" data-url="http://yoursite.com/2016/08/02/Web-Real-time-Engine-Socket-io/" class="ds-thread"></div><script>var duoshuoQuery = {short_name:'duoshuo_shortname'};
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+        || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script><div id="disqus_thread"></div><script type="text/javascript">
+var disqus_shortname = 'disqus _shortname';
+var disqus_identifier = '2016/08/02/Web-Real-time-Engine-Socket-io/';
+var disqus_title = 'Web Real-time Connection';
+var disqus_url = 'http://yoursite.com/2016/08/02/Web-Real-time-Engine-Socket-io/';
+(function() {
+   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+   (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">Blog comments powered by <span class="logo-disqus">Disqus</span></a></div></article><footer id="footer"><div class="container"><div class="bar"><div class="social"><a href="mailto:stephenlyao@yeah.net" target="_blank"><i class="fa fa-envelope-o"></i></a><a href="https://github.com/https://github.com/stephenLYao" target="_blank"><i class="fa fa-github"></i></a><a href="/atom.xml" target="_blank"><i class="fa fa-rss"></i></a></div><div class="footer">© 2016 <a href="/" rel="nofollow">Stephen'blog</a>. Powered by <a rel="nofollow" target="_blank" href="https://hexo.io">Hexo</a>. Theme <a target="_blank" href="https://github.com/lotabout/very-simple">very-simple</a>.</div></div></div></footer><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.css"><script src="//cdn.bootcss.com/jquery/2.0.3/jquery.min.js"></script><script src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js"></script><script>$(document).ready(function() {
+    $(".fancybox").fancybox();
+});
+</script></body><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+e.src='//www.google-analytics.com/analytics.js';
+r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+ga('create','Google Analytics Tracking Code');ga('send','pageview');</script></html>
