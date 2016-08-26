@@ -17,16 +17,15 @@
     <!-- css files -->
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
 
-    <!-- font -->
-	<link rel="stylesheet" type="text/css" href="http://cdn.staticfile.org/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 
 <body>
 	<!-- header -->
 	<header class="header">
     <section class="banner">
-        <img class="banner-image" src="img/blank.png" data-src="/img/banner.png" alt="banner">
+        <img class="banner-image" src="/img/banner.png" alt="banner">
         <img class="avatar" src="/img/avatar.png" alt="avatar" >
     </section>
 
@@ -42,6 +41,21 @@
 
 	<!-- Main content -->
 	<main class="index">
+	
+		<div class="post">
+			<div class="post-time">
+				<span class="post-date">07-25</span>
+			</div>
+			<div class="post-content">
+				<h1 class="post-title">
+		        	<a href="/2016/07/25/module.exports vs exports in Node.js/">Module.exports vs Exports in Node.js</a>
+		    	</h1>
+		    	<div class="post-entry">
+		    		最近在折腾node.js的时候，经常会看到类似exports.xxx = yyy以及module.exports = yyy这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有
+		    	</div>
+		    	<a href="/2016/07/25/module.exports vs exports in Node.js/" class="readmore">Read More</a>
+			</div>
+		</div>
 	
 		<div class="post">
 			<div class="post-time">
