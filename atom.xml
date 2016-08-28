@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-08-28T08:07:30.000Z</updated>
+  <updated>2016-08-22T03:13:35.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,20 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>hello world</title>
-    <link href="http://yoursite.com/2016/08/28/hello-world/"/>
-    <id>http://yoursite.com/2016/08/28/hello-world/</id>
-    <published>2016-08-28T08:07:30.000Z</published>
-    <updated>2016-08-28T08:07:30.000Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>Understanding Event Loop</title>
