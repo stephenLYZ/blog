@@ -1,8 +1,3 @@
-.clearfix::after {
-  content: "";
-  display: table;
-  clear: both; }
-
 * {
   box-sizing: border-box; }
 
@@ -366,7 +361,7 @@ pre .javascript .function {
     background-color: #3eb3a5;
     font-family: "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
     transition: all 0.4s ease;
-    padding: 5px; }
+    padding: 5px 15px; }
     .page-nav .btn a {
       color: #fff;
       display: block;
@@ -379,3 +374,14 @@ pre .javascript .function {
     float: right; }
   .page-nav .previous {
     float: left; }
+
+.about {
+  width: 940px;
+  margin: 0 auto;
+  text-align: center;
+  font-family: "Comic Sans MS", cursive, LiSu, sans-serif; }
+  .about .about-header {
+    border-bottom: 1px dashed #ebebeb; }
+  .about .social a {
+    display: inline-block;
+    margin: 10px 20px; }
