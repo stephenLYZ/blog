@@ -1,66 +1,212 @@
-<!DOCTYPE html>
-<html>
-
-<!-- Head tag -->
-
-<head>
- 	 <!-- Meta data -->
-    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="null">
-    <meta name="keyword"  content="undefined">
-    <title>bootstrap之CSS源码分析 | Stephen&#39;s blog</title>
-    <!-- Favicon -->
-    <link rel="Shortcut Icon" href="/favicon.ico">
-
-    <!-- css files -->
-    <link rel="stylesheet" href="/css/app.css">
-    <link rel="stylesheet" href="/css/normalize.css">
-    <link rel="stylesheet" href="/css/font-awesome.min.css">
-
-</head>
-
-<body>
-	<!-- header -->
-	<header class="header">
-    <section class="banner">
-        <div class="banner-image">
-            <img src="http://7xl0rs.com1.z0.glb.clouddn.com/banner.png" alt="banner">
-        </div>
-        <img class="avatar" src="http://7xl0rs.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" >
-    </section>
-
-    <nav class="nav">
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Stephen&#39;blog</title>
+  <subtitle>Just do It</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2016-08-28T08:07:30.000Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>Stephen Liu</name>
     
-    	<a href="/">Home</a>
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>hello world</title>
+    <link href="http://yoursite.com/2016/08/28/hello-world/"/>
+    <id>http://yoursite.com/2016/08/28/hello-world/</id>
+    <published>2016-08-28T08:07:30.000Z</published>
+    <updated>2016-08-28T08:07:30.000Z</updated>
     
-    	<a href="/archives">Archives</a>
+    <summary type="html">
     
-    	<a href="/about">About</a>
+    </summary>
     
-    	<a href="/atom.xml">Rss</a>
     
-    </nav>
-    	
-    <div class="subtitle"> Just Do Hack!!! </div>
+  </entry>
+  
+  <entry>
+    <title>Understanding Event Loop</title>
+    <link href="http://yoursite.com/2016/08/16/Understanding-Event-Loop/"/>
+    <id>http://yoursite.com/2016/08/16/Understanding-Event-Loop/</id>
+    <published>2016-08-16T06:58:53.000Z</published>
+    <updated>2016-08-22T03:13:35.000Z</updated>
     
-</header>
-
-	<!-- Main content -->
-	<main class="post">
-
-	<article>
-	<h1 class="article-title">
-	   bootstrap之CSS源码分析
-	</h1>
-
-	<section class="post-time">
-		<span class="post-date">02-05</span>
-	</section>
-
-	<section class="article-entry">
-	    <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p><a href="http://getbootstrap.com/2.3.2/" target="_blank" rel="external">Bootstrap</a>作为到目前为止世界上最流行的CSS开发框架吸引了很多开发者。不过对于前端开发者来说，我觉得bootstrap的意义还是在于其代码设计理念以及思路。这篇post主要分析其中的部分CSS源码(版本是<strong>bootstrap-4.0.0-alpha</strong>，其中CSS具体数据可以通过<a href="http://www.cssstats.com" target="_blank" rel="external">css stats</a>测得）。Bootstrap3版本之前是基于Less来编译的，但到了4.0-alpha版本就开始正式使用Sass。<br>我们可以看到scss目录结构大致是这样的：</p>
+    <content type="html"><![CDATA[<p>前段时间看了 Philip Roberts 关于event-loop的演讲视频</p>
+<blockquote>
+<p>传送门：<br>YouTube:<a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ" target="_blank" rel="external"> Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014</a><br>Vimeo: <a href="https://vimeo.com/96425312" target="_blank" rel="external">Philip Roberts: Help, I’m stuck in an event-loop</a></p>
+</blockquote>
+<p>决定总结整理一下自己对event-loop的理解。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前段时间看了 Philip Roberts 关于event-loop的演讲视频&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;传送门：&lt;br&gt;YouTube:&lt;a href=&quot;https://www.youtube.com/watch?v=8aGhZQkoFbQ&quot; target=
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Web Real-time Connection</title>
+    <link href="http://yoursite.com/2016/08/02/Web-Real-Time-Connection/"/>
+    <id>http://yoursite.com/2016/08/02/Web-Real-Time-Connection/</id>
+    <published>2016-08-02T13:30:13.000Z</published>
+    <updated>2016-08-05T07:13:05.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>关于web实时通信，我们都知道通常是使用长轮询或者长连接这种方式。 本文是对几种web实时通信进行简单的总结介绍，仅供参考。</p>
+<h3 id="Ajax-long-polling"><a href="#Ajax-long-polling" class="headerlink" title="Ajax long polling"></a>Ajax long polling</h3><p>传统的轮询方式是客户端定时(一般使用setInterval)向服务器发送ajax请求，服务器收到请求后马上响应信息。这种方式在客户端和服务端都很好实现，但是会造成很多无用的请求，当服务器没有可返回的数据时，这次请求就浪费了。<br>而长轮询，则是客户端向服务器发送Ajax请求，<strong>服务器接到请求后保持住连接</strong>，直到有新消息才返回响应信息，客户端处理完响应信息后再向服务器发送新的请求。<br>当然使用长轮询，客户端和服务端需要具备以下的条件:  </p>
+<ul>
+<li>客户端在收到服务器的响应后，需要向服务器发送新的请求，从而达到轮询的效果  </li>
+<li>服务器端要能够一直保持住客户端的请求，直到有响应消息；同时服务器对请求的处理要支持非阻塞模式  </li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/websocket1.png" alt=""></p>
+<h3 id="Server-sent-Events-SSE"><a href="#Server-sent-Events-SSE" class="headerlink" title="Server-sent Events(SSE)"></a>Server-sent Events(SSE)</h3><p>SSE是HTML5规范的一个组成部分，简单点说，就是客户端向服务端发送一个HTTP请求，然后服务端不断<strong>单向</strong>地向客户端推送信息(message)。这种信息在格式上也很简单，就是“信息”加上前缀“data: ”，然后以“\n\n”结尾: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ curl http://example.com/dates</div><div class="line">data: 1394572346452</div><div class="line"></div><div class="line">data: 1394572347457</div><div class="line"></div><div class="line">data: 1394572348463</div><div class="line"></div><div class="line">^C</div></pre></td></tr></table></figure>
+<p>也就是说，当数据源有新数据的时候，服务器端能立刻发送给一个或多个客户端，而不用等客户端来请求，这些新数据可能是实时新闻、最新股票、上线朋友的聊天信息等等。<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/websocket2.png" alt=""></p>
+<h3 id="Websocket"><a href="#Websocket" class="headerlink" title="Websocket"></a>Websocket</h3><p>在HTML5中，还提供了一种叫做Websocket的技术，它不仅仅是一种web通信方式，而且也是一种应用层的协议。 它和前文提到的SSE一样都是用来建立客户端和服务端之间的通信渠道，不过两者最大的区别在于： </p>
+<ul>
+<li><p>Websocket提供了客户端和服务端之间的全双工跨域通信，在同一时刻能够实现客户端到服务器和服务器到客户端的数据发送;而SSE是单向通道，只能服务器向浏览器端发送;</p>
+</li>
+<li><p>Websocket是一个新的协议（其实是基于TCP协议），需要服务端的支持；而SSE则是部署在HTTP协议之上的</p>
+</li>
+<li>SSE是一个轻量级协议，相对简单；WebSocket是一种较重的协议，相对复杂。</li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/websocket3.png" alt="">  </p>
+<p>可以看出，两者虽然功能相似，但是各有特点，适合于不同的场合。关于更多websocket的内容，可以参考<a href="http://www.websocket.org/aboutwebsocket.html" target="_blank" rel="external">websocket.org</a>   </p>
+<h3 id="Socket-io"><a href="#Socket-io" class="headerlink" title="Socket.io"></a>Socket.io</h3><p>因为不是所有浏览器都支持Websocket标准，所以为了解决这个问题，Socket.io便诞生了。<br>Socket.io是基于node.js生态系统，是对Node.js关于支持WebSocket协议所有API的封装和拓展，完全由js实现。<br>同时，Socket.io设计的目标是支持任何的浏览器和任何设备。于是在接口方面，Socket.io统一了通信的API，在内部支持一系列降级功能：  </p>
+<ul>
+<li>WebSocket</li>
+<li>AJAX long-polling </li>
+<li>AJAX multipart streaming</li>
+<li>Forever Iframe</li>
+<li>Adobe® Flash® Socket</li>
+<li>JSONP Polling</li>
+</ul>
+<p>也就是说，Socket.io会根据环境来选择适合的通信方式。这点是十分强大的。<br>而搭建Socket.io环境也十分简单，首先需要创建一个作为工作空间的目录，然后安装Node.js，并在工作空间下安装Socket.io(命令：npm install socket.io)，这样环境已经搭建完成。还可以安装基于Node.js框架(如Express.js等)以协助应用的服务器端开发。   具体可以参考我用<a href="http://socket.io" target="_blank" rel="external">socket.io</a> &amp;&amp; express 写的一个<a href="https://github.com/stephenLYao/chatroom" target="_blank" rel="external">简易的聊天室</a>程序。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;关于web实时通信，我们都知道通常是使用长轮询或者长连接这种方式。 本文是对几种web实时通信进行简单的总结介绍，仅供参考。&lt;/p&gt;
+&lt;h3 id=&quot;Ajax-long-polling&quot;&gt;&lt;a href=&quot;#Ajax-long-polling&quot; class=&quot;headerl
+    
+    </summary>
+    
+    
+      <category term="Web" scheme="http://yoursite.com/tags/Web/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>初识WebPageTest（一）</title>
+    <link href="http://yoursite.com/2016/07/27/%E5%88%9D%E8%AF%86WebpageTest/"/>
+    <id>http://yoursite.com/2016/07/27/初识WebpageTest/</id>
+    <published>2016-07-27T05:30:04.000Z</published>
+    <updated>2016-08-25T18:29:34.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>基本上在讨论网站性能分析工具的时候，就一定会提到<a href="http://www.webpagetest.org" target="_blank" rel="external">WebpageTest</a>这个工具，顾名思义，它的核心是测量以及分析一个网站的性能，下面以我参与的一个产品<a href="book.muxistudio.com">木犀图书</a>为例，介绍一下WebPageTest的内容。  </p>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>当你输入你想要测量的网站后，等待一段时间（可能是喝一口咖啡的时间），就会出现网站一些关键数据信息的展示，右上角是对一些重要的性能优化评分，其中包括Keep-alive Enabled、Compress Text、Compress Images、Cache Static Content、Combine JS/CSS Files以及Use of CDN。<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage1.png" alt="">  </p>
+<ul>
+<li>下方就是一些关键的数据信息展示，包含 Load Time、First Byte、Start Render、DOM Elements 等 ，其中最大的特点就是会分为 <strong>首次加载以及再次加载</strong></li>
+</ul>
+<blockquote>
+<p>note: 首次加载是指浏览器中的缓存以及cookie全部清除，即第一次浏览该网页；再次加载是指在首次加载的基础上没有清除任何东西的加载网页。</p>
+</blockquote>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage2.png" alt="">  </p>
+<ul>
+<li>除此之外，detail选项中会展现每个请求不同阶段占用时间对比，类似于Chrome浏览器的瀑布流，以及每个请求的 detail、request、response、object 信息。</li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage3.png" alt="">  </p>
+<ul>
+<li>Performance Review,一些刚提过的必要性能检查，关于每个性能的解释可以查看<a href="https://sites.google.com/a/webpagetest.org/docs/using-webpagetest/quick-start-quide#TOC-Optimization-Grades:" target="_blank" rel="external">文档</a>  </li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage4.png" alt=""></p>
+<ul>
+<li>Content breakdown, 不同资源的请求数以及请求类型 </li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage5.png" alt=""></p>
+<ul>
+<li>Domains,域名分析，域名越多消耗的 DNS 查询时间就越长。由于这个产品只有一个域名，所以只显示一个</li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage6.png" alt=""></p>
+<p>个人认为，这个工具的优点有这几点:</p>
+<ul>
+<li>内容上，首次加载以及再次加载的对比可以让性能优化更具有针对性，测量标准也是按照最佳实践，比如Compress Images、Cache Static Content等。</li>
+<li>展示上，各项加载时间指标以及图表、瀑布图的使用让数据更为直观。</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;基本上在讨论网站性能分析工具的时候，就一定会提到&lt;a href=&quot;http://www.webpagetest.org&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;WebpageTest&lt;/a&gt;这个工具，顾名思义，它的核心是测量以及分析一个网站的性能，下
+    
+    </summary>
+    
+    
+      <category term="web性能" scheme="http://yoursite.com/tags/web%E6%80%A7%E8%83%BD/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Module.exports vs Exports in Node.js</title>
+    <link href="http://yoursite.com/2016/07/25/module.exports%20vs%20exports%20in%20Node.js/"/>
+    <id>http://yoursite.com/2016/07/25/module.exports vs exports in Node.js/</id>
+    <published>2016-07-24T16:00:00.000Z</published>
+    <updated>2016-08-25T23:43:47.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近在折腾node.js的时候，经常会看到类似<code>exports.xxx = yyy</code>以及<code>module.exports = yyy</code>这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？<br>关于两者的区别，了解了下面几点就会非常的清楚:</p>
+<ul>
+<li><code>exports</code> 是 <code>module.exports</code> 的一个引用 <code>exports = module.exports = {}</code></li>
+<li><code>require()</code>返回的是<code>module.exports</code> 而不是 <code>exports</code></li>
+<li><code>exports.xxx</code> 相当于在导出对象上挂属性，该属性对调用模块直接可见</li>
+<li><code>exports =</code>相当于给exports对象重新赋值，调用模块不能访问<code>exports</code> 对象及其属性</li>
+<li>如果此模块是一个类，就应该直接赋值给<code>module.exports</code>,这样调用者就是一个类构造器，可以直接使用new实例化；如果只导出简单的属性，可以直接挂载到<code>exports</code>上</li>
+</ul>
+<p>比如以下代码计算圆的面积：</p>
+<p><strong>使用exports</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// circle.js</span></div><div class="line">exports.area = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125; ;</div><div class="line"></div><div class="line"><span class="comment">//app.js</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> circle = <span class="built_in">require</span>(<span class="string">'./circle'</span>)</div><div class="line"><span class="built_in">console</span>.log(circle.area(<span class="number">2</span>))</div><div class="line"></div><div class="line"><span class="comment">//输出 '12'</span></div></pre></td></tr></table></figure>
+<p><strong>使用module.exports</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// area.js</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//app.js</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> area = <span class="built_in">require</span>(<span class="string">'./area'</span>)</div><div class="line"><span class="built_in">console</span>.log(area(<span class="number">2</span>))</div><div class="line"></div><div class="line"><span class="comment">//输出 '12'</span></div></pre></td></tr></table></figure>
+<p>两者输出是一样的，因为<code>exports</code>是<code>module.exports</code>的一个引用，所以两者指向的内存地址是一样的，可是如果你这样写:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// area.js</span></div><div class="line">exports = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//app.js</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> area = <span class="built_in">require</span>(<span class="string">'./area'</span>)</div><div class="line"><span class="built_in">console</span>.log(area(<span class="number">2</span>))</div><div class="line"></div><div class="line"><span class="comment">//输出 'TypeError: object is not a function'</span></div></pre></td></tr></table></figure>
+<p>我们可以看到是报错的，原因在于，之前说过<code>require()</code>返回的只是<code>module.exports</code>,而<code>exports</code>是<code>module.exports</code>的一个引用，上面代码给<code>exports</code>重新赋值，使其指向了新的内存地址，此时<code>exports</code>和<code>module.exports</code>毫无关系，也就是说此时<code>module.exports</code>的值为默认值{}，所以导出的是一个空对象。   </p>
+<p>也就是说，<code>module.exports</code>才是关键，而<code>exports</code>只是起辅助的作用,最终导出来的是<code>module.exports</code>上挂载的对象，当<code>module.exports</code>没有任何值时，<code>exports</code>挂载的属性会赋值给<code>module.exports</code>, 当<code>module.exports</code>具有挂载的对象时，<code>exports</code>上的所有值会被忽略，比如以下代码只输出了<code>module.exports</code>所挂载的属性:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//rock.js</span></div><div class="line"><span class="built_in">module</span>.exports.name = <span class="string">'Stephen'</span></div><div class="line">exports.name = <span class="string">'Mike'</span></div><div class="line"></div><div class="line"><span class="comment">//app.js</span></div><div class="line"><span class="keyword">var</span> rock = <span class="built_in">require</span>(<span class="string">'./rock.js'</span>)</div><div class="line">rock.name</div><div class="line"></div><div class="line"><span class="comment">//输出</span></div><div class="line"><span class="string">'Stephen'</span></div></pre></td></tr></table></figure>
+<p>总结一下:</p>
+<ul>
+<li>如果要导出非对象接口（属性），可以直接使用<code>exports</code></li>
+<li>如果要导出对象接口(类)，应该将其挂载到<code>module.exports</code>上面，从而可以直接让调用者new实例化对象</li>
+</ul>
+<p>参考：<br><a href="https://cnodejs.org/topic/5231a630101e574521e45ef8" target="_blank" rel="external">exports 和 module.exports 的区别</a><br><a href="http://www.hacksparrow.com/node-js-exports-vs-module-exports.html" target="_blank" rel="external">node-js-exports-vs-module-exports</a><br><a href="http://www.ghostchina.com/module-exports-and-exports-in-node-js/" target="_blank" rel="external">module-exports-and-exports-in-node-js</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近在折腾node.js的时候，经常会看到类似&lt;code&gt;exports.xxx = yyy&lt;/code&gt;以及&lt;code&gt;module.exports = yyy&lt;/code&gt;这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造
+    
+    </summary>
+    
+    
+      <category term="node.js" scheme="http://yoursite.com/tags/node-js/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>bootstrap之CSS源码分析</title>
+    <link href="http://yoursite.com/2016/02/05/bootstrap-CSS-source-analysis/"/>
+    <id>http://yoursite.com/2016/02/05/bootstrap-CSS-source-analysis/</id>
+    <published>2016-02-05T02:18:40.000Z</published>
+    <updated>2016-07-25T08:04:18.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p><a href="http://getbootstrap.com/2.3.2/" target="_blank" rel="external">Bootstrap</a>作为到目前为止世界上最流行的CSS开发框架吸引了很多开发者。不过对于前端开发者来说，我觉得bootstrap的意义还是在于其代码设计理念以及思路。这篇post主要分析其中的部分CSS源码(版本是<strong>bootstrap-4.0.0-alpha</strong>，其中CSS具体数据可以通过<a href="http://www.cssstats.com" target="_blank" rel="external">css stats</a>测得）。Bootstrap3版本之前是基于Less来编译的，但到了4.0-alpha版本就开始正式使用Sass。<br>我们可以看到scss目录结构大致是这样的：</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">bootstrap/</div><div class="line">|– bootstrap.scss   # Manifest file </div><div class="line">|– _alerts.scss     # Component file </div><div class="line">|– _buttons.scss    # Component file </div><div class="line">|– _mixins.scss     # Mixin file – imports all files from mixins folder</div><div class="line">|–  ...             # Etc..</div><div class="line">|– mixins/</div><div class="line">|  |–  _alerts.scss # Alert mixin</div><div class="line">|  |– _buttons.scss # Button mixin</div><div class="line">|  |– ...           # Etc.</div></pre></td></tr></table></figure>
 <p>从整体的文件结构也可以看出bootstrap组件化以及层次化的特点。<br>接下来我将从三个方面进行分析：  </p>
 <ul>
@@ -123,27 +269,95 @@
 <p>你可以很轻易的看出其中思想上的差别，也就是说，normalize.css的优势在于它保持了许多浏览器的默认样式，当一个元素在不同浏览器中有不同的默认值时，nomalize.css会让样式保持一致并且尽可能的与现代标准相符合；以及修复了常用的桌面端和移动端浏览器的bug，比如HTML5元素的显示设置、预格式化文字的font-size问题、在IE9中SVG的溢出、许多出现在各浏览器和操作系统中的与表单相关的bug。  </p>
 <p>对于使用reset.css还是normalize.css，仁者见仁智者见智吧。  </p>
 <h3 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h3><p>Bootstrap在设计上是非常注重模块化以及层次化的，一方面是利于维护，另一方面提高了可复用性，这点非常值得学习。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;一、前言&quot;&gt;&lt;a href=&quot;#一、前言&quot; class=&quot;headerlink&quot; title=&quot;一、前言&quot;&gt;&lt;/a&gt;一、前言&lt;/h3&gt;&lt;p&gt;&lt;a href=&quot;http://getbootstrap.com/2.3.2/&quot; target=&quot;_blank&quot; rel=&quot;
+    
+    </summary>
+    
+    
+      <category term="css" scheme="http://yoursite.com/tags/css/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>［译］Vertical-align你应该知道的事</title>
+    <link href="http://yoursite.com/2016/01/12/Vertical-Align-%20All%20You%20Need%20To%20Know/"/>
+    <id>http://yoursite.com/2016/01/12/Vertical-Align- All You Need To Know/</id>
+    <published>2016-01-12T09:02:18.000Z</published>
+    <updated>2016-07-25T08:00:18.000Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>原文链接：<a href="http://christopheraue.net/2014/03/05/vertical-align/#inline-block-element" target="_blank" rel="external">Vertical-Align: All You Need To Know</a><br>原文作者: <a href="https://twitter.com/christopheraue" target="_blank" rel="external">Christopher Aue</a></p>
+</blockquote>
+<h1 id="关于Vertical-Align你应该知道的事"><a href="#关于Vertical-Align你应该知道的事" class="headerlink" title="关于Vertical-Align你应该知道的事"></a>关于Vertical-Align你应该知道的事</h1><p>我经常会碰到将元素在垂直方向上对齐的需求。</p>
+<p>CSS提供了一些可能的方法:有时我会用<code>float</code>来解决这个问题,有时会使用<code>position:absolute</code>,有时甚至不惜手动调整<code>margins</code>或者<code>paddings</code>(这是一件十分dirty的做法)。</p>
+<p>实话说我非常不喜欢这些解决方式。浮动只在其顶部对齐并且需要手动清除浮动。绝对定位会使元素脱离文档流,以至于它们不再影响它们周边的元素。对于使用固定的margins和paddings来说即使只是一些微小的变化,那也将成为一场灾难。</p>
+<p>但是这里有另一个杀伤力武器:<code>vertical-align</code>。我认为它值得这个称赞。好吧,从技术角度上讲,使用<code>vertical-align</code>来布局其实是一种hack,原因是它存在并不是为了布局。而是为了使文本元素和与相邻的元素在垂直方向上对齐。尽管如此,在不同的上下文你依然可以非常灵活和细粒化的使用<code>vertical-align</code>来对齐元素。元素的尺寸可以不需要知道,因为元素没有脱离文档流,所以其它元素可以对那些改变的尺寸作出反应。这将使他在布局时成为一个有价值的选择。</p>
+<h2 id="Vertical-Align的奇特之处"><a href="#Vertical-Align的奇特之处" class="headerlink" title="Vertical-Align的奇特之处"></a>Vertical-Align的奇特之处</h2><p>尽管如此,<code>vertical-align</code>有时候可能是面目狰狞的。使用它会令人有点泄气:在它的内部工作机制中似乎有一些神秘的规则。比如有一种很可能发生的情况便是,当你改变了某个元素的<code>vertical-align</code>属性,实际上并没有改变它的对齐方式,但别的元素却发生了变化!</p>
+<p>不幸的是,当今大部分有关这方面的资料深入程度都不够。尤其是当我们想用<code>vertical-align</code>来布局的时候。这些资料更多的是将注意力集中在一个误解的概念上-尝试着垂直对齐一个元素内的任何内容。他们仅仅给出基本的介绍以及解释在一些十分简单的情况下元素是如何对齐的。他们并不解释复杂的部分。</p>
+<p>所以,我给自己设定了一个目标– <strong>彻彻底底的弄清楚vertical-align的行为</strong> 。我参考了W3C上的CSS规范以及试验了一些例子最终结束了这项任务。这篇文章便是我研究的成果。</p>
+<p>那么,让我们来弄清楚这个游戏规则吧!</p>
+<h2 id="使用Vertical-align的要求"><a href="#使用Vertical-align的要求" class="headerlink" title="使用Vertical-align的要求"></a>使用Vertical-align的要求</h2><p><code>vertical-align</code>被用于对齐<code>inline</code>元素。这些元素,也就是<code>display</code>属性为<code>inline</code>和<code>inline-block</code>,而<code>inline-table</code>的元素不在本文讨论的范围内。<br><strong>Inline</strong>元素基本上指的就是文本。</p>
+<p><strong>Inline-block</strong>元素顾名思义,同时具备inline以及block元素的特性。这样的元素具有宽度和高度(可能是由内容高度决定),同样还具有padding,margin,boreder。<br>inline元素一个一个挨着摆放在行内。一旦元素太多而超出该行,则一个新行会被创建出来,这些行便是所谓的<strong>line-box</strong>。它会将行内所有的内容包裹起来。不同大小的内容,line-box的行内高度也会不同。下图画的红线代表了line-box的上下边界。<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/火狐截图_2015-12-06T04-18-06.808Z.png" alt="">  </p>
+<p>在这些line-box里<code>vertical-align</code>属性负责对齐那些独立的元素。<strong>那么,这些元素是和谁对齐呢?</strong>  </p>
+<h2 id="关于Baselines和边界"><a href="#关于Baselines和边界" class="headerlink" title="关于Baselines和边界"></a>关于Baselines和边界</h2><p>关于垂直对齐最重要的一点便是相关元素的baseline。有些情况元素盒模型的上下边界也十分重要。让我们来看看每个相关元素中baseline和边界所在的位置。<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/火狐截图_2015-12-06T05-38-14.546Z.png" alt=""><br>上图你可以看到有并排的三行文字。行高的上下边界用红线标出,文字高度用的是绿线,baseline便是蓝线了。左图行高和文字高度一致,所以绿线和红线重合了。中间图行高是文字大小的两倍。右边行高是文字大小的二分之一。<br>行内元素的外界在行高的上下边缘这个范围内对齐。如果行高小于文字高度也无所谓。<br>什么是baseline呢?简单粗暴的说,baseline就是文字高度中线下方的一条线。具体可以看W3C上的介绍<a href="http://www.w3.org/TR/CSS2/visudet.html#leading" title="标准链接" target="_blank" rel="external">标准链接</a>。  </p>
+<p><strong>inline-block元素</strong><br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/火狐截图_2015-12-06T07-16-44.376Z.png" alt=""><br>从左到右你可以看到三个<code>inline-block</code>元素:左边是没有脱离文档流的内容c,中间是没有脱离文档流的内容c并且<code>overflow:hidden</code>,右边是没有内容但是内容有高度。margin-box的边界是用红线标出,黄色是border,绿色是padding,蓝色是content。蓝色的线代表的是元素的baseline。<br><code>inline-block</code>元素的边界就是<a href="http://www.w3.org/TR/CSS2/box.html#x17" target="_blank" rel="external">margin-box</a>的上下边界。  </p>
+<p><code>inline-block</code>元素的baseline取决于该元素是否具有处于正常流的内容,具体分以下三种情况:  </p>
+<ul>
+<li>在具有处于文档流的内容的情况下,<code>inline-block</code>元素的baseline就是最后一个内容元素的baseline(如上图左边)。这个元素的baseline的确定根据去自身规则确定。  </li>
+<li>在具有处于文档流的内容并且<code>overflow</code>属性的值不为<code>visible</code>的情况下,baseline便是margin-box的下边界(如上图中间)。因此它也是inline-block的下边界。  </li>
+<li>在不具有处于文档流的内容情况下,baseline同样也是margin-box的下边界。  </li>
+</ul>
+<p><strong>Line box</strong><br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/火狐截图_2015-12-12T08-48-08.364Z.png" alt=""><br>关于line-box的图上面已经说过了。这次我将linebox的内容的上下边界(绿线)以及baseline(蓝线)画了出来。同样将内容元素用灰色背景高亮了出来。<br>line-box的上边界和最高元素的上边界对齐,下边界和最低元素的下边界对齐。  </p>
+<p><strong>line-box的baseline是不确定的</strong>  </p>
+<article>CSS2.1 does not define the position of the line box’s baseline   ——the W3C Specs*</article>   
 
-	</section>	
-</article>
 
-	
-</main>
-
-	<!-- footer -->
-	<footer>
-	<div class="social">
-		<a href="https://twitter.com">
-			<i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
-		</a>
-		<a href="https://github.com/stephenLYao">
-			<i class="fa fa-github fa-2x" aria-hidden="true"></i>
-		</a>
-		<a href="http://www.weibo.com/3103316530/profile?rightmod=1&wvr=6&mod=personinfo">
-			<i class="fa fa-weibo fa-2x" aria-hidden="true"></i>
-		</a>
-	</div>
-	<p>@2016.Power by <a rel="nofollow"  href="https://hexo.io">Hexo</a>. Theme <a rel="nofollow" href="https://github.com/stephenLYao/hexo-theme-fresh.git">fresh</p>
-</footer>
-</body>
-</html>
+<p>这也是当我们使用vertical-align时最令人疑惑的地方。这意味着baseline的位置受其他条件比如vertical-align的值以及让line-box高度最小的影响。这是一个很灵活的参数。 </p>
+<p>因为line-box的baseline是不可见得,所以可能不能一眼就看出来它在那。不过,你可以很轻易的将它可视化出来。只需要在行的开头添加一个字母。比如添加一个’x’。如果这个字母没有被其他方法来对齐,那么它的下边界默认就是baseline的位置。  </p>
+<p>在line-box中围绕着baseline会形成text-box。text-box可以简单的被认为是没有和line-box中任何元素对齐的inline元素。它的高度与父元素font-size的值相等。因此,text-box仅仅包含非格式化的line-box文本。text-box的边界由绿线来表示。因为text-box和baseline是绑定的,当baseline位置发生变化时它的位置也会发生变化。(这里所说的text-box在W3C标准中被叫做<a href="http://www.w3.org/TR/CSS2/visudet.html#strut" target="_blank" rel="external">strut</a>。)  </p>
+<p>hu~这部分比较难理解。让我们总结一下最重要的两点:      </p>
+<ul>
+<li>有一个叫<em>line-box</em>的区域,垂直方向的对齐都发生在这个区域里。它有baseline,text-box以及上下边界。  </li>
+<li>inline元素是我们需要对其的对象,他们有baseline和上下边界。   </li>
+</ul>
+<h2 id="Vertical-Align的值"><a href="#Vertical-Align的值" class="headerlink" title="Vertical-Align的值"></a>Vertical-Align的值</h2><p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/310677093-552620eb1da7d.png" alt=""><br>关于Vertical-align的值具体可以看MDN  </p>
+<h2 id="Vertical-Align是如何发挥它的作用的呢"><a href="#Vertical-Align是如何发挥它的作用的呢" class="headerlink" title="Vertical-Align是如何发挥它的作用的呢"></a>Vertical-Align是如何发挥它的作用的呢</h2><p>我们现在可以更加深入的了解在某些情况下元素是如何垂直对齐的。  </p>
+<h4 id="对齐一个Icon"><a href="#对齐一个Icon" class="headerlink" title="对齐一个Icon"></a>对齐一个Icon</h4><p>这里有一个问题：我想将一个icon与相邻的文本对齐。仅仅将icon的vertical-align属性的值设置为middle并不是一个令人满意的方法。看一下例子：<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/3207176454-552622437bff3.png" alt=""><br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/捕获.PNG" alt="">   </p>
+<p>下面给出上图的辅助线版本:<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/1480687358-5526230af1f75.png" alt="">  </p>
+<p>这揭示了我们的问题。因为左图的文本根本没有发生对齐行为，它还是和line-box的baseline对齐。而vertical-align对齐的点是baseline加上半个x的距离(half of the x-height)。因此文字的最高点超过了icon的高度。<br>右图所示，文字与icon对齐与一个中点。文字的baseline稍微低于line-box的baseline。结果文字很好的和icon对齐了。  </p>
+<p>####关于Line-box的baseline的移动问题<br>这是一个使用<code>vertical-align</code>常有的坑：line-box里的所有元素都会影响到baseline的位置。让我们假设一下，如果一个元素通过某种方法对齐了，但是line-box的baseline不得不因此移动。因为大部分对齐方式（除了top和bottom）都和baseline有关，因此这个元素的对齐会导致行内其他元素的调整。<br>下面是一些例子：  </p>
+<ul>
+<li>如果有一个高度可以占满整个line-box高度的元素，那么vertical-align对它是没有影响的。在它的top以上和bottom以下没有空间可以使它移动。为了满足它的vertical-align的值，line-box的baseline需要移动。下图矮盒子的<code>vertical-align:baseline</code>,左边的高盒子取值为<code>text-bottom</code>,右边为<code>text-top</code>，你可以看到矮盒子随着baseline跳了上去。<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/3321562939-552a393f0f532.png" alt=""><br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/捕获1.PNG" alt=""><br>当把高元素的vertical-align属性设置成其他值的时候，表现的行为是一样的。  </li>
+<li>甚至将<code>vertical-align</code>设置成<code>bottom</code>（left）和<code>top</code>（right）也会移动baseline。这很奇怪，因为这应该和baseline并没有什么关系。<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/3321562939-552a393f0f532.png" alt=""><br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/捕获3.PNG" alt=""></li>
+<li>将两个更大的元素放在一行里，然后设置vertical-align的值使其的baseline移动以至于让他们对齐。接着line-box的高度会自动调整。添加第三个元素，这个元素如果不超过line-box的边界，则它不影响line-box的高度以及baseline的位置。如果该元素<em>超过</em>了line-box的边缘，则line-box的高度以及baseline都会调整。在这种情况下，另外两个元素的位置发生了下移。<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/877914604-552a3f2c8aaf5.png" alt=""><br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/捕获4.PNG" alt="">  </li>
+</ul>
+<h4 id="inline元素下方可能会有点间隙"><a href="#inline元素下方可能会有点间隙" class="headerlink" title="inline元素下方可能会有点间隙"></a>inline元素下方可能会有点间隙</h4><p> 来看一个例子。一个常见的情况就是你尝试将列表的<code>li</code>元素垂直对齐。<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/2778514088-552a3fbaada4b.png" alt=""><br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/捕获6.PNG" alt="">  </p>
+<p> 正如你所看到的，<code>li</code>元素是对齐baseline的。baseline的下方会有一部分留给文字的空间。这便会产生小缝隙。那么解决方案是什么？只要改变line-box的baseline的位置就好了，比如把<code>li</code>元素的<code>vertical-align:middle</code>.<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/捕获7.PNG" alt=""><br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/捕获6.PNG" alt="">  </p>
+<p>####inline元素之间的间隙会破坏布局效果<br>这主要是inline元素自身的问题。但是因为这是让vertical-align发挥作用的必要因素，所以了解它也是不错的。 </p>
+<p>这个间隙主要是来源于inline元素之间的空格。所有空白都会变成一个空格。这个空格可以通过该方法反映，比如如果你想让两个inline元素紧挨着，然后给他们的宽度分别设置为50%，这里并没有足够的空间存放两个宽度为50%的元素以及一个空格。所以一行便会被破坏成两行。为了移除空隙，我需要移除空格，解决方案如下：<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/1169658073-552a41cb7252a.png" alt=""><br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/捕获8.PNG" alt="">  </p>
+<h2 id="Vertical-align揭秘"><a href="#Vertical-align揭秘" class="headerlink" title="Vertical-align揭秘"></a>Vertical-align揭秘</h2><p>是的，对于你来说了解这些规则并不复杂。如果vertical-align不起作用，那么想想看这两个问题：  </p>
+<ul>
+<li>line-box的baseline以及上下边缘位置在哪里？  </li>
+</ul>
+<ul>
+<li>inline元素的baseline以及上下边缘在哪里？</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;原文链接：&lt;a href=&quot;http://christopheraue.net/2014/03/05/vertical-align/#inline-block-element&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Vert
+    
+    </summary>
+    
+    
+      <category term="translate-posts" scheme="http://yoursite.com/tags/translate-posts/"/>
+    
+  </entry>
+  
+</feed>
