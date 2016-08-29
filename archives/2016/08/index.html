@@ -1,67 +1,111 @@
 <!DOCTYPE html>
 <html>
+
+<!-- Head tag -->
+
 <head>
-  <meta charset="utf-8">
-  <title>Ian He&#39;s Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="shortcut icon" href="/avator.png">
-  <link rel="stylesheet" href="/css/app.css">
-  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+ 	 <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <title>Stephen&#39;s blog</title>
+    <!-- Favicon -->
+    <link rel="Shortcut Icon" href="/favicon.ico">
+
+    <!-- css files -->
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
 </head>
 
 <body>
-  <nav class="app-nav">
-  
-      
-        <a class="active" href="/.">home</a>
-        
+	<!-- header -->
+	<header class="header">
+    <section class="banner">
+        <div class="banner-image">
+            <img src="http://7xl0rs.com1.z0.glb.clouddn.com/banner.png" alt="banner">
+        </div>
+        <img class="avatar" src="http://7xl0rs.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" >
+    </section>
 
-      
-  
-      
-        <a href="/archives">archive</a>
-      
-  
-      
-        <a href="/tags">tags</a>
-      
-  
-      
-        <a href="/about">about</a>
-      
-  
-</nav>
+    <nav class="nav">
+    
+    	<a href="/">Home</a>
+    
+    	<a href="/archives">Archives</a>
+    
+    	<a href="/about">About</a>
+    
+    	<a href="/atom.xml">Rss</a>
+    
+    </nav>
+    <button class="menu-toggle">
+        <div class="nav-bar">
+             
+                <a href="/">Home</a>
+            
+                <a href="/archives">Archives</a>
+            
+                <a href="/about">About</a>
+            
+                <a href="/atom.xml">Rss</a>
+            
+        </div>
+    </button>
+    
+</header>
 
-  <main class="archive">
+	<!-- Main content -->
+	<main class="archive">
   
-    <article class="grid">
-  <h1 class="article-title grid-item">
+    <article class="article">
+   <div class="article-meta">
+    <span class="article-date">2016-08-16</span>
+  </div>
+  <h1 class="article-title">
     <a href="/2016/08/16/Understanding-Event-Loop/">Understanding Event Loop</a>
   </h1>
-
-  <div class="article-meta">
-    <span class="article-date">8月 16 2016</span>
-  </div>
 </article>
-
   
-    <article class="grid">
-  <h1 class="article-title grid-item">
+    <article class="article">
+   <div class="article-meta">
+    <span class="article-date">2016-08-02</span>
+  </div>
+  <h1 class="article-title">
     <a href="/2016/08/02/Web-Real-Time-Connection/">Web Real-time Connection</a>
   </h1>
-
-  <div class="article-meta">
-    <span class="article-date">8月 02 2016</span>
-  </div>
 </article>
-
   
 
-  <nav class="page-nav">
-  <span class="page-number current">1</span>
-</nav>
-
+  <ul class="page-nav">
+    
+    
+</ul>
 </main>
 
+	<!-- footer -->
+	<footer>
+	<div class="social">
+		<a href="https://twitter.com">
+			<i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="https://github.com/stephenLYao">
+			<i class="fa fa-github fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="http://www.weibo.com/3103316530/profile?rightmod=1&wvr=6&mod=personinfo">
+			<i class="fa fa-weibo fa-2x" aria-hidden="true"></i>
+		</a>
+	</div>
+	<p>@2016.Power by <a rel="nofollow"  href="https://hexo.io">Hexo</a>. Theme <a rel="nofollow" href="https://github.com/stephenLYao/hexo-theme-fresh.git">fresh</p>
+</footer>
+
+
+	
+	<!-- js -->
+	<script type="text/javascript" src="https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+	<script src="/js/toggle.js"></script>
 </body>
 </html>

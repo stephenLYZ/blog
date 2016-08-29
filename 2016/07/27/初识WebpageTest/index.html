@@ -1,49 +1,77 @@
 <!DOCTYPE html>
 <html>
+
+<!-- Head tag -->
+
 <head>
-  <meta charset="utf-8">
-  <title>初识WebPageTest（一） | Ian He&#39;s Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="shortcut icon" href="/avator.png">
-  <link rel="stylesheet" href="/css/app.css">
-  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+ 	 <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <title>初识WebPageTest（一） | Stephen&#39;s blog</title>
+    <!-- Favicon -->
+    <link rel="Shortcut Icon" href="/favicon.ico">
+
+    <!-- css files -->
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
 </head>
 
 <body>
-  <nav class="app-nav">
-  
-      
-        <a class="active" href="/.">home</a>
-        
+	<!-- header -->
+	<header class="header">
+    <section class="banner">
+        <div class="banner-image">
+            <img src="http://7xl0rs.com1.z0.glb.clouddn.com/banner.png" alt="banner">
+        </div>
+        <img class="avatar" src="http://7xl0rs.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" >
+    </section>
 
-      
-  
-      
-        <a href="/archives">archive</a>
-      
-  
-      
-        <a href="/tags">tags</a>
-      
-  
-      
-        <a href="/about">about</a>
-      
-  
-</nav>
+    <nav class="nav">
+    
+    	<a href="/">Home</a>
+    
+    	<a href="/archives">Archives</a>
+    
+    	<a href="/about">About</a>
+    
+    	<a href="/atom.xml">Rss</a>
+    
+    </nav>
+    <button class="menu-toggle">
+        <div class="nav-bar">
+             
+                <a href="/">Home</a>
+            
+                <a href="/archives">Archives</a>
+            
+                <a href="/about">About</a>
+            
+                <a href="/atom.xml">Rss</a>
+            
+        </div>
+    </button>
+    
+</header>
 
-  <main class="post">
-  <article>
-  <h1 class="article-title">
-    <a href="/2016/07/27/初识WebpageTest/">初识WebPageTest（一）</a>
-  </h1>
+	<!-- Main content -->
+	<main class="post">
 
-  <section class="article-meta">
-    <p class="article-date">七月 27 2016</p>
-  </section>
+	<article>
+	<h1 class="article-title">
+	   初识WebPageTest（一）
+	</h1>
 
-  <section class="article-entry">
-    <p>基本上在讨论网站性能分析工具的时候，就一定会提到<a href="http://www.webpagetest.org" target="_blank" rel="external">WebpageTest</a>这个工具，顾名思义，它的核心是测量以及分析一个网站的性能，下面以我参与的一个产品<a href="book.muxistudio.com">木犀图书</a>为例，介绍一下WebPageTest的内容。  </p>
+	<section class="post-time">
+		<span class="post-date">07-27</span>
+	</section>
+
+	<section class="article-entry">
+	    <p>基本上在讨论网站性能分析工具的时候，就一定会提到<a href="http://www.webpagetest.org" target="_blank" rel="external">WebpageTest</a>这个工具，顾名思义，它的核心是测量以及分析一个网站的性能，下面以我参与的一个产品<a href="book.muxistudio.com">木犀图书</a>为例，介绍一下WebPageTest的内容。  </p>
 <h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><p>当你输入你想要测量的网站后，等待一段时间（可能是喝一口咖啡的时间），就会出现网站一些关键数据信息的展示，右上角是对一些重要的性能优化评分，其中包括Keep-alive Enabled、Compress Text、Compress Images、Cache Static Content、Combine JS/CSS Files以及Use of CDN。<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/webpage1.png" alt="">  </p>
 <ul>
 <li>下方就是一些关键的数据信息展示，包含 Load Time、First Byte、Start Render、DOM Elements 等 ，其中最大的特点就是会分为 <strong>首次加载以及再次加载</strong></li>
@@ -74,10 +102,31 @@
 <li>展示上，各项加载时间指标以及图表、瀑布图的使用让数据更为直观。</li>
 </ul>
 
-  </section>
+	</section>	
 </article>
 
 </main>
 
+	<!-- footer -->
+	<footer>
+	<div class="social">
+		<a href="https://twitter.com">
+			<i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="https://github.com/stephenLYao">
+			<i class="fa fa-github fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="http://www.weibo.com/3103316530/profile?rightmod=1&wvr=6&mod=personinfo">
+			<i class="fa fa-weibo fa-2x" aria-hidden="true"></i>
+		</a>
+	</div>
+	<p>@2016.Power by <a rel="nofollow"  href="https://hexo.io">Hexo</a>. Theme <a rel="nofollow" href="https://github.com/stephenLYao/hexo-theme-fresh.git">fresh</p>
+</footer>
+
+
+	
+	<!-- js -->
+	<script type="text/javascript" src="https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+	<script src="/js/toggle.js"></script>
 </body>
 </html>

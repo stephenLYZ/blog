@@ -1,151 +1,175 @@
 <!DOCTYPE html>
 <html>
+
+<!-- Head tag -->
+
 <head>
-  <meta charset="utf-8">
-  <title>Ian He&#39;s Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="shortcut icon" href="/avator.png">
-  <link rel="stylesheet" href="/css/app.css">
-  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+ 	 <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <title>Stephen&#39;s blog</title>
+    <!-- Favicon -->
+    <link rel="Shortcut Icon" href="/favicon.ico">
+
+    <!-- css files -->
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
 </head>
 
 <body>
-  <nav class="app-nav">
-  
-      
-        <a class="active" href="/.">home</a>
-        
+	<!-- header -->
+	<header class="header">
+    <section class="banner">
+        <div class="banner-image">
+            <img src="http://7xl0rs.com1.z0.glb.clouddn.com/banner.png" alt="banner">
+        </div>
+        <img class="avatar" src="http://7xl0rs.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" >
+    </section>
 
-      
-  
-      
-        <a href="/archives">archive</a>
-      
-  
-      
-        <a href="/tags">tags</a>
-      
-  
-      
-        <a href="/about">about</a>
-      
-  
-</nav>
-
-  <header class="app-header">
-  <section class="banner">
-    <!-- http://daverupert.com/2015/12/intrinsic-placeholders-with-picture/ -->
-    <div class="placeholder"></div>
-    <img
-      class="banner-small"
-      data-src="/images/banner-large.png"
-      src="/images/banner-small.png"
-      alt="banner"
-    >
-  </section>
-
-  <section class="description">
-    <img class="avatar" src="/images/avatar.png" alt="avatar" />
-    <h1 class="title"> Ian He's Blog </h1>
-    <h3 class="subtitle"> 静静地旁观，默默地思考，然后开心的笑笑，就好了 </h3>
-  </section>
-
-  <ul class="social-list">
-    <a href="https://twitter.com/IanPeverell">Twitter</a>
-    <a href="https://github.com/IanPeverell">GitHub</a>
-  </ul>
+    <nav class="nav">
+    
+    	<a href="/">Home</a>
+    
+    	<a href="/archives">Archives</a>
+    
+    	<a href="/about">About</a>
+    
+    	<a href="/atom.xml">Rss</a>
+    
+    </nav>
+    <button class="menu-toggle">
+        <div class="nav-bar">
+             
+                <a href="/">Home</a>
+            
+                <a href="/archives">Archives</a>
+            
+                <a href="/about">About</a>
+            
+                <a href="/atom.xml">Rss</a>
+            
+        </div>
+    </button>
+    
 </header>
 
-<main class="index">
-  
-    <article>
-      <h1 class="article-title">
-        <a href="/2016/08/16/Understanding-Event-Loop/">Understanding Event Loop</a>
-      </h1>
+	<!-- Main content -->
+	<main class="index">
+	<div class="subtitle"> Just Do Hack!!! </div>
+	
+		<div class="post">
+			<div class="post-time">
+				<span class="post-date">08-16</span>
+			</div>
+			<div class="post-content">
+				<h1 class="post-title">
+		        	<a href="/2016/08/16/Understanding-Event-Loop/">Understanding Event Loop</a>
+		    	</h1>
+		    	<div class="post-entry">
+		    		前段时间看了 Philip Roberts 关于event-loop的演讲视频
 
-      <div class="article-entry">
-        
-      </div>
+传送门：YouTube: Philip Roberts: What the heck is the event loop anyway? | JSConf E
+		    	</div>
+		    	<a href="/2016/08/16/Understanding-Event-Loop/" class="readmore">Read More</a>
+			</div>
+		</div>
+	
+		<div class="post">
+			<div class="post-time">
+				<span class="post-date">08-02</span>
+			</div>
+			<div class="post-content">
+				<h1 class="post-title">
+		        	<a href="/2016/08/02/Web-Real-Time-Connection/">Web Real-time Connection</a>
+		    	</h1>
+		    	<div class="post-entry">
+		    		关于web实时通信，我们都知道通常是使用长轮询或者长连接这种方式。 本文是对几种web实时通信进行简单的总结介绍，仅供参考。
+Ajax long polling传统的轮询方式是客户端定时(一般使用setInterval)向服务器发送ajax
+		    	</div>
+		    	<a href="/2016/08/02/Web-Real-Time-Connection/" class="readmore">Read More</a>
+			</div>
+		</div>
+	
+		<div class="post">
+			<div class="post-time">
+				<span class="post-date">07-27</span>
+			</div>
+			<div class="post-content">
+				<h1 class="post-title">
+		        	<a href="/2016/07/27/初识WebpageTest/">初识WebPageTest（一）</a>
+		    	</h1>
+		    	<div class="post-entry">
+		    		基本上在讨论网站性能分析工具的时候，就一定会提到WebpageTest这个工具，顾名思义，它的核心是测量以及分析一个网站的性能，下面以我参与的一个产品木犀图书为例，介绍一下WebPageTest的内容。  
+实例当你输入你想要测量的网站后，
+		    	</div>
+		    	<a href="/2016/07/27/初识WebpageTest/" class="readmore">Read More</a>
+			</div>
+		</div>
+	
+		<div class="post">
+			<div class="post-time">
+				<span class="post-date">07-25</span>
+			</div>
+			<div class="post-content">
+				<h1 class="post-title">
+		        	<a href="/2016/07/25/module.exports vs exports in Node.js/">Module.exports vs Exports in Node.js</a>
+		    	</h1>
+		    	<div class="post-entry">
+		    		最近在折腾node.js的时候，经常会看到类似exports.xxx = yyy以及module.exports = yyy这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有
+		    	</div>
+		    	<a href="/2016/07/25/module.exports vs exports in Node.js/" class="readmore">Read More</a>
+			</div>
+		</div>
+	
+		<div class="post">
+			<div class="post-time">
+				<span class="post-date">02-05</span>
+			</div>
+			<div class="post-content">
+				<h1 class="post-title">
+		        	<a href="/2016/02/05/bootstrap-CSS-source-analysis/">bootstrap之CSS源码分析</a>
+		    	</h1>
+		    	<div class="post-entry">
+		    		一、前言Bootstrap作为到目前为止世界上最流行的CSS开发框架吸引了很多开发者。不过对于前端开发者来说，我觉得bootstrap的意义还是在于其代码设计理念以及思路。这篇post主要分析其中的部分CSS源码(版本是bootstrap-
+		    	</div>
+		    	<a href="/2016/02/05/bootstrap-CSS-source-analysis/" class="readmore">Read More</a>
+			</div>
+		</div>
+	
 
-      <div class="article-meta">
-        <span class="article-date">8月 16 2016</span>
-      </div>
-    </article>
-  
-    <article>
-      <h1 class="article-title">
-        <a href="/2016/08/02/Web-Real-Time-Connection/">Web Real-time Connection</a>
-      </h1>
-
-      <div class="article-entry">
-        
-      </div>
-
-      <div class="article-meta">
-        <span class="article-date">8月 02 2016</span>
-      </div>
-    </article>
-  
-    <article>
-      <h1 class="article-title">
-        <a href="/2016/07/27/初识WebpageTest/">初识WebPageTest（一）</a>
-      </h1>
-
-      <div class="article-entry">
-        
-      </div>
-
-      <div class="article-meta">
-        <span class="article-date">7月 27 2016</span>
-      </div>
-    </article>
-  
-    <article>
-      <h1 class="article-title">
-        <a href="/2016/07/25/module.exports vs exports in Node.js/">Module.exports vs Exports in Node.js</a>
-      </h1>
-
-      <div class="article-entry">
-        
-      </div>
-
-      <div class="article-meta">
-        <span class="article-date">7月 25 2016</span>
-      </div>
-    </article>
-  
-    <article>
-      <h1 class="article-title">
-        <a href="/2016/02/05/bootstrap-CSS-source-analysis/">bootstrap之CSS源码分析</a>
-      </h1>
-
-      <div class="article-entry">
-        
-      </div>
-
-      <div class="article-meta">
-        <span class="article-date">2月 05 2016</span>
-      </div>
-    </article>
-  
-
-  <nav class="page-nav">
-  <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &rarr;</a>
-</nav>
-
+	<ul class="page-nav">
+    
+    
+        <li class="btn next"><a href="/page/2/">OLDER POSTS </a></li>
+    
+</ul>
 </main>
 
-<footer class="app-footer">
-  <p>
-    Writed by
-    <a href="https://github.com/IanPeverell">
-      Ian He
-    </a>
-  </p>
-  <p> Powered by <a href="https://hexo.io.com"> Hexo </a> <p>
+	<!-- footer -->
+	<footer>
+	<div class="social">
+		<a href="https://twitter.com">
+			<i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="https://github.com/stephenLYao">
+			<i class="fa fa-github fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="http://www.weibo.com/3103316530/profile?rightmod=1&wvr=6&mod=personinfo">
+			<i class="fa fa-weibo fa-2x" aria-hidden="true"></i>
+		</a>
+	</div>
+	<p>@2016.Power by <a rel="nofollow"  href="https://hexo.io">Hexo</a>. Theme <a rel="nofollow" href="https://github.com/stephenLYao/hexo-theme-fresh.git">fresh</p>
 </footer>
 
-<script src="/js/app.js"></script>
 
+	
+	<!-- js -->
+	<script type="text/javascript" src="https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+	<script src="/js/toggle.js"></script>
 </body>
 </html>

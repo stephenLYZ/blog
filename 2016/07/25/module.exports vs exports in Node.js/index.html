@@ -1,49 +1,77 @@
 <!DOCTYPE html>
 <html>
+
+<!-- Head tag -->
+
 <head>
-  <meta charset="utf-8">
-  <title>Module.exports vs Exports in Node.js | Ian He&#39;s Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="shortcut icon" href="/avator.png">
-  <link rel="stylesheet" href="/css/app.css">
-  <!-- <link rel='stylesheet' href='http://fonts.useso.com/css?family=Source+Code+Pro'> -->
+ 	 <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <title>Module.exports vs Exports in Node.js | Stephen&#39;s blog</title>
+    <!-- Favicon -->
+    <link rel="Shortcut Icon" href="/favicon.ico">
+
+    <!-- css files -->
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
 </head>
 
 <body>
-  <nav class="app-nav">
-  
-      
-        <a class="active" href="/.">home</a>
-        
+	<!-- header -->
+	<header class="header">
+    <section class="banner">
+        <div class="banner-image">
+            <img src="http://7xl0rs.com1.z0.glb.clouddn.com/banner.png" alt="banner">
+        </div>
+        <img class="avatar" src="http://7xl0rs.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" >
+    </section>
 
-      
-  
-      
-        <a href="/archives">archive</a>
-      
-  
-      
-        <a href="/tags">tags</a>
-      
-  
-      
-        <a href="/about">about</a>
-      
-  
-</nav>
+    <nav class="nav">
+    
+    	<a href="/">Home</a>
+    
+    	<a href="/archives">Archives</a>
+    
+    	<a href="/about">About</a>
+    
+    	<a href="/atom.xml">Rss</a>
+    
+    </nav>
+    <button class="menu-toggle">
+        <div class="nav-bar">
+             
+                <a href="/">Home</a>
+            
+                <a href="/archives">Archives</a>
+            
+                <a href="/about">About</a>
+            
+                <a href="/atom.xml">Rss</a>
+            
+        </div>
+    </button>
+    
+</header>
 
-  <main class="post">
-  <article>
-  <h1 class="article-title">
-    <a href="/2016/07/25/module.exports vs exports in Node.js/">Module.exports vs Exports in Node.js</a>
-  </h1>
+	<!-- Main content -->
+	<main class="post">
 
-  <section class="article-meta">
-    <p class="article-date">七月 25 2016</p>
-  </section>
+	<article>
+	<h1 class="article-title">
+	   Module.exports vs Exports in Node.js
+	</h1>
 
-  <section class="article-entry">
-    <p>最近在折腾node.js的时候，经常会看到类似<code>exports.xxx = yyy</code>以及<code>module.exports = yyy</code>这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？<br>关于两者的区别，了解了下面几点就会非常的清楚:</p>
+	<section class="post-time">
+		<span class="post-date">07-25</span>
+	</section>
+
+	<section class="article-entry">
+	    <p>最近在折腾node.js的时候，经常会看到类似<code>exports.xxx = yyy</code>以及<code>module.exports = yyy</code>这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？<br>关于两者的区别，了解了下面几点就会非常的清楚:</p>
 <ul>
 <li><code>exports</code> 是 <code>module.exports</code> 的一个引用 <code>exports = module.exports = {}</code></li>
 <li><code>require()</code>返回的是<code>module.exports</code> 而不是 <code>exports</code></li>
@@ -68,10 +96,31 @@
 </ul>
 <p>参考：<br><a href="https://cnodejs.org/topic/5231a630101e574521e45ef8" target="_blank" rel="external">exports 和 module.exports 的区别</a><br><a href="http://www.hacksparrow.com/node-js-exports-vs-module-exports.html" target="_blank" rel="external">node-js-exports-vs-module-exports</a><br><a href="http://www.ghostchina.com/module-exports-and-exports-in-node-js/" target="_blank" rel="external">module-exports-and-exports-in-node-js</a></p>
 
-  </section>
+	</section>	
 </article>
 
 </main>
 
+	<!-- footer -->
+	<footer>
+	<div class="social">
+		<a href="https://twitter.com">
+			<i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="https://github.com/stephenLYao">
+			<i class="fa fa-github fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="http://www.weibo.com/3103316530/profile?rightmod=1&wvr=6&mod=personinfo">
+			<i class="fa fa-weibo fa-2x" aria-hidden="true"></i>
+		</a>
+	</div>
+	<p>@2016.Power by <a rel="nofollow"  href="https://hexo.io">Hexo</a>. Theme <a rel="nofollow" href="https://github.com/stephenLYao/hexo-theme-fresh.git">fresh</p>
+</footer>
+
+
+	
+	<!-- js -->
+	<script type="text/javascript" src="https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+	<script src="/js/toggle.js"></script>
 </body>
 </html>
