@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-09-06T08:41:10.000Z</updated>
+  <updated>2016-09-25T13:05:33.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,59 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Array-Like Object in Javascript</title>
+    <link href="http://yoursite.com/2016/09/25/array-like-to-array/"/>
+    <id>http://yoursite.com/2016/09/25/array-like-to-array/</id>
+    <published>2016-09-25T09:00:31.000Z</published>
+    <updated>2016-09-25T13:05:33.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="What-is-Array-Like-Object"><a href="#What-is-Array-Like-Object" class="headerlink" title="What is Array-Like Object?"></a>What is Array-Like Object?</h2><p>As we all know,everything in javascript is <strong>Object</strong>.So an array-like object is not a separate object type,it’s an object we are familiar with.Why? Maybe you often use <code>arguments</code> variable in javascript function by default.Like this:  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="built_in">arguments</span>[<span class="number">0</span>])</div><div class="line">	<span class="built_in">console</span>.log(<span class="built_in">arguments</span>[<span class="number">1</span>])</div><div class="line">	<span class="built_in">console</span>.log(<span class="built_in">arguments</span>.length)</div><div class="line">&#125;</div><div class="line">foo(<span class="string">'A'</span>,<span class="string">'B'</span>)  </div><div class="line"></div><div class="line"><span class="comment">// A</span></div><div class="line"><span class="comment">// B</span></div><div class="line"><span class="comment">// 2</span></div></pre></td></tr></table></figure>
+<p>Okay,it has <code>length</code>  property right?So is it an array? No!If you push some stuff to it like this:  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">arguments</span>.push(<span class="string">'C'</span>)</div><div class="line"><span class="comment">//// TypeError: Object has no method 'push'</span></div></pre></td></tr></table></figure>
+<p>Then you will realize that none of the array methods, like pop(), shift(), forEach() etc work.In fact ,we call this “Array-Like”.<br>An Array-Like Object has two features:  </p>
+<ul>
+<li>has indexed access to elements and the property <code>length</code></li>
+<li>doesn’t have array methods ,like push(),pop() etc.</li>
+</ul>
+<h2 id="Common-Array-Like-Objects"><a href="#Common-Array-Like-Objects" class="headerlink" title="Common Array-Like Objects"></a>Common Array-Like Objects</h2><ul>
+<li>document.getElementsByClassName()</li>
+<li>document.getElementsByTagName()</li>
+<li>document.getElementsByName()</li>
+<li>document.stylesheets</li>
+<li>parentNode.chidlNodes</li>
+<li>arguments</li>
+<li>document.querySelectorAll()</li>
+</ul>
+<h2 id="Converting-an-Array-Like-Object-to-an-array"><a href="#Converting-an-Array-Like-Object-to-an-array" class="headerlink" title="Converting an Array-Like Object to an array"></a>Converting an Array-Like Object to an array</h2><p>Sometimes it’s better to convert an array-like object  to an array.A very straight method is creating an array,like this:  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fn</span> (<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">var</span> array = []</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>;i &lt; <span class="built_in">arguments</span>.length;i++)&#123;</div><div class="line">		arr[i] = <span class="built_in">arguments</span>[i]</div><div class="line">	&#125;</div><div class="line">	array.push(<span class="number">5</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line">fn(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>) </div><div class="line"></div><div class="line"><span class="comment">// [1,2,3,4,5]</span></div></pre></td></tr></table></figure>
+<p>However, it’s not elegant at all. We can use<br>:  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>.prototype.slice.call(<span class="built_in">arguments</span>)</div></pre></td></tr></table></figure>
+<p>Or use [ ] to replace <code>array.prototype</code>:  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[].slice.call(<span class="built_in">arguments</span>)</div></pre></td></tr></table></figure>
+<p>The reason that slice() can convert an array-like to array, since it returns a shallow copy of elements from the original array. About the specific detail can refer to <a href="https://github.com/v8/v8/blob/master/src/js/array.js#L621-L660" target="_blank" rel="external">V8 source</a> .  </p>
+<p>ES2015 provides a more convenient method <code>Array.from()</code>:</p>
+<pre><code class="javascript"><span class="function"><span class="keyword">function</span> <span class="title">fn</span>(<span class="params"></span>)</span>{
+    <span class="keyword">return</span> <span class="built_in">Array</span>.from(<span class="built_in">arguments</span>)
+}
+
+fn(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)
+
+<span class="comment">//[1,2,3,4]</span>
+</code></pre>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="http://www.2ality.com/2013/05/quirk-array-like-objects.html" target="_blank" rel="external">JavaScript quirk 8: array-like objects</a><br><a href="http://www.hacksparrow.com/javascript-array-like-objects.html" target="_blank" rel="external">JavaScript Array-like Objects</a><br><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from" target="_blank" rel="external">MDN  Array.from()</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;What-is-Array-Like-Object&quot;&gt;&lt;a href=&quot;#What-is-Array-Like-Object&quot; class=&quot;headerlink&quot; title=&quot;What is Array-Like Object?&quot;&gt;&lt;/a&gt;What is Ar
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>2016 NingJS(JSConf CN 2016) 见闻(一)</title>
