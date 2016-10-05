@@ -223,7 +223,11 @@ main.post {
   @media (max-width: 62em) {
     main.post .post-time {
       left: 50%;
-      transform: translateX(-50%); }
+      transform: translateX(-50%);
+      width: 76.66667px;
+      height: 76.66667px;
+      top: -38.33333px;
+      line-height: 76.66667px; }
     main.post .article-title {
       margin-top: 2em; }
     main.post .article-entry {
