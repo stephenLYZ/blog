@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Head tag -->
+
+<head>
+ 	 <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <title>基于Phaser写一个简单的FlappyBird | Stephen&#39;s blog</title>
+    <!-- Favicon -->
+    <link rel="Shortcut Icon" href="/favicon.ico">
+
+    <!-- css files -->
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+</head>
+
+<body>
+	<!-- header -->
+	<header class="header">
+    <section class="banner">
+        <div class="banner-image">
+            <img src="http://7xl0rs.com1.z0.glb.clouddn.com/banner.png" alt="banner">
+        </div>
+        <img class="avatar" src="http://7xl0rs.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" >
+    </section>
+
+    <nav class="nav">
+    
+    	<a href="/">Home</a>
+    
+    	<a href="/archives">Archives</a>
+    
+    	<a href="/about">About</a>
+    
+    	<a href="/atom.xml">Rss</a>
+    
+    </nav>
+    <button class="menu-toggle">
+        <div class="nav-bar">
+             
+                <a href="/">Home</a>
+            
+                <a href="/archives">Archives</a>
+            
+                <a href="/about">About</a>
+            
+                <a href="/atom.xml">Rss</a>
+            
+        </div>
+    </button>
+    
+</header>
+
+	<!-- Main content -->
+	<main class="post">
+
+	<article>
+	<h1 class="article-title">
+	   基于Phaser写一个简单的FlappyBird
+	</h1>
+
+	<section class="post-time">
+		<span class="post-date">11-04</span>
+	</section>
+
+	<section class="article-entry">
+	    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><a href="http://phaser.io" target="_blank" rel="external">Phaser</a>是一个免费开源而且功能强大的html5游戏框架，利用它可以很轻松的开发出一个html5游戏。本篇文章主要讲利用Phaser来开发一个简单的flappy bird。这里有试玩地址<a href="https://stephenlyao.github.io/HTML5-Games/FlappyBird/" target="_blank" rel="external">Play</a>，相关代码放在了<a href="https://github.com/stephenLYao/HTML5-Games" target="_blank" rel="external">github</a>上。  </p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>在开始前，为了让我们更专注于写游戏代码上，可以先下载一份<a href="http://7xl0rs.com1.z0.glb.clouddn.com/FlappyBird.zip" target="_blank" rel="external">模版</a>，下载后里面的目录结构为： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">-- FlappyBird</div><div class="line">   -- assets</div><div class="line">      -- bird.png</div><div class="line">      -- pipe.png</div><div class="line">      -- hurt.wav</div><div class="line">      -- score.wav</div><div class="line">      -- jump.wav</div><div class="line">   -- main.js</div><div class="line">   -- phaser.min.js</div><div class="line">   -- index.html</div></pre></td></tr></table></figure>
+<p>其中<code>assets</code>主要放置我们的精灵图以及声音素材，<code>main.js</code>主要是写游戏逻辑的地方。前期工作准备好了后，接下来我们就开始吧！  </p>
+<h2 id="新建游戏"><a href="#新建游戏" class="headerlink" title="新建游戏"></a>新建游戏</h2><p>首先在<code>main.js</code>中新建一个空的Phaser游戏：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 创建一个mainState来包裹整个游戏状态</span></div><div class="line"><span class="keyword">var</span> mainState = &#123;</div><div class="line">    preload: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </div><div class="line">  		<span class="comment">// preload函数会在游戏开始前执行</span></div><div class="line">  		<span class="comment">// 所以这里主要放置图片声音等资源来进行预加载</span></div><div class="line">    &#125;,</div><div class="line"></div><div class="line">    create: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </div><div class="line">        <span class="comment">// create函数在preload函数后加载     </span></div><div class="line">        <span class="comment">// 所以这里主要设置游戏，显示精灵图等 </span></div><div class="line">    &#125;,</div><div class="line"></div><div class="line">    update: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="comment">// update函数每秒会调用60次    </span></div><div class="line">        <span class="comment">// 所以这里主要放置游戏逻辑   </span></div><div class="line">    &#125;,</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">// 初始化Phaser，创建宽400px，高490px的游戏</span></div><div class="line"><span class="keyword">var</span> game = <span class="keyword">new</span> Phaser.Game(<span class="number">400</span>, <span class="number">490</span>);</div><div class="line"></div><div class="line"><span class="comment">// 加入mainState, 命名为'main'</span></div><div class="line">game.state.add(<span class="string">'main'</span>, mainState); </div><div class="line"></div><div class="line"><span class="comment">// 执行游戏开始</span></div><div class="line">game.state.start(<span class="string">'main'</span>);</div></pre></td></tr></table></figure>
+<p>接下来我们就开始写<code>preload()</code>、<code>create()</code>以及<code>update()</code>函数。</p>
+<h2 id="创建Bird"><a href="#创建Bird" class="headerlink" title="创建Bird"></a>创建Bird</h2><p>下面我们来创建游戏中的bird：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">preload: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </div><div class="line">    </div><div class="line">    <span class="comment">// 加载bird精灵图</span></div><div class="line">    game.load.image(<span class="string">'bird'</span>, <span class="string">'assets/bird.png'</span>); </div><div class="line">&#125;,</div><div class="line"></div><div class="line">create: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </div><div class="line">    <span class="comment">// 游戏背景颜色</span></div><div class="line">    game.stage.backgroundColor = <span class="string">'#71c5cf'</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 设置游戏物理系统</span></div><div class="line">    game.physics.startSystem(Phaser.Physics.ARCADE);</div><div class="line"></div><div class="line">    <span class="comment">// 设置bird出现的位置，这里我设置的坐标为(100,245)</span></div><div class="line">    <span class="keyword">this</span>.bird = game.add.sprite(<span class="number">100</span>, <span class="number">245</span>, <span class="string">'bird'</span>);</div><div class="line"></div><div class="line">    <span class="comment">// 给bird加上物理系统，让它具有移动、重力、碰撞等等</span></div><div class="line">    game.physics.arcade.enable(<span class="keyword">this</span>.bird);</div><div class="line"></div><div class="line">    <span class="comment">// 添加重力，让bird能够向下掉</span></div><div class="line">    <span class="keyword">this</span>.bird.body.gravity.y = <span class="number">1000</span>;  </div><div class="line"></div><div class="line">    <span class="comment">// 当按下空格后，调用jump()函数（后面会提到这个函数）</span></div><div class="line">    <span class="keyword">var</span> spaceKey = game.input.keyboard.addKey(</div><div class="line">                    Phaser.Keyboard.SPACEBAR);</div><div class="line">    spaceKey.onDown.add(<span class="keyword">this</span>.jump, <span class="keyword">this</span>);     </div><div class="line">&#125;,</div><div class="line"></div><div class="line">update: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// 判断bird如果超出屏幕边界，则调用restartGame()函数</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.bird.y &lt; <span class="number">0</span> || <span class="keyword">this</span>.bird.y &gt; <span class="number">490</span>)</div><div class="line">        <span class="keyword">this</span>.restartGame();</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<p>下面我们添加两个函数，一个是<code>jump()</code>一个<code>restartGame()</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">jump: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">// 减少bird竖直方向的速度</span></div><div class="line">	<span class="keyword">this</span>.bird.body.velocity.y = <span class="number">-350</span></div><div class="line">&#125;,</div><div class="line"></div><div class="line">restartGame: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">// 重启游戏</span></div><div class="line">	game.state.start(<span class="string">'main'</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h4><blockquote>
+<p>注意如果你直接在浏览器打开index.html文件，会报<code>Uncaught SecurityError: Failed to execute &#39;texImage2D&#39; on &#39;WebGLRenderingContext&#39;</code>的错误，这是因为javascript不允许在本地文件系统下加载文件，为了解决这个问题可以使用一个webserver，比如</p>
+<ul>
+<li>使用<code>python -m SimpleHTTPServer</code> 然后访问<code>localhost:8000</code>;</li>
+<li>下载<a href="https://www.npmjs.com/package/http-server" target="_blank" rel="external">http-server</a>，使用<code>http-server</code>访问<code>localhost:8080</code>  </li>
+</ul>
+</blockquote>
+<p>最终你可以看到这个：  </p>
+<p><img src="http://www.lessmilk.com/imgtut/FB1/3.gif" alt=""></p>
+<h2 id="创建Pipes"><a href="#创建Pipes" class="headerlink" title="创建Pipes"></a>创建Pipes</h2><p>现在我们来添加管道障碍物。首先，我们先在<code>preload()函数</code>里加载pipe资源:  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">game.load.image(<span class="string">'pipe'</span>,<span class="string">'assets/pipe.png'</span>)</div></pre></td></tr></table></figure>
+<p>因为游戏里会有许多的pipes，所以我们可以使用Phaser里的<code>group()</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.pipes = game.add.group()</div></pre></td></tr></table></figure>
+<p>接下来设置单独的一个pipe：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 传进pipe的坐标作为参数</span></div><div class="line">addOnePipe: <span class="function"><span class="keyword">function</span>(<span class="params">x,y</span>)</span>&#123;</div><div class="line">	<span class="comment">//创建一个pipe(x,y)	</span></div><div class="line">	<span class="keyword">var</span> pipe = game.add.sprite(<span class="string">'pipe'</span>,x,y)</div><div class="line">	</div><div class="line">	<span class="comment">//将pipe加入到group中去</span></div><div class="line">	<span class="keyword">this</span>.pipes.add(pipe)</div><div class="line">	</div><div class="line">	<span class="comment">//加入物理效果</span></div><div class="line">	game.physics.arcade.enable(pipe)</div><div class="line">	</div><div class="line">	<span class="comment">//给pipe添加向左移动的速度（向左为负，向右为正，这里我们主要是让pipe向左移动）</span></div><div class="line">	pipe.body.velocity.x = <span class="number">-200</span></div><div class="line">	</div><div class="line">	<span class="comment">// 当pipe不在视野的时候，自动的销毁	</span></div><div class="line">	pipe.checkWorldBounds = <span class="literal">true</span></div><div class="line">	pipe.outOfBoundsKill = <span class="literal">true</span></div><div class="line">	</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在我们来创建一排的pipes，主要有6个pipe，2个hole，其中hole的位置是随机且两个hole是相邻的: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">addRowOfPipes: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">//随机产生hole</span></div><div class="line">	<span class="keyword">var</span> hole = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">5</span>) + <span class="number">1</span></div><div class="line">	</div><div class="line">	<span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++)&#123;</div><div class="line">		<span class="keyword">if</span>(i != hole &amp;&amp; i != hole + <span class="number">1</span>)&#123;</div><div class="line">			<span class="keyword">this</span>.addOnePipe(<span class="number">400</span>,i * <span class="number">60</span> + <span class="number">10</span>)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面图就非常清楚了：<br><img src="http://www.lessmilk.com/imgtut/FB1/6.png" alt=""></p>
+<p>最后我们在<code>create()</code>函数里，通过每1.5秒循环调用<code>addRowOfPipes()</code>函数来创建一个<code>timer</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.timer = game.time.events.loop(<span class="number">1500</span>,<span class="keyword">this</span>.addRowOfPipes,<span class="keyword">this</span>)</div></pre></td></tr></table></figure>
+<p>完成这一步后，效果应该是这样：  </p>
+<p><img src="http://www.lessmilk.com/imgtut/FB1/4.gif" alt=""></p>
+<h2 id="创建分数和碰撞"><a href="#创建分数和碰撞" class="headerlink" title="创建分数和碰撞"></a>创建分数和碰撞</h2><p>我们需要一个记分板来显示分数，于是在<code>create()</code>函数中添加:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.score = <span class="number">0</span></div><div class="line"><span class="keyword">this</span>.scoreLabel = game.add.text(<span class="number">20</span>,<span class="number">20</span>,<span class="string">'0'</span>,&#123;fill: <span class="string">'#fff'</span>&#125;)</div></pre></td></tr></table></figure>
+<p>然后分数增加的形式我们设置为，每次创建一排的pipes就加一分，也就是在<code>addRowOfPipes</code>中加上：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.score += <span class="number">1</span></div><div class="line"><span class="keyword">this</span>.scoreLabel.text = <span class="keyword">this</span>.score</div></pre></td></tr></table></figure>
+<p>下面我们加入碰撞，每次碰撞后调用<code>restartGame()</code>函数:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">game.physics.arcade.overlap(<span class="keyword">this</span>.bird, <span class="keyword">this</span>.pipes, <span class="keyword">this</span>.restartGame, <span class="literal">null</span>, <span class="keyword">this</span>)</div></pre></td></tr></table></figure>
+<p>效果如下：  </p>
+<p><img src="http://www.lessmilk.com/imgtut/FB1/5.gif" alt=""></p>
+<h2 id="添加jump动画"><a href="#添加jump动画" class="headerlink" title="添加jump动画"></a>添加jump动画</h2><p>我们知道在flappybird中，bird会随下落而缓慢向下，随着jump而有向上的趋势，类似于这种效果:  </p>
+<p><img src="http://www.lessmilk.com/imgtut/FB2/5.gif" alt=""></p>
+<p>首先我们先实现随着下落而缓慢向下，在<code>update()</code>函数中添加:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(<span class="keyword">this</span>.bird.angle &lt; <span class="number">20</span>)&#123;</div><div class="line">	<span class="keyword">this</span>.bird.angle += <span class="number">1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>原理也很简单，就是当bird的角度小于20的时候不断加一个度数（注意是顺时针方向）。<br>然后实现第二个效果，我们只要简单的设置<code>this.bird.angle = -20</code>就可以，不过为了让动画看起来更自然，我们可以让变化限制在非常短的时间内（比如100毫秒）: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 新建一个animation</span></div><div class="line"><span class="keyword">var</span> animation = game.add.tween(<span class="keyword">this</span>.bird)</div><div class="line"></div><div class="line"><span class="comment">// 改变角度并限制在100毫秒内</span></div><div class="line">animation.to(&#123;angle: <span class="number">-20</span>&#125;, <span class="number">100</span>)</div><div class="line"></div><div class="line"><span class="comment">// 执行动画</span></div><div class="line">animation.start()</div></pre></td></tr></table></figure>
+<p>这里需要注意的一点是，此时bird旋转的效果并不是我们想要的效果，因为此时旋转的中心(我们称为’anchor’)在左上角，如下图左边的bird：  </p>
+<p><img src="http://www.lessmilk.com/imgtut/FB2/2.png" alt=""></p>
+<p>我们希望将anchor(上图红色的点)放置在右边bird的位置，于是我们在<code>create()</code>函数中设置: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.bird.anchor.setTo(<span class="number">-0.2</span>,<span class="number">0.5</span>)</div></pre></td></tr></table></figure>
+<p>效果如下:  </p>
+<p><img src="http://www.lessmilk.com/imgtut/FB2/3.gif" alt="">  </p>
+<h2 id="添加死亡动画"><a href="#添加死亡动画" class="headerlink" title="添加死亡动画"></a>添加死亡动画</h2><p>之前当bird碰撞pipes后是直接重启游戏的，现在我们希望添加bird死亡掉落的动画,我们将之前<code>update()</code>函数里的<code>restartGame()</code>修改为<code>hitPipe()</code>函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">game.physics.arcade.overlap(<span class="keyword">this</span>.bird,<span class="keyword">this</span>.pipes,<span class="keyword">this</span>.hitPipe,<span class="literal">null</span>,<span class="keyword">this</span>)</div></pre></td></tr></table></figure>
+<p>hitPipe()函数如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">hitPipe: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">// 如果bird已经碰撞了pipe，则不做任何事，此时表明bird已经掉落</span></div><div class="line">	<span class="keyword">if</span>(<span class="keyword">this</span>.bird.alive == <span class="literal">false</span>)&#123;</div><div class="line">		<span class="keyword">return</span></div><div class="line">	&#125;</div><div class="line">	<span class="keyword">this</span>.bird.alive == <span class="literal">false</span></div><div class="line">	</div><div class="line">	<span class="comment">// 将timer移除，防止出现新的pipes</span></div><div class="line">	game.time.events.remove(<span class="keyword">this</span>.timer)</div><div class="line">	</div><div class="line">	<span class="comment">// 让所有的pipes停止运动</span></div><div class="line">	<span class="keyword">this</span>.pipes.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">p</span>)</span>&#123;</div><div class="line">        p.body.velocity.x = <span class="number">0</span>;</div><div class="line">    &#125;, <span class="keyword">this</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接着为了不让bird在碰撞pipe后继续jump，我们添加以下代码:  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (<span class="keyword">this</span>.bird.alive == <span class="literal">false</span>)&#123;</div><div class="line">    <span class="keyword">return</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>效果如下：  </p>
+<p><img src="http://www.lessmilk.com/imgtut/FB2/4.gif" alt=""></p>
+<h2 id="添加声音"><a href="#添加声音" class="headerlink" title="添加声音"></a>添加声音</h2><p>首先我们先在<code>preload()</code>函数加载声音资源:  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">game.load.audio(<span class="string">'jump'</span>,<span class="string">'assets/jump.wav'</span>)</div><div class="line">game.load.audio(<span class="string">'dead'</span>,<span class="string">'assets/hurt.wav'</span>)</div><div class="line">game.load.audio(<span class="string">'score'</span>,<span class="string">'assets/score.wav'</span>)</div></pre></td></tr></table></figure>
+<p>分别是jump的声音、死亡的声音以及得分的声音。  </p>
+<p>然后我们在<code>create()</code>中设置这三种： </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.jumpSong = game.add.audio(<span class="string">'jump'</span>)</div><div class="line"><span class="keyword">this</span>.deadSong = game.add.audio(<span class="string">'dead'</span>)</div><div class="line"><span class="keyword">this</span>.scoreSong = game.add.audio(<span class="string">'score'</span>)</div></pre></td></tr></table></figure>
+<p>我们在<code>jump()</code>函数中添加：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.jumpSong.play()</div></pre></td></tr></table></figure>
+<p>在<code>hitPipe()</code>函数中添加：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.deadSong.play()</div></pre></td></tr></table></figure>
+<p>在<code>addRowOfPipes()</code>函数中添加：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.scoreSong.play()</div></pre></td></tr></table></figure>
+<p>接下来就可以开始愉快的玩耍了:)</p>
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p><a href="http://phaser.io" target="_blank" rel="external">Phaser.io</a><br><a href="http://www.lessmilk.com/tutorial/flappy-bird-phaser-1" target="_blank" rel="external">flappy-bird-phaser</a></p>
+
+	</section>	
+</article>
+
+</main>
+
+	<!-- footer -->
+	<footer>
+	<div class="social">
+		<a href="https://twitter.com">
+			<i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="https://github.com/stephenLYao">
+			<i class="fa fa-github fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="http://www.weibo.com/3103316530/profile?rightmod=1&wvr=6&mod=personinfo">
+			<i class="fa fa-weibo fa-2x" aria-hidden="true"></i>
+		</a>
+	</div>
+	<p>@2016.Power by <a rel="nofollow"  href="https://hexo.io">Hexo</a>. Theme <a rel="nofollow" href="https://github.com/stephenLYao/hexo-theme-fresh.git">fresh</p>
+</footer>
+
+
+	
+	<!-- js -->
+	<script type="text/javascript" src="https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+	<script src="/js/toggle.js"></script>
+</body>
+</html>
