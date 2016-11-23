@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Head tag -->
+
+<head>
+ 	 <!-- Meta data -->
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="null">
+    <meta name="keyword"  content="undefined">
+    <title>最小编辑距离问题（Edit Distance） | Stephen&#39;s blog</title>
+    <!-- Favicon -->
+    <link rel="Shortcut Icon" href="/favicon.ico">
+
+    <!-- css files -->
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/normalize.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+</head>
+
+<body>
+	<!-- header -->
+	<header class="header">
+    <section class="banner">
+        <div class="banner-image">
+            <img src="http://7xl0rs.com1.z0.glb.clouddn.com/banner.png" alt="banner">
+        </div>
+        <img class="avatar" src="http://7xl0rs.com1.z0.glb.clouddn.com/avatar.png" alt="avatar" >
+    </section>
+
+    <nav class="nav">
+    
+    	<a href="/">Home</a>
+    
+    	<a href="/archives">Archives</a>
+    
+    	<a href="/about">About</a>
+    
+    	<a href="/atom.xml">Rss</a>
+    
+    </nav>
+    <button class="menu-toggle">
+        <div class="nav-bar">
+             
+                <a href="/">Home</a>
+            
+                <a href="/archives">Archives</a>
+            
+                <a href="/about">About</a>
+            
+                <a href="/atom.xml">Rss</a>
+            
+        </div>
+    </button>
+    
+</header>
+
+	<!-- Main content -->
+	<main class="post">
+
+	<article>
+	<h1 class="article-title">
+	   最小编辑距离问题（Edit Distance）
+	</h1>
+
+	<section class="post-time">
+		<span class="post-date">11-23</span>
+	</section>
+
+	<section class="article-entry">
+	    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在研究<code>react-diff</code>算法的时候，遇到了两个Virtual DOM列表的Diff，其实就是典型的最小编辑距离(Edit Distance)问题，于是抱着强烈的好奇心去研究了一番并做个总结。  </p>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>什么是编辑距离？简单来说就是两个字符串之间，一个转成另一个的最少编辑操作次数，也就是说编辑距离是衡量两个字符串相似性的度量方法，距离越小相似度越大，而其中允许编辑的操作有：插入（insert），删除（delete）以及替换（substitution）。</p>
+<p>这里可以看具体问题的描述（摘自<a href="https://leetcode.com/problems/edit-distance/" target="_blank" rel="external">leetcode</a>）：  </p>
+<blockquote>
+<p>Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.)</p>
+<p>You have the following 3 operations permitted on a word:</p>
+<p>a) Insert a character<br>b) Delete a character<br>c) Replace a character  </p>
+</blockquote>
+<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>具体思路如下图：  </p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance.png" alt=""></p>
+<p>假设字符串<code>X</code>的长度为N,字符串<code>Y</code>的长度为M，<code>D(i,j)</code>表示字符串<code>X[1...i]</code>转换为<code>Y[1...j]</code>的编辑距离：</p>
+<blockquote>
+<p>注意： 其中<code>X[i]</code>和<code>Y[j]</code>表示字符串<code>X</code>和<code>Y</code>的最后一位    </p>
+</blockquote>
+<p><strong>初始化:</strong>  </p>
+<p>D(i,0) = i，表示Y字符串为空，X[1…i]全部删除，所以编辑距离为i<br>D(0,j) = j，表示X字符串为空，新插入Y[1…j]，所以编辑距离为j    </p>
+<p><strong>递归关系:</strong> </p>
+<blockquote>
+<p>例子中 &gt;&gt; 定义为字符串转换</p>
+</blockquote>
+<ul>
+<li>当<code>X[i]</code>与<code>Y[j]</code>相等时，此时<code>D(i,j) = D(i-1,j-1)</code>，比如 <code>xyz &gt;&gt; thz</code> 与 <code>xy &gt;&gt; th</code> 的编辑距离相等。</li>
+<li>当<code>X[i]</code>与<code>Y[j]</code>不相等时，取下面三项的最小值：  <ul>
+<li><code>D(i-1,j) + 1</code>，即删除<code>X[i]</code>，编辑距离+1，比如<code>xyz &gt;&gt; thx = xy &gt;&gt; thx + 1</code></li>
+<li><code>D(i,j-1) + 1</code>，即插入<code>Y[j]</code>，转换后编辑距离+1，比如 <code>xyz &gt;&gt; thx = xyzx &gt;&gt; thx + 1 = xyz &gt;&gt; th + 1</code></li>
+<li><code>D(i-1,j-1) + 2</code>，即<code>X[i]</code>替换成<code>Y[j]</code>，比如<code>xyz &gt;&gt; thx = xyx &gt;&gt; thx + 2 = xy &gt;&gt; th + 2</code> </li>
+</ul>
+</li>
+</ul>
+<p>最后求的这三项的最小值就是编辑距离。</p>
+<h3 id="递归算法"><a href="#递归算法" class="headerlink" title="递归算法"></a>递归算法</h3><p>我们按照上面的思路用代码实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> editDistance = (</div><div class="line">  word1,</div><div class="line">  word2,</div><div class="line">  i,</div><div class="line">  j </div><div class="line">) =&gt; &#123;</div><div class="line">  <span class="keyword">const</span> len1 = word1.length</div><div class="line">  <span class="keyword">const</span> len2 = word2.length</div><div class="line">  <span class="keyword">const</span> d = []</div><div class="line">  <span class="keyword">if</span>(len1 === <span class="number">0</span>) &#123;</div><div class="line">    <span class="keyword">return</span> len2</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(len2 === <span class="number">0</span>) &#123;</div><div class="line">    <span class="keyword">return</span> len1</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(word1[i<span class="number">-1</span>] === word2[j<span class="number">-1</span>])&#123;</div><div class="line">    <span class="keyword">return</span> editDistance(word1,word2,i<span class="number">-1</span>,j<span class="number">-1</span>)</div><div class="line">  &#125;<span class="keyword">else</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.min(editDistance(word1,word2,i<span class="number">-1</span>,j) + <span class="number">1</span>,</div><div class="line">      		    editDistance(word1,word2,i,j<span class="number">-1</span>) + <span class="number">1</span>,</div><div class="line">      		    editDistance(word1,word2,i<span class="number">-1</span>,j<span class="number">-1</span>) + <span class="number">2</span></div><div class="line">      		    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>显然这样写的代码，性能是一个很大的问题，时间复杂度是随指数增长的，所以解决该问题的办法是使用动态规划求解。  </p>
+<h3 id="动态规划算法"><a href="#动态规划算法" class="headerlink" title="动态规划算法"></a>动态规划算法</h3><p>我们可以用动态规划的方法来优化时间复杂度<br>以<code>word1</code>为<code>‘sot’</code>，<code>word2</code>为<code>‘stop’</code>为例，我们首先创建一个矩阵：</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance1.png" alt=""></p>
+<p>计算 <code>i=1,j=1</code>:   </p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance3.png" alt=""></p>
+<p>得到:  </p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance2.png" alt=""></p>
+<p>计算<code>i=1,j=2</code>:  </p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance5.png" alt=""></p>
+<p>得到：  </p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance4.png" alt=""></p>
+<p>最终可以的得到：  </p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance6.png" alt=""></p>
+<p>于是可以得到最短编辑距离为<code>d[m][n] = 3</code>，现在时间复杂度控制在了O(mn)。</p>
+<p>具体算法如下：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> editDistance = (</div><div class="line">  word1,</div><div class="line">  word2</div><div class="line">) =&gt; &#123;</div><div class="line">  <span class="keyword">const</span> len1 = word1.length</div><div class="line">  <span class="keyword">const</span> len2 = word2.length</div><div class="line">  <span class="keyword">let</span> d = []</div><div class="line">  <span class="keyword">let</span> i,j</div><div class="line">  </div><div class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= len1; i++)&#123;</div><div class="line">    d[i] = []	</div><div class="line">    d[i][<span class="number">0</span>] = i  </div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">for</span>(j = <span class="number">0</span>; j &lt;= len2; j++)&#123;</div><div class="line">    d[<span class="number">0</span>][j] = j</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">for</span>(i = <span class="number">1</span>; i&lt;= len1; i++)&#123;</div><div class="line">    <span class="keyword">for</span>(j = <span class="number">1</span>; j &lt;= len2; j++)&#123;</div><div class="line">      <span class="keyword">if</span>(word1[i<span class="number">-1</span>] == word2[j<span class="number">-1</span>])&#123;</div><div class="line">        d[i][j] = d[i<span class="number">-1</span>][j<span class="number">-1</span>]</div><div class="line">      &#125;<span class="keyword">else</span>&#123;</div><div class="line">        d[i][j] = <span class="built_in">Math</span>.min(d[i<span class="number">-1</span>][j]+<span class="number">1</span>,d[i][j<span class="number">-1</span>]+<span class="number">1</span>,d[i<span class="number">-1</span>][j<span class="number">-1</span>]+<span class="number">2</span>)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> d[len1][len2]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>具体还可以进行空间复杂度的优化，这里我没有做等以后再研究。  </p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://web.stanford.edu/class/cs124/lec/med.pdf" target="_blank" rel="external">stanford - Minimum&amp;Edit&amp;Distance</a>  </li>
+<li><a href="http://ccl.pku.edu.cn/doubtfire/Course/Computational%20Linguistics/contents/Minimum%20Edit%20Distance.pdf" target="_blank" rel="external">最小编辑距离算法</a></li>
+</ul>
+
+	</section>	
+</article>
+
+</main>
+
+	<!-- footer -->
+	<footer>
+	<div class="social">
+		<a href="https://twitter.com">
+			<i class="fa fa-twitter fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="https://github.com/stephenLYao">
+			<i class="fa fa-github fa-2x" aria-hidden="true"></i>
+		</a>
+		<a href="http://www.weibo.com/3103316530/profile?rightmod=1&wvr=6&mod=personinfo">
+			<i class="fa fa-weibo fa-2x" aria-hidden="true"></i>
+		</a>
+	</div>
+	<p>@2016.Power by <a rel="nofollow"  href="https://hexo.io">Hexo</a>. Theme <a rel="nofollow" href="https://github.com/stephenLYao/hexo-theme-fresh.git">fresh</p>
+</footer>
+
+
+	
+	<!-- js -->
+	<script type="text/javascript" src="https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+	<script src="/js/toggle.js"></script>
+</body>
+</html>
