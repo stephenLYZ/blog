@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-11-23T16:40:50.000Z</updated>
+  <updated>2016-12-08T07:16:26.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,27 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>react-router 源码分析</title>
+    <link href="http://yoursite.com/2016/11/28/react-router/"/>
+    <id>http://yoursite.com/2016/11/28/react-router/</id>
+    <published>2016-11-27T17:29:42.000Z</published>
+    <updated>2016-12-08T07:16:26.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+      <category term="source-code" scheme="http://yoursite.com/tags/source-code/"/>
+    
+  </entry>
+  
+  <entry>
     <title>最小编辑距离问题（Edit Distance）</title>
     <link href="http://yoursite.com/2016/11/23/Min-Edit-Distance/"/>
     <id>http://yoursite.com/2016/11/23/Min-Edit-Distance/</id>
     <published>2016-11-23T07:39:01.000Z</published>
-    <updated>2016-11-23T16:40:50.000Z</updated>
+    <updated>2016-12-08T07:16:02.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在研究<code>react-diff</code>算法的时候，遇到了两个Virtual DOM列表的Diff，其实就是典型的最小编辑距离(Edit Distance)问题，于是抱着强烈的好奇心去研究了一番并做个总结。  </p>
 <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>什么是编辑距离？简单来说就是两个字符串之间，一个转成另一个的最少编辑操作次数，也就是说编辑距离是衡量两个字符串相似性的度量方法，距离越小相似度越大，而其中允许编辑的操作有：插入（insert），删除（delete）以及替换（substitution）。</p>
@@ -84,7 +100,50 @@
     </summary>
     
     
-      <category term="Algorithm" scheme="http://yoursite.com/tags/Algorithm/"/>
+      <category term="algorithm" scheme="http://yoursite.com/tags/algorithm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>实现一个VirtualDOM的轮子</title>
+    <link href="http://yoursite.com/2016/11/14/Virtual-Dom/"/>
+    <id>http://yoursite.com/2016/11/14/Virtual-Dom/</id>
+    <published>2016-11-13T17:24:11.000Z</published>
+    <updated>2016-12-08T07:14:59.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>学习React有一段时间了，一直想深入了解一下React的核心技术之一VirtualDOM的实现原理，于是便研究了一下其中的算法实现，实现了一个简易版本的VirtualDOM来帮助自己理解。  </p>
+<h2 id="什么是VirtualDOM"><a href="#什么是VirtualDOM" class="headerlink" title="什么是VirtualDOM"></a>什么是VirtualDOM</h2><h3 id="状态管理与UI同步的今世前生"><a href="#状态管理与UI同步的今世前生" class="headerlink" title="状态管理与UI同步的今世前生"></a>状态管理与UI同步的今世前生</h3><p>在Web早期，页面通常是静态的，也就是说页面上的状态一旦发生改变，需要重新请求页面，得到基于新数据的新页面。随着web应用越来越复杂，开发者发现很多情况下都只是部分状态发生改变，所以并不需要重新渲染整个页面，只要更改新状态对应的UI就好了。<br>不过如何实现呢？最简单的办法就是操作DOM了，不过由于DOM的复杂性，开发者不得不编写大量代码，为了简化这个过程，许多框架就像雨后春笋般出现了。</p>
+<h3 id="Data-Binding"><a href="#Data-Binding" class="headerlink" title="Data Binding"></a>Data Binding</h3><p>这类框架开发者只需要将UI绑定到状态(model)上，监听数据的变更，一旦变更就更新对应的UI节点：<br><img src="http://upload-images.jianshu.io/upload_images/37341-085d63a591c8647d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h3><p>以<code>Angular</code>为例的MVVM框架采用脏检查的方式来找到需要重新渲染的UI节点，虽然这种方式依然使用数据变化后更新对应 DOM 节点的方式，不过建立这种绑定关系交给了框架去处理。  </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/37341-45f13340118dcea9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="VirtualDOM"><a href="#VirtualDOM" class="headerlink" title="VirtualDOM"></a>VirtualDOM</h3><p>React的VirtualDOM的思路更为直接，初次渲染时，将数据渲染为VirtualDOM，然后通过这个VirtualDOM（javascript<br>对象）去生成真实的DOM，当状态变化时，得到一个新的VirtualDOM，将新的与旧的进行diff得到差异，然后在patch过程中将差异反映到真实DOM上，从而将操作DOM控制在最小。  </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/37341-f3172ab2917534d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">  </p>
+<h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>VirtualDOM算法主要有三个步骤:  </p>
+<ul>
+<li>用 js 对象模拟DOM Tree</li>
+<li>diff两个虚拟的DOM Tree</li>
+<li>把差异反映到真实的DOM Tree</li>
+</ul>
+<h3 id="一、用-js-对象模拟DOM-Tree"><a href="#一、用-js-对象模拟DOM-Tree" class="headerlink" title="一、用 js 对象模拟DOM Tree"></a>一、用 js 对象模拟DOM Tree</h3><h3 id="二、diff两个虚拟的DOM-Tree"><a href="#二、diff两个虚拟的DOM-Tree" class="headerlink" title="二、diff两个虚拟的DOM Tree"></a>二、diff两个虚拟的DOM Tree</h3><h3 id="三、把差异反映到真实的DOM-Tree"><a href="#三、把差异反映到真实的DOM-Tree" class="headerlink" title="三、把差异反映到真实的DOM Tree"></a>三、把差异反映到真实的DOM Tree</h3><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html" target="_blank" rel="external">Change And Its Detection In JavaScript Frameworks</a></li>
+<li><a href="http://www.infoq.com/cn/articles/react-dom-diff" target="_blank" rel="external">深入浅出React（四）：虚拟DOM Diff算法解析</a>  </li>
+<li><a href="https://github.com/livoras/blog/issues/13" target="_blank" rel="external">深度剖析：如何实现一个 Virtual DOM 算法</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/20346379?refer=purerender" target="_blank" rel="external">React 源码剖析系列 － 不可思议的 react diff</a></li>
+<li><a href="https://segmentfault.com/a/1190000003741294" target="_blank" rel="external">Edit Distance 最小编辑距离</a></li>
+<li><a href="http://grfia.dlsi.ua.es/ml/algorithms/references/editsurvey_bille.pdf" target="_blank" rel="external">A Survey on Tree Edit Distance and Related<br>Problems</a></li>
+<li><a href="https://medium.com/@deathmood/how-to-write-your-own-virtual-dom-ee74acc13060#.1ripyt7yi" target="_blank" rel="external">How to write your own Virtual DOM(1)</a></li>
+<li><a href="https://medium.com/@deathmood/write-your-virtual-dom-2-props-events-a957608f5c76#.fjuyeqczn" target="_blank" rel="external">How to write your own Virtual DOM(2)</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;学习React有一段时间了，一直想深入了解一下React的核心技术之一VirtualDOM的实现原理，于是便研究了一下其中的算法实现，实现了
+    
+    </summary>
+    
+    
+      <category term="react" scheme="http://yoursite.com/tags/react/"/>
     
   </entry>
   
@@ -183,16 +242,18 @@
   </entry>
   
   <entry>
-    <title>javascript-asynchronous-programming</title>
+    <title>探索javascript异步编程</title>
     <link href="http://yoursite.com/2016/10/21/javascript-asynchronous-programming/"/>
     <id>http://yoursite.com/2016/10/21/javascript-asynchronous-programming/</id>
     <published>2016-10-21T08:59:11.000Z</published>
-    <updated>2016-10-21T08:59:11.000Z</updated>
+    <updated>2016-12-08T07:17:59.000Z</updated>
     
     <summary type="html">
     
     </summary>
     
+    
+      <category term="javascript" scheme="http://yoursite.com/tags/javascript/"/>
     
   </entry>
   
@@ -201,7 +262,7 @@
     <link href="http://yoursite.com/2016/10/20/When-not-to-use-arrow-functions/"/>
     <id>http://yoursite.com/2016/10/20/When-not-to-use-arrow-functions/</id>
     <published>2016-10-20T02:15:28.000Z</published>
-    <updated>2016-11-23T17:00:18.000Z</updated>
+    <updated>2016-12-08T07:17:18.000Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>原文链接： <a href="https://rainsoft.io/when-not-to-use-arrow-functions-in-javascript/" target="_blank" rel="external">https://rainsoft.io/when-not-to-use-arrow-functions-in-javascript/</a></p>
@@ -288,7 +349,7 @@ multiply(<span class="number">2</span>, <span class="number">3</span>); <span cl
     </summary>
     
     
-      <category term="translate" scheme="http://yoursite.com/tags/translate/"/>
+      <category term="translations" scheme="http://yoursite.com/tags/translations/"/>
     
   </entry>
   
@@ -297,12 +358,9 @@ multiply(<span class="number">2</span>, <span class="number">3</span>); <span cl
     <link href="http://yoursite.com/2016/10/05/jquery-no-new/"/>
     <id>http://yoursite.com/2016/10/05/jquery-no-new/</id>
     <published>2016-10-05T06:25:09.000Z</published>
-    <updated>2016-10-05T08:25:33.000Z</updated>
+    <updated>2016-12-08T07:15:51.000Z</updated>
     
-    <content type="html"><![CDATA[<blockquote>
-<p>在阅读之前，假定你已经对javascript中的原型继承、闭包、new构造以及jquery和underscore都有了解。</p>
-</blockquote>
-<p>首先我们来看看jquery中的无new构造，我们知道，jquery中可以通过以下两种方式来构造对象：  </p>
+    <content type="html"><![CDATA[<p>首先我们来看看jquery中的无new构造，我们知道，jquery中可以通过以下两种方式来构造对象：  </p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 无new</span></div><div class="line">$(<span class="string">'#id'</span>).context(<span class="string">'hello world'</span>) </div><div class="line"></div><div class="line"><span class="comment">// 有new</span></div><div class="line"><span class="keyword">var</span> id = <span class="keyword">new</span> $(<span class="string">'#id'</span>)</div><div class="line">id.context(<span class="string">'hello world'</span>)</div></pre></td></tr></table></figure>
 <p>显然，我们用得最多就是第一种无new的构造方式，那这种方式内部又是怎么实现的呢？下面我们一步步来实现这样的效果。<br>js中函数是一等公民，我们在用oop形式编程的时候，很容易的会使用类来实例化对象： </p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 构造函数</span></div><div class="line"><span class="keyword">var</span> cQuery = <span class="function"><span class="keyword">function</span>(<span class="params">selector, contex</span>)</span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line">cQuery.prototype = &#123;</div><div class="line">	setName: <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.name = name</div><div class="line">	&#125;,</div><div class="line">	name: <span class="string">'stephen'</span>,</div><div class="line">	age: <span class="number">20</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> c = <span class="keyword">new</span> cQuery()</div><div class="line"></div><div class="line">c.age  <span class="comment">// 20</span></div></pre></td></tr></table></figure>
@@ -323,13 +381,13 @@ multiply(<span class="number">2</span>, <span class="number">3</span>); <span cl
     
     <summary type="html">
     
-      &lt;blockquote&gt;
-&lt;p&gt;在阅读之前，假定你已经对javascript中的原型继承、闭包、new构造以及jquery和underscore都有了解。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;首先我们来看看jquery中的无new构造，我们知道，jquery中可以通过以下两
+      &lt;p&gt;首先我们来看看jquery中的无new构造，我们知道，jquery中可以通过以下两种方式来构造对象：  &lt;/p&gt;
+&lt;figure class=&quot;highlight javascript&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div cla
     
     </summary>
     
+    
+      <category term="javascript" scheme="http://yoursite.com/tags/javascript/"/>
     
   </entry>
   
@@ -338,7 +396,7 @@ multiply(<span class="number">2</span>, <span class="number">3</span>); <span cl
     <link href="http://yoursite.com/2016/09/25/array-like-to-array/"/>
     <id>http://yoursite.com/2016/09/25/array-like-to-array/</id>
     <published>2016-09-25T09:00:31.000Z</published>
-    <updated>2016-09-25T13:05:33.000Z</updated>
+    <updated>2016-12-08T07:15:25.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="What-is-Array-Like-Object"><a href="#What-is-Array-Like-Object" class="headerlink" title="What is Array-Like Object?"></a>What is Array-Like Object?</h2><p>As we all know,everything in javascript is <strong>Object</strong>.So an array-like object is not a separate object type,it’s an object we are familiar with.Why? Maybe you often use <code>arguments</code> variable in javascript function by default.Like this:  </p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(<span class="built_in">arguments</span>[<span class="number">0</span>])</div><div class="line">	<span class="built_in">console</span>.log(<span class="built_in">arguments</span>[<span class="number">1</span>])</div><div class="line">	<span class="built_in">console</span>.log(<span class="built_in">arguments</span>.length)</div><div class="line">&#125;</div><div class="line">foo(<span class="string">'A'</span>,<span class="string">'B'</span>)  </div><div class="line"></div><div class="line"><span class="comment">// A</span></div><div class="line"><span class="comment">// B</span></div><div class="line"><span class="comment">// 2</span></div></pre></td></tr></table></figure>
@@ -384,6 +442,8 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
     </summary>
     
     
+      <category term="javascript" scheme="http://yoursite.com/tags/javascript/"/>
+    
   </entry>
   
   <entry>
@@ -391,7 +451,7 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
     <link href="http://yoursite.com/2016/09/06/2016-NingJS-JSConf-CN-2016/"/>
     <id>http://yoursite.com/2016/09/06/2016-NingJS-JSConf-CN-2016/</id>
     <published>2016-09-06T03:44:36.000Z</published>
-    <updated>2016-11-07T11:36:52.000Z</updated>
+    <updated>2016-12-08T07:15:08.000Z</updated>
     
     <content type="html"><![CDATA[<p>第一次参加JSconf，也是我第一次来南京这座城市，这座有着丰富的文化历史底蕴的城市。参加这次JSconf心情是十分激动的，见到来自各地的开发者，感受他们分享的经历与成长，这对我自身也有很大激励与启发。下面就是我对参加峰会的记录整理。</p>
 <h2 id="9月3日"><a href="#9月3日" class="headerlink" title="9月3日"></a>9月3日</h2><h3 id="VUE-js"><a href="#VUE-js" class="headerlink" title="VUE.js"></a>VUE.js</h3><p>从出场的热烈掌声无不表明了尤小右在国内前端圈的受欢迎程度，作为首位分享的讲师，尤大大首先分享了progressive framework的概念，即  </p>
@@ -419,6 +479,8 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
 </code></pre><p>具体可以参考官方地址：<br><a href="https://aframe.io" target="_blank" rel="external">https://aframe.io</a></p>
 <h3 id="Building-a-Unified-Frontend-and-Mobile-Team"><a href="#Building-a-Unified-Frontend-and-Mobile-Team" class="headerlink" title="Building a Unified Frontend and Mobile Team"></a>Building a Unified Frontend and Mobile Team</h3><p>这个分享主要说的是react,react native的，介绍了通过UI层的虚拟机，来屏蔽各端的差异，用RN搞定web、android、ios三端的开发，不过即使如此，这还是不能抛开原生的影响，也就是说未来RN可以融合其他端，但是这只是在某些特定的业务场景下。  </p>
 <h3 id="Building-asynchronous-microservices-that-get-along"><a href="#Building-asynchronous-microservices-that-get-along" class="headerlink" title="Building asynchronous microservices that get along"></a>Building asynchronous microservices that get along</h3><p> 讲师解释了microservices的概念，以及microservices的交互（restful接口，消息中间件、任务系统），然后是microservices面临的一些问题（请求变重、API数量暴增），最后以订单&amp;支付为例子，介绍了一些问题以及解决方案。</p>
+<p> 最后附上我和大神的合影:)</p>
+<p> <img src="https://avatars1.githubusercontent.com/u/11830681?v=3&amp;s=460" alt=""></p>
 ]]></content>
     
     <summary type="html">
@@ -429,6 +491,8 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
     </summary>
     
     
+      <category term="life" scheme="http://yoursite.com/tags/life/"/>
+    
   </entry>
   
   <entry>
@@ -436,7 +500,7 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
     <link href="http://yoursite.com/2016/08/16/Understanding-Event-Loop/"/>
     <id>http://yoursite.com/2016/08/16/Understanding-Event-Loop/</id>
     <published>2016-08-16T06:58:53.000Z</published>
-    <updated>2016-08-22T03:13:35.000Z</updated>
+    <updated>2016-12-08T07:16:43.000Z</updated>
     
     <content type="html"><![CDATA[<p>前段时间看了 Philip Roberts 关于event-loop的演讲视频</p>
 <blockquote>
@@ -454,6 +518,8 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
     </summary>
     
     
+      <category term="javascript" scheme="http://yoursite.com/tags/javascript/"/>
+    
   </entry>
   
   <entry>
@@ -461,7 +527,7 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
     <link href="http://yoursite.com/2016/08/02/Web-Real-Time-Connection/"/>
     <id>http://yoursite.com/2016/08/02/Web-Real-Time-Connection/</id>
     <published>2016-08-02T13:30:13.000Z</published>
-    <updated>2016-08-05T07:13:05.000Z</updated>
+    <updated>2016-12-08T07:17:08.000Z</updated>
     
     <content type="html"><![CDATA[<p>关于web实时通信，我们都知道通常是使用长轮询或者长连接这种方式。 本文是对几种web实时通信进行简单的总结介绍，仅供参考。</p>
 <h3 id="Ajax-long-polling"><a href="#Ajax-long-polling" class="headerlink" title="Ajax long polling"></a>Ajax long polling</h3><p>传统的轮询方式是客户端定时(一般使用setInterval)向服务器发送ajax请求，服务器收到请求后马上响应信息。这种方式在客户端和服务端都很好实现，但是会造成很多无用的请求，当服务器没有可返回的数据时，这次请求就浪费了。<br>而长轮询，则是客户端向服务器发送Ajax请求，<strong>服务器接到请求后保持住连接</strong>，直到有新消息才返回响应信息，客户端处理完响应信息后再向服务器发送新的请求。<br>当然使用长轮询，客户端和服务端需要具备以下的条件:  </p>
@@ -503,7 +569,7 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
     </summary>
     
     
-      <category term="Web" scheme="http://yoursite.com/tags/Web/"/>
+      <category term="web" scheme="http://yoursite.com/tags/web/"/>
     
   </entry>
   
@@ -562,7 +628,7 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
     <link href="http://yoursite.com/2016/07/25/module.exports%20vs%20exports%20in%20Node.js/"/>
     <id>http://yoursite.com/2016/07/25/module.exports vs exports in Node.js/</id>
     <published>2016-07-24T16:00:00.000Z</published>
-    <updated>2016-08-25T23:43:47.000Z</updated>
+    <updated>2016-12-08T07:16:10.000Z</updated>
     
     <content type="html"><![CDATA[<p>最近在折腾node.js的时候，经常会看到类似<code>exports.xxx = yyy</code>以及<code>module.exports = yyy</code>这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？<br>关于两者的区别，了解了下面几点就会非常的清楚:</p>
 <ul>
@@ -597,7 +663,7 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
     </summary>
     
     
-      <category term="node.js" scheme="http://yoursite.com/tags/node-js/"/>
+      <category term="nodeJs" scheme="http://yoursite.com/tags/nodeJs/"/>
     
   </entry>
   
@@ -689,7 +755,7 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
     <link href="http://yoursite.com/2016/01/12/Vertical-Align-%20All%20You%20Need%20To%20Know/"/>
     <id>http://yoursite.com/2016/01/12/Vertical-Align- All You Need To Know/</id>
     <published>2016-01-12T09:02:18.000Z</published>
-    <updated>2016-07-25T08:00:18.000Z</updated>
+    <updated>2016-12-08T07:16:55.000Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>原文链接：<a href="http://christopheraue.net/2014/03/05/vertical-align/#inline-block-element" target="_blank" rel="external">Vertical-Align: All You Need To Know</a><br>原文作者: <a href="https://twitter.com/christopheraue" target="_blank" rel="external">Christopher Aue</a></p>
@@ -758,7 +824,7 @@ fn(<span class="number">1</span>,<span class="number">2</span>,<span class="numb
     </summary>
     
     
-      <category term="translate-posts" scheme="http://yoursite.com/tags/translate-posts/"/>
+      <category term="translation" scheme="http://yoursite.com/tags/translation/"/>
     
   </entry>
   

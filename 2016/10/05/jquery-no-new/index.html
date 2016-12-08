@@ -123,15 +123,16 @@
           <div class="tags-links">
             
               
+                <a href="/tags/javascript/" rel="tag">
+                  javascript
+                </a>
+              
             
           </div>
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <blockquote>
-<p>在阅读之前，假定你已经对javascript中的原型继承、闭包、new构造以及jquery和underscore都有了解。</p>
-</blockquote>
-<p>首先我们来看看jquery中的无new构造，我们知道，jquery中可以通过以下两种方式来构造对象：  </p>
+          <p>首先我们来看看jquery中的无new构造，我们知道，jquery中可以通过以下两种方式来构造对象：  </p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 无new</span></div><div class="line">$(<span class="string">'#id'</span>).context(<span class="string">'hello world'</span>) </div><div class="line"></div><div class="line"><span class="comment">// 有new</span></div><div class="line"><span class="keyword">var</span> id = <span class="keyword">new</span> $(<span class="string">'#id'</span>)</div><div class="line">id.context(<span class="string">'hello world'</span>)</div></pre></td></tr></table></figure>
 <p>显然，我们用得最多就是第一种无new的构造方式，那这种方式内部又是怎么实现的呢？下面我们一步步来实现这样的效果。<br>js中函数是一等公民，我们在用oop形式编程的时候，很容易的会使用类来实例化对象： </p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 构造函数</span></div><div class="line"><span class="keyword">var</span> cQuery = <span class="function"><span class="keyword">function</span>(<span class="params">selector, contex</span>)</span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line">cQuery.prototype = &#123;</div><div class="line">	setName: <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.name = name</div><div class="line">	&#125;,</div><div class="line">	name: <span class="string">'stephen'</span>,</div><div class="line">	age: <span class="number">20</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> c = <span class="keyword">new</span> cQuery()</div><div class="line"></div><div class="line">c.age  <span class="comment">// 20</span></div></pre></td></tr></table></figure>

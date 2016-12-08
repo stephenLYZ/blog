@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Stephen Liu">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="实现一个VirtualDOM的轮子"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Stephen&#39;blog"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>实现一个VirtualDOM的轮子 - Stephen&#39;blog</title>
+
+
+  <link rel="shortcut icon" href="https://hexo.io/icon/favicon-96x96.png">
+
+  <!-- Custom CSS/Sass -->
+  <!-- <link rel="stylesheet" href="/css/style.css"> -->
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="http://7xl0rs.com1.z0.glb.clouddn.com/avatar.png" alt="Stephen'blog" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  home
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  archive
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            实现一个VirtualDOM的轮子
+            
+          </h1>
+          <p class="posted-on">
+          2016-11-14
+          </p>
+          <div class="tags-links">
+            
+              
+                <a href="/tags/react/" rel="tag">
+                  react
+                </a>
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>学习React有一段时间了，一直想深入了解一下React的核心技术之一VirtualDOM的实现原理，于是便研究了一下其中的算法实现，实现了一个简易版本的VirtualDOM来帮助自己理解。  </p>
+<h2 id="什么是VirtualDOM"><a href="#什么是VirtualDOM" class="headerlink" title="什么是VirtualDOM"></a>什么是VirtualDOM</h2><h3 id="状态管理与UI同步的今世前生"><a href="#状态管理与UI同步的今世前生" class="headerlink" title="状态管理与UI同步的今世前生"></a>状态管理与UI同步的今世前生</h3><p>在Web早期，页面通常是静态的，也就是说页面上的状态一旦发生改变，需要重新请求页面，得到基于新数据的新页面。随着web应用越来越复杂，开发者发现很多情况下都只是部分状态发生改变，所以并不需要重新渲染整个页面，只要更改新状态对应的UI就好了。<br>不过如何实现呢？最简单的办法就是操作DOM了，不过由于DOM的复杂性，开发者不得不编写大量代码，为了简化这个过程，许多框架就像雨后春笋般出现了。</p>
+<h3 id="Data-Binding"><a href="#Data-Binding" class="headerlink" title="Data Binding"></a>Data Binding</h3><p>这类框架开发者只需要将UI绑定到状态(model)上，监听数据的变更，一旦变更就更新对应的UI节点：<br><img src="http://upload-images.jianshu.io/upload_images/37341-085d63a591c8647d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h3><p>以<code>Angular</code>为例的MVVM框架采用脏检查的方式来找到需要重新渲染的UI节点，虽然这种方式依然使用数据变化后更新对应 DOM 节点的方式，不过建立这种绑定关系交给了框架去处理。  </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/37341-45f13340118dcea9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="VirtualDOM"><a href="#VirtualDOM" class="headerlink" title="VirtualDOM"></a>VirtualDOM</h3><p>React的VirtualDOM的思路更为直接，初次渲染时，将数据渲染为VirtualDOM，然后通过这个VirtualDOM（javascript<br>对象）去生成真实的DOM，当状态变化时，得到一个新的VirtualDOM，将新的与旧的进行diff得到差异，然后在patch过程中将差异反映到真实DOM上，从而将操作DOM控制在最小。  </p>
+<p><img src="http://upload-images.jianshu.io/upload_images/37341-f3172ab2917534d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="">  </p>
+<h2 id="算法实现"><a href="#算法实现" class="headerlink" title="算法实现"></a>算法实现</h2><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><p>VirtualDOM算法主要有三个步骤:  </p>
+<ul>
+<li>用 js 对象模拟DOM Tree</li>
+<li>diff两个虚拟的DOM Tree</li>
+<li>把差异反映到真实的DOM Tree</li>
+</ul>
+<h3 id="一、用-js-对象模拟DOM-Tree"><a href="#一、用-js-对象模拟DOM-Tree" class="headerlink" title="一、用 js 对象模拟DOM Tree"></a>一、用 js 对象模拟DOM Tree</h3><h3 id="二、diff两个虚拟的DOM-Tree"><a href="#二、diff两个虚拟的DOM-Tree" class="headerlink" title="二、diff两个虚拟的DOM Tree"></a>二、diff两个虚拟的DOM Tree</h3><h3 id="三、把差异反映到真实的DOM-Tree"><a href="#三、把差异反映到真实的DOM-Tree" class="headerlink" title="三、把差异反映到真实的DOM Tree"></a>三、把差异反映到真实的DOM Tree</h3><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html" target="_blank" rel="external">Change And Its Detection In JavaScript Frameworks</a></li>
+<li><a href="http://www.infoq.com/cn/articles/react-dom-diff" target="_blank" rel="external">深入浅出React（四）：虚拟DOM Diff算法解析</a>  </li>
+<li><a href="https://github.com/livoras/blog/issues/13" target="_blank" rel="external">深度剖析：如何实现一个 Virtual DOM 算法</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/20346379?refer=purerender" target="_blank" rel="external">React 源码剖析系列 － 不可思议的 react diff</a></li>
+<li><a href="https://segmentfault.com/a/1190000003741294" target="_blank" rel="external">Edit Distance 最小编辑距离</a></li>
+<li><a href="http://grfia.dlsi.ua.es/ml/algorithms/references/editsurvey_bille.pdf" target="_blank" rel="external">A Survey on Tree Edit Distance and Related<br>Problems</a></li>
+<li><a href="https://medium.com/@deathmood/how-to-write-your-own-virtual-dom-ee74acc13060#.1ripyt7yi" target="_blank" rel="external">How to write your own Virtual DOM(1)</a></li>
+<li><a href="https://medium.com/@deathmood/write-your-virtual-dom-2-props-events-a957608f5c76#.fjuyeqczn" target="_blank" rel="external">How to write your own Virtual DOM(2)</a></li>
+</ul>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2016/11/23/Min-Edit-Distance/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> 上一页</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2016/11/04/flappyBird-with-phaser/" rel="prev">下一页 <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">null</h1>
+        <div class="custom-widget-content">
+          
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">与我联系</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/stephenLYao" class="icon icon-github" target="_blank">github</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+    <div class="col-1-3">
+      <aside>
+        <h1 class="widget-title">站内搜索</h1>
+        <div class="widget-text">
+          <form onSubmit="return appDaily.submitSearch('')">
+            <p>
+              <input type="text" placeholder="search..." id="homeSearchInput">
+            </p>
+            <!-- <input type="submit" value="GO"> -->
+          </form>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Stephen'blog &copy; 2016</span>
+    
+      <span class="split">|</span><span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="//cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>
