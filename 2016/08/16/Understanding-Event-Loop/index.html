@@ -16,7 +16,7 @@
 
   <!--Open Graph Title-->
   
-      <meta property="og:title" content="Understanding Event Loop"/>
+      <meta property="og:title" content="Understanding Event Loop in Javascript"/>
   
   <!--Open Graph Description-->
   
@@ -33,7 +33,7 @@
 
   <!-- Title -->
   
-  <title>Understanding Event Loop - Stephen&#39;blog</title>
+  <title>Understanding Event Loop in Javascript - Stephen&#39;blog</title>
 
 
   <link rel="shortcut icon" href="https://hexo.io/icon/favicon-96x96.png">
@@ -114,7 +114,7 @@
         <!-- Title date & tags -->
         <div class="post-header">
           <h1 class="entry-title">
-            Understanding Event Loop
+            Understanding Event Loop in Javascript
             
           </h1>
           <p class="posted-on">
@@ -132,11 +132,22 @@
         </div>
         <!-- Post Main Content -->
         <div class="entry-content">
-          <p>前段时间看了 Philip Roberts 关于event-loop的演讲视频</p>
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前段时间看了 Philip Roberts 关于event-loop的演讲视频收获良多:</p>
 <blockquote>
 <p>传送门：<br>YouTube:<a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ" target="_blank" rel="external"> Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014</a><br>Vimeo: <a href="https://vimeo.com/96425312" target="_blank" rel="external">Philip Roberts: Help, I’m stuck in an event-loop</a></p>
 </blockquote>
-<p>决定总结整理一下自己对event-loop的理解。</p>
+<p>我们知道web应用在浏览器中运行会涉及到一系列比如<code>JS runtime</code>、<code>event loop</code>、<code>dom</code>、<code>ajax</code>等等技术，而在弄明白<code>event loop</code>之前我们必须先了解一下<code>JS Runtime</code>的基本作用。</p>
+<h2 id="JavaScript-Runtime"><a href="#JavaScript-Runtime" class="headerlink" title="JavaScript Runtime"></a>JavaScript Runtime</h2><p>如今业内领头的JS引擎非Chrome的V8莫属了，下图简要的概括了JS引擎是个什么样子：  </p>
+<p><img src="http://image.beekka.com/blog/2014/bg2014100802.png" alt="">  </p>
+<p>其中<code>heap</code>、<code>stack</code>、<code>callback queue</code>是JS引擎最基本的特征，而关于DOM、ajax、Timer等则属于<strong>Web APIs</strong>。</p>
+<h4 id="Heap"><a href="#Heap" class="headerlink" title="Heap"></a>Heap</h4><p>主要存放着一系列对象，表示的是内存中大未组织的区域，并且不同的浏览器提供不同的优化。 </p>
+<h4 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h4><p>函数调用时形成的堆栈，我们知道栈这种数据结构是后进先出的，每当函数调用的时候，就将函数（称为<em>帧</em>）压入栈内，函数调用完则推出栈内。一旦栈空，就会等待<code>callback queue</code>提供下一帧。比如:  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">multiply</span>(<span class="params">a,b</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> a * b</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">square</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> multiply(n,n)</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">printSquare</span>(<span class="params">n</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> squared = square(<span class="number">4</span>)</div><div class="line">  <span class="built_in">console</span>.log(squared)</div><div class="line">&#125;</div><div class="line"></div><div class="line">printSquare(<span class="number">4</span>)</div></pre></td></tr></table></figure>
+<h4 id="Callback-queue"><a href="#Callback-queue" class="headerlink" title="Callback queue"></a>Callback queue</h4><h4 id="Event-loop"><a href="#Event-loop" class="headerlink" title="Event loop"></a>Event loop</h4><h4 id="WebAPIS"><a href="#WebAPIS" class="headerlink" title="WebAPIS"></a>WebAPIS</h4><h2 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h2><h2 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h2><p>最大感触便是学习应该刨根问底，抱着强烈的好奇心去学，就像Phi做的一样，我们经常会听到javascript中的single-threaded、callback等概念，但是真正花时间去研究callback或者javascript如何运作的人却很少。所以学习应该是追根溯源、敢于探索。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://altitudelabs.com/blog/what-is-the-javascript-event-loop/" target="_blank" rel="external">Willson Mock - What is the JavaScript Event Loop?</a></li>
+<li><a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ" target="_blank" rel="external"> Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014</a> </li>
+</ul>
 
         </div>
       </article>
