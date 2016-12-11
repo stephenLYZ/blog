@@ -518,11 +518,11 @@ multiply(<span class="number">2</span>, <span class="number">3</span>); <span cl
   </entry>
   
   <entry>
-    <title>jquery以及underscore中的无new构造</title>
+    <title>jquery源码分析之无new构造</title>
     <link href="http://yoursite.com/2016/10/05/jquery-no-new/"/>
     <id>http://yoursite.com/2016/10/05/jquery-no-new/</id>
     <published>2016-10-05T06:25:09.000Z</published>
-    <updated>2016-12-08T07:15:51.000Z</updated>
+    <updated>2016-12-11T09:52:23.000Z</updated>
     
     <content type="html"><![CDATA[<p>首先我们来看看jquery中的无new构造，我们知道，jquery中可以通过以下两种方式来构造对象：  </p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 无new</span></div><div class="line">$(<span class="string">'#id'</span>).context(<span class="string">'hello world'</span>) </div><div class="line"></div><div class="line"><span class="comment">// 有new</span></div><div class="line"><span class="keyword">var</span> id = <span class="keyword">new</span> $(<span class="string">'#id'</span>)</div><div class="line">id.context(<span class="string">'hello world'</span>)</div></pre></td></tr></table></figure>
