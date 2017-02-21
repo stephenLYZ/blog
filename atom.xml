@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-12-10T09:40:03.000Z</updated>
+  <updated>2017-02-21T07:41:50.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>throttle</title>
+    <link href="http://yoursite.com/2017/02/21/throttle&amp;&amp;debounce/"/>
+    <id>http://yoursite.com/2017/02/21/throttle&amp;&amp;debounce/</id>
+    <published>2017-02-21T07:41:50.000Z</published>
+    <updated>2017-02-21T07:41:50.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>［MUXI WiKi］页面性能优化</title>
@@ -180,22 +194,6 @@
   </entry>
   
   <entry>
-    <title>react-router 源码分析</title>
-    <link href="http://yoursite.com/2016/11/28/react-router/"/>
-    <id>http://yoursite.com/2016/11/28/react-router/</id>
-    <published>2016-11-27T17:29:42.000Z</published>
-    <updated>2016-12-08T07:16:26.000Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-      <category term="source-code" scheme="http://yoursite.com/tags/source-code/"/>
-    
-  </entry>
-  
-  <entry>
     <title>最小编辑距离问题（Edit Distance）</title>
     <link href="http://yoursite.com/2016/11/23/Min-Edit-Distance/"/>
     <id>http://yoursite.com/2016/11/23/Min-Edit-Distance/</id>
@@ -273,7 +271,7 @@
     <link href="http://yoursite.com/2016/11/14/Virtual-Dom/"/>
     <id>http://yoursite.com/2016/11/14/Virtual-Dom/</id>
     <published>2016-11-13T17:24:11.000Z</published>
-    <updated>2016-12-08T07:14:59.000Z</updated>
+    <updated>2016-12-11T10:38:17.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>学习React有一段时间了，一直想深入了解一下React的核心技术之一VirtualDOM的实现原理，于是便研究了一下其中的算法实现，实现了一个简易版本的VirtualDOM来帮助自己理解。  </p>
 <h2 id="什么是VirtualDOM"><a href="#什么是VirtualDOM" class="headerlink" title="什么是VirtualDOM"></a>什么是VirtualDOM</h2><h3 id="状态管理与UI同步的今世前生"><a href="#状态管理与UI同步的今世前生" class="headerlink" title="状态管理与UI同步的今世前生"></a>状态管理与UI同步的今世前生</h3><p>在Web早期，页面通常是静态的，也就是说页面上的状态一旦发生改变，需要重新请求页面，得到基于新数据的新页面。随着web应用越来越复杂，开发者发现很多情况下都只是部分状态发生改变，所以并不需要重新渲染整个页面，只要更改新状态对应的UI就好了。<br>不过如何实现呢？最简单的办法就是操作DOM了，不过由于DOM的复杂性，开发者不得不编写大量代码，为了简化这个过程，许多框架就像雨后春笋般出现了。</p>
@@ -522,7 +520,7 @@ multiply(<span class="number">2</span>, <span class="number">3</span>); <span cl
     <link href="http://yoursite.com/2016/10/05/jquery-no-new/"/>
     <id>http://yoursite.com/2016/10/05/jquery-no-new/</id>
     <published>2016-10-05T06:25:09.000Z</published>
-    <updated>2016-12-11T09:52:23.000Z</updated>
+    <updated>2017-01-01T16:23:40.000Z</updated>
     
     <content type="html"><![CDATA[<p>首先我们来看看jquery中的无new构造，我们知道，jquery中可以通过以下两种方式来构造对象：  </p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 无new</span></div><div class="line">$(<span class="string">'#id'</span>).context(<span class="string">'hello world'</span>) </div><div class="line"></div><div class="line"><span class="comment">// 有new</span></div><div class="line"><span class="keyword">var</span> id = <span class="keyword">new</span> $(<span class="string">'#id'</span>)</div><div class="line">id.context(<span class="string">'hello world'</span>)</div></pre></td></tr></table></figure>
@@ -551,7 +549,7 @@ multiply(<span class="number">2</span>, <span class="number">3</span>); <span cl
     </summary>
     
     
-      <category term="javascript" scheme="http://yoursite.com/tags/javascript/"/>
+      <category term="源码分析" scheme="http://yoursite.com/tags/%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
     
   </entry>
   
