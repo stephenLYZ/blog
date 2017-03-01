@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-02-21T09:14:48.000Z</updated>
+  <updated>2017-03-01T05:46:17.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hack！如何让Github Pages支持SPA</title>
+    <link href="http://yoursite.com/2017/03/01/github-spa/"/>
+    <id>http://yoursite.com/2017/03/01/github-spa/</id>
+    <published>2017-03-01T03:55:22.000Z</published>
+    <updated>2017-03-01T05:46:17.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="问题提出"><a href="#问题提出" class="headerlink" title="问题提出"></a>问题提出</h3><p>之前我在写一个日记生成器的时候，大致思路是抓取github issues上的文章，然后使用react + react-router搭建SPA，最后部署到github pages上。其中遇到一个很麻烦的问题就是，github pages原生是不支持SPA的，举个例子：比如我们前端路由是<code>xxx.github.io/diary/post</code>，一旦刷新页面，github pages就会返回404，因为它并不知道这个路由<code>/post</code>，所以有什么解决办法呢？</p>
+<h3 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h3><p>github上已经有人提供了一种hack的解决办法，具体源码在<a href="https://github.com/rafrex/spa-github-pages" target="_blank" rel="external">这里</a>。接下来我们一步一步说明这个hack的方法是如何解决这个问题的：  </p>
+<h4 id="404-html"><a href="#404-html" class="headerlink" title="404.html"></a>404.html</h4><p>首先我们需要提供一个404.html，当你刷新页面后，github pages是返回404的，所以这个404.html是为了覆盖原有的404页面。最关键的是，这个404页面需要提供一段脚本代码：  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pathPrefix = <span class="literal">false</span>;</div><div class="line"><span class="keyword">var</span> l = <span class="built_in">window</span>.location;</div><div class="line">l.replace(</div><div class="line">    l.protocol + <span class="string">'//'</span> + l.hostname + (l.port ? <span class="string">':'</span> + l.port : <span class="string">''</span>) +</div><div class="line">    l.pathname.split(<span class="string">'/'</span>).slice(<span class="number">0</span>, <span class="number">2</span> * pathPrefix).join(<span class="string">'/'</span>) + <span class="string">'/?p=/'</span> +</div><div class="line">    l.pathname.slice(<span class="number">1</span>).split(<span class="string">'/'</span>).slice(pathPrefix).join(<span class="string">'/'</span>).replace(<span class="regexp">/&amp;/g</span>, <span class="string">'~and~'</span>) +</div><div class="line">    (l.search ? <span class="string">'&amp;q='</span> + l.search.slice(<span class="number">1</span>).replace(<span class="regexp">/&amp;/g</span>, <span class="string">'~and~'</span>) : <span class="string">''</span>) +</div><div class="line">    l.hash</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>这段代码啥意思呢？第一个pathPrefix我们先不管，看下面<code>l.replace()</code>，这个API是重载当前文档，并且不会产生新的历史纪录，即覆盖History对象中的当前纪录，后面的一段代码就是将当前的url转换成查询字符串以及hash片段，比如： <code>http://www.foo.tld/one/two?a=b&amp;c=d#qwe</code> 就会转换成<code>http://www.foo.tld/?p=/one/two&amp;q=a=b~and~c=d#qwe</code> 。 再说说pathPrefix，如果你的页面不是使用自定义域名，而是<code>xxx.github.io/xxx</code>，则应该设置为true，不然就为false，举个例子 <code>https://username.github.io/repo-name/one/two?a=b&amp;c=d#qwe</code> 就会转换成 <code>https://username.github.io/repo-name/?p=/one/two&amp;q=a=b~and~c=d#qwe</code> ， 这是因为需要保留repo的名称。说了这么多，这个到底有什么用呢？不急，继续看下面。</p>
+<h4 id="index-html"><a href="#index-html" class="headerlink" title="index.html"></a>index.html</h4><p>Github pages在收到404.html新请求后（<code>l.replace()</code>重载文档会发送一个新请求，比如<code>/diary/post/2015</code> 转换成了 <code>/diary/?p=/post/2015</code>），这时候会忽略查询参数和hash片段，返回index.html，相当于<code>/diary/index.html</code>，这时候魔法出现了，我们在index.html的<strong>头部</strong>加入以下代码:  </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">l</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (l.search) &#123;</div><div class="line">      <span class="keyword">var</span> q = &#123;&#125;;</div><div class="line">      l.search.slice(<span class="number">1</span>).split(<span class="string">'&amp;'</span>).forEach(<span class="function"><span class="keyword">function</span>(<span class="params">v</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> a = v.split(<span class="string">'='</span>);</div><div class="line">        q[a[<span class="number">0</span>]] = a.slice(<span class="number">1</span>).join(<span class="string">'='</span>).replace(<span class="regexp">/~and~/g</span>, <span class="string">'&amp;'</span>);</div><div class="line">      &#125;);</div><div class="line">      <span class="keyword">if</span> (q.p !== <span class="literal">undefined</span>) &#123;</div><div class="line">        <span class="built_in">window</span>.history.replaceState(<span class="literal">null</span>, <span class="literal">null</span>,</div><div class="line">          l.pathname.slice(<span class="number">0</span>, <span class="number">-1</span>) + (q.p || <span class="string">''</span>) +</div><div class="line">          (q.q ? (<span class="string">'?'</span> + q.q) : <span class="string">''</span>) +</div><div class="line">          l.hash</div><div class="line">        );</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">&#125;(<span class="built_in">window</span>.location))</div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意这段代码必须在SPA加载之前执行，就是放在打包出来的bundle.js之前</p>
+</blockquote>
+<p>这段代码做了什么呢，第一是将url还原，即<code>/diary/?p=/post/2015</code> 还原为<code>/diary/post/2015</code>，然后使用<code>history.replaceState()</code>这个API添加到history对象中，不过注意这时候浏览器不会刷新页面，简单说把history想象成盒子，把url放到history盒子里去，但是不会加载这个url，只有等页面刷新，也就是SPA的js文件加载执行后，才会使用这个url，于是等SPA页面加载后，就会根据之前的url加载相应页面，也就解决了咱们的问题。</p>
+<h4 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h4><p>总体来说整个hack的过程是： 提供404.html -&gt; 加载脚本并请求index.html -&gt; 还原url并且加载应用。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;问题提出&quot;&gt;&lt;a href=&quot;#问题提出&quot; class=&quot;headerlink&quot; title=&quot;问题提出&quot;&gt;&lt;/a&gt;问题提出&lt;/h3&gt;&lt;p&gt;之前我在写一个日记生成器的时候，大致思路是抓取github issues上的文章，然后使用react + react-rou
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>深入浅出throttle和debounce</title>
@@ -66,7 +96,7 @@
     <link href="http://yoursite.com/2017/01/25/react-router/"/>
     <id>http://yoursite.com/2017/01/25/react-router/</id>
     <published>2017-01-25T10:45:46.000Z</published>
-    <updated>2017-02-23T10:04:58.000Z</updated>
+    <updated>2017-02-23T10:12:04.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>SPA中路由系统占据着非常重要的部分，与服务端路由不同，前端路由可以有两种方式实现：一种是通过监听url的hash变化，另一种是通过History API来处理。实际上很多路由系统背后的原理都是基于以上两种，然后再对自身所使用的框架进行配套和优化。这篇文章简要分析如何实现一个前端路由，并且对react-router源码进行分析。</p>
 <h3 id="基于hash的路由实现"><a href="#基于hash的路由实现" class="headerlink" title="基于hash的路由实现"></a>基于hash的路由实现</h3><p>基于hash的路由主要原理如下：</p>
