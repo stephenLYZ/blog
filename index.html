@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Stephen&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Stephen&#39;s Blog">
+<meta property="og:url" content="stephenliu.site/index.html">
+<meta property="og:site_name" content="Stephen&#39;s Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Stephen&#39;s Blog">
+  
+    <link rel="alternate" href="/atom.xml" title="Stephen&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Stephen&#39;s Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">life is coding</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="stephenliu.site"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-［译］关于vertical-align你应该知道的事" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/07/［译］关于vertical-align你应该知道的事/" class="article-date">
+  <time datetime="2017-06-07T07:41:19.000Z" itemprop="datePublished">2017-06-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/07/［译］关于vertical-align你应该知道的事/">［译］关于vertical-align你应该知道的事</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>原文链接：<a href="http://christopheraue.net/2014/03/05/vertical-align/#inline-block-element" target="_blank" rel="external">Vertical-Align: All You Need To Know</a><br>原文作者:    Christopher Aue</p>
+</blockquote>
+<h2 id="关于Vertical-Align你应该知道的事"><a href="#关于Vertical-Align你应该知道的事" class="headerlink" title="关于Vertical-Align你应该知道的事"></a>关于Vertical-Align你应该知道的事</h2><p>我经常会碰到将元素在垂直方向上对齐的需求。</p>
+<p>CSS提供了一些可能的方法:有时我会用<code>float</code>来解决这个问题,有时会使用<code>position:absolute,</code>有时甚至不惜手动调整<code>margins</code>或者paddings(这是一件十分dirty的做法)。</p>
+<p>实话说我非常不喜欢这些解决方式。浮动只在其顶部对齐并且需要手动清除浮动。绝对定位会使元素脱离文档流,以至于它们不再影响它们周边的元素。对于使用固定的<code>margins</code>和<code>paddings</code>来说即使只是一些微小的变化,那也将成为一场灾难。</p>
+<p>但是这里有另一个杀伤力武器 : <code>vertical-align</code>。我认为它值得这个称赞。好吧,从技术角度上讲,使用<code>vertical-align</code>来布局其实是一种hack,原因是它存在并不是为了布局。而是为了使文本元素和与相邻的元素在垂直方向上对齐。尽管如此,在不同的上下文你依然可以非常灵活和细粒化的使用<code>vertical-align</code>来对齐元素。元素的尺寸可以不需要知道,因为元素没有脱离文档流,所以其它元素可以对那些改变的尺寸作出反应。这将使他在布局时成为一个有价值的选择。</p>
+<h2 id="Vertical-Align的奇特之处"><a href="#Vertical-Align的奇特之处" class="headerlink" title="Vertical-Align的奇特之处"></a>Vertical-Align的奇特之处</h2><p>尽管如此,<code>vertical-align</code>有时候可能是面目狰狞的。使用它会令人有点泄气:在它的内部工作机制中似乎有一些神秘的规则。比如有一种很可能发生的情况便是,当你改变了某个元素的<code>vertical-align</code>属性,实际上并没有改变它的对齐方式,但别的元素却发生了变化!</p>
+<p>不幸的是,当今大部分有关这方面的资料深入程度都不够。尤其是当我们想用<code>vertical-align</code>来布局的时候。这些资料更多的是将注意力集中在一个误解的概念上-尝试着垂直对齐一个元素内的任何内容。他们仅仅给出基本的介绍以及解释在一些十分简单的情况下元素是如何对齐的。他们并不解释复杂的部分。</p>
+<p>所以,我给自己设定了一个目标–  <strong>彻彻底底的弄清楚<code>vertical-align</code></strong> 的行为 。我参考了W3C上的CSS规范以及试验了一些例子最终结束了这项任务。这篇文章便是我研究的成果。</p>
+<p>那么,让我们来弄清楚这个游戏规则吧!</p>
+<p>使用<code>Vertical-align</code>的要求</p>
+<p><code>vertical-align</code>被用于对齐inline元素。这些元素,也就是display属性为inline和inline-block,而inline-table的元素不在本文讨论的范围内。<br>Inline元素基本上指的就是文本。</p>
+<p>Inline-block元素顾名思义,同时具备inline以及block元素的特性。这样的元素具有宽度和高度(可能是由内容高度决定),同样还具有padding,margin,boreder。<br>inline元素一个一个挨着摆放在行内。一旦元素太多而超出该行,则一个新行会被创建出来,这些行便是所谓的line-box。它会将行内所有的内容包裹起来。不同大小的内容,line-box的行内高度也会不同。下图画的红线代表了line-box的上下边界。</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/%E7%81%AB%E7%8B%90%E6%88%AA%E5%9B%BE_2015-12-06T04-18-06.808Z.png" alt=""></p>
+<p>在这些line-box里vertical-align属性负责对齐那些独立的元素。那么,这些元素是和谁对齐呢?</p>
+<p>关于Baselines和边界</p>
+<p>关于垂直对齐最重要的一点便是相关元素的baseline。有些情况元素盒模型的上下边界也十分重要。让我们来看看每个相关元素中baseline和边界所在的位置。</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/%E7%81%AB%E7%8B%90%E6%88%AA%E5%9B%BE_2015-12-06T05-38-14.546Z.png" alt=""> </p>
+<p>上图你可以看到有并排的三行文字。行高的上下边界用红线标出,文字高度用的是绿线,baseline便是蓝线了。左图行高和文字高度一致,所以绿线和红线重合了。中间图行高是文字大小的两倍。右边行高是文字大小的二分之一。<br>行内元素的外界在行高的上下边缘这个范围内对齐。如果行高小于文字高度也无所谓。<br>什么是baseline呢?简单粗暴的说,baseline就是文字高度中线下方的一条线。具体可以看W3C上的介绍<a href="http://www.w3.org/TR/CSS2/visudet.html#leading" target="_blank" rel="external">标准链接</a>。</p>
+<h3 id="inline-block元素"><a href="#inline-block元素" class="headerlink" title="inline-block元素"></a>inline-block元素</h3><p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/%E7%81%AB%E7%8B%90%E6%88%AA%E5%9B%BE_2015-12-06T07-16-44.376Z.png" alt=""></p>
+<p>从左到右你可以看到三个<code>inline-block</code>元素:左边是没有脱离文档流的内容c,中间是没有脱离文档流的内容c并且<code>overflow:hidden</code>,右边是没有内容但是内容有高度。margin-box的边界是用红线标出,黄色是border,绿色是padding,蓝色是content。蓝色的线代表的是元素的baseline。<br><code>inline-block</code>元素的边界就是<a href="http://www.w3.org/TR/CSS2/box.html#x17" target="_blank" rel="external">margin-box</a>的上下边界。</p>
+<p><code>inline-block</code>元素的baseline取决于该元素是否具有处于正常流的内容,具体分以下三种情况:</p>
+<ul>
+<li>在具有处于文档流的内容的情况下,inline-block元素的baseline就是最后一个内容元素的baseline(如上图左边)。这个元素的baseline的确定根据去自身规则确定。</li>
+<li>在具有处于文档流的内容并且overflow属性的值不为visible的情况下,baseline便是margin-box的下边界(如上图中间)。因此它也是inline-block的下边界。</li>
+<li>在不具有处于文档流的内容情况下,baseline同样也是margin-box的下边界。</li>
+</ul>
+<h3 id="Line-box"><a href="#Line-box" class="headerlink" title="Line box"></a>Line box</h3><p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/%E7%81%AB%E7%8B%90%E6%88%AA%E5%9B%BE_2015-12-12T08-48-08.364Z.png" alt=""></p>
+<p>关于line-box的图上面已经说过了。这次我将linebox的内容的上下边界(绿线)以及baseline(蓝线)画了出来。同样将内容元素用灰色背景高亮了出来。<br>line-box的上边界和最高元素的上边界对齐,下边界和最低元素的下边界对齐。</p>
+<h3 id="line-box的baseline是不确定的"><a href="#line-box的baseline是不确定的" class="headerlink" title="line-box的baseline是不确定的"></a>line-box的baseline是不确定的</h3><blockquote>
+<p>CSS2.1 does not define the position of the line box’s baseline ——the W3C Specs*</p>
+</blockquote>
+<p>这也是当我们使用vertical-align时最令人疑惑的地方。这意味着baseline的位置受其他条件比如vertical-align的值以及让line-box高度最小的影响。这是一个很灵活的参数。</p>
+<p>因为line-box的baseline是不可见得,所以可能不能一眼就看出来它在那。不过,你可以很轻易的将它可视化出来。只需要在行的开头添加一个字母。比如添加一个’x’。如果这个字母没有被其他方法来对齐,那么它的下边界默认就是baseline的位置。</p>
+<p>在line-box中围绕着baseline会形成text-box。text-box可以简单的被认为是没有和line-box中任何元素对齐的inline元素。它的高度与父元素font-size的值相等。因此,text-box仅仅包含非格式化的line-box文本。text-box的边界由绿线来表示。因为text-box和baseline是绑定的,当baseline位置发生变化时它的位置也会发生变化。(这里所说的text-box在W3C标准中被叫做<a href="http://www.w3.org/TR/CSS2/visudet.html#strut" target="_blank" rel="external">strut</a>。)</p>
+<p>hu~这部分比较难理解。让我们总结一下最重要的两点:</p>
+<ul>
+<li>有一个叫line-box的区域,垂直方向的对齐都发生在这个区域里。它有baseline,text-box以及上下边界。</li>
+<li>inline元素是我们需要对其的对象,他们有baseline和上下边界。</li>
+</ul>
+<h2 id="Vertical-Align的值"><a href="#Vertical-Align的值" class="headerlink" title="Vertical-Align的值"></a>Vertical-Align的值</h2><p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/310677093-552620eb1da7d.png" alt=""></p>
+<p>关于Vertical-align的值具体可以看MDN</p>
+<h2 id="Vertical-Align是如何发挥它的作用的呢"><a href="#Vertical-Align是如何发挥它的作用的呢" class="headerlink" title="Vertical-Align是如何发挥它的作用的呢"></a>Vertical-Align是如何发挥它的作用的呢</h2><p>我们现在可以更加深入的了解在某些情况下元素是如何垂直对齐的。</p>
+<h3 id="对齐一个Icon"><a href="#对齐一个Icon" class="headerlink" title="对齐一个Icon"></a>对齐一个Icon</h3><p>这里有一个问题：我想将一个icon与相邻的文本对齐。仅仅将icon的vertical-align属性的值设置为middle并不是一个令人满意的方法。看一下例子：</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/3207176454-552622437bff3.png" alt=""></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- left mark-up --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"icon middle"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line">Centered?</div><div class="line"></div><div class="line"><span class="comment">&lt;!-- right mark-up --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"icon middle"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"middle"</span>&gt;</span>Centered!<span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></div><div class="line">.icon &#123; display: inline-block; </div><div class="line">            /* size, color, etc. */ &#125;</div><div class="line">.middle &#123; vertical-align: middle; &#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>下面给出上图的辅助线版本:</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/1480687358-5526230af1f75.png" alt=""></p>
+<p>这揭示了我们的问题。因为左图的文本根本没有发生对齐行为，它还是和line-box的baseline对齐。而vertical-align对齐的点是baseline加上半个x的距离(half of the x-height)。因此文字的最高点超过了icon的高度。<br>右图所示，文字与icon对齐与一个中点。文字的baseline稍微低于line-box的baseline。结果文字很好的和icon对齐了。</p>
+<h3 id="关于Line-box的baseline的移动问题"><a href="#关于Line-box的baseline的移动问题" class="headerlink" title="关于Line-box的baseline的移动问题"></a>关于Line-box的baseline的移动问题</h3><p>这是一个使用<code>vertical-align</code>常有的坑：line-box里的所有元素都会影响到baseline的位置。让我们假设一下，如果一个元素通过某种方法对齐了，但是line-box的baseline不得不因此移动。因为大部分对齐方式（除了top和bottom）都和baseline有关，因此这个元素的对齐会导致行内其他元素的调整。<br>下面是一些例子：</p>
+<ul>
+<li>如果有一个高度可以占满整个line-box高度的元素，那么<code>vertical-align</code>对它是没有影响的。在它的top以上和bottom以下没有空间可以使它移动。为了满足它的<code>vertical-align</code>的值，<code>line-box</code>的baseline需要移动。下图矮盒子的<code>vertical-align:baseline</code>,左边的高盒子取值为<code>text-bottom</code>,右边为<code>text-top</code>，你可以看到矮盒子随着baseline跳了上去。</li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/3321562939-552a393f0f532.png" alt=""></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- left mark-up --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box text-bottom"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"short-box"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- right mark-up --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box text-top"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"short-box"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></div><div class="line">.tall-box,</div><div class="line">.short-box  &#123; display: inline-block; </div><div class="line">                       /* size, color, etc. */ &#125;</div><div class="line">.text-bottom &#123; vertical-align: text-bottom; &#125;</div><div class="line">.text-top &#123; vertical-align: text-top; &#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>当把高元素的vertical-align属性设置成其他值的时候，表现的行为是一样的。</p>
+<ul>
+<li>甚至将<code>vertical-align</code>设置成bottom（left）和top（right）也会移动baseline。这很奇怪，因为这应该和baseline并没有什么关系。</li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/3321562939-552a393f0f532.png" alt=""></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- left mark-up --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box bottom"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"short-box"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- right mark-up --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box top"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"short-box"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></div><div class="line">.tall-box,</div><div class="line">.short-box  &#123; display: inline-block; </div><div class="line">                    /* size, color, etc. */ &#125;</div><div class="line">.bottom &#123; vertical-align: bottom; &#125;</div><div class="line">.top &#123; vertical-align: top; &#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li>将两个更大的元素放在一行里，然后设置vertical-align的值使其的baseline移动以至于让他们对齐。接着line-box的高度会自动调整。添加第三个元素，这个元素如果不超过line-box的边界，则它不影响line-box的高度以及baseline的位置。如果该元素超过了line-box的边缘，则line-box的高度以及baseline都会调整。在这种情况下，另外两个元素的位置发生了下移。</li>
+</ul>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/877914604-552a3f2c8aaf5.png" alt=""></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- left mark-up --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box text-bottom"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box text-top"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- mark-up in the middle --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box text-bottom"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box text-top"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box middle"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- right mark-up --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box text-bottom"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box text-top"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"tall-box text-100up"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></div><div class="line">.tall-box  &#123; display: inline-block; </div><div class="line">                    /* size, color, etc. */ &#125;</div><div class="line">.middle  &#123; vertical-align: middle; &#125;</div><div class="line">.text-top  &#123; vertical-align: text-top; &#125;</div><div class="line">.text-bottom &#123; vertical-align: text-bottom; &#125;</div><div class="line">.text-100up  &#123; vertical-align: 100%; &#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="inline元素下方可能会有点间隙"><a href="#inline元素下方可能会有点间隙" class="headerlink" title="inline元素下方可能会有点间隙"></a>inline元素下方可能会有点间隙</h3><p>来看一个例子。一个常见的情况就是你尝试将列表的<code>li</code>元素垂直对齐。</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/2778514088-552a3fbaada4b.png" alt=""></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"box"</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></div><div class="line">  .box &#123; display: inline-block;</div><div class="line">         /* size, color, etc. */ &#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>正如你所看到的，<code>li</code>元素是对齐baseline的。baseline的下方会有一部分留给文字的空间。这便会产生小缝隙。那么解决方案是什么？只要改变line-box的baseline的位置就好了，比如把<code>li</code>元素的<code>vertical-align:middle</code>.</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/%E6%8D%95%E8%8E%B77.PNG" alt=""></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"box middle"</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"box middle"</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"box middle"</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></div><div class="line">  .box    &#123; display: inline-block;</div><div class="line">            /* size, color, etc. */ &#125;</div><div class="line"></div><div class="line">  .middle &#123; vertical-align: middle; &#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="inline元素之间的间隙会破坏布局效果"><a href="#inline元素之间的间隙会破坏布局效果" class="headerlink" title="inline元素之间的间隙会破坏布局效果"></a>inline元素之间的间隙会破坏布局效果</h3><p>这主要是inline元素自身的问题。但是因为这是让vertical-align发挥作用的必要因素，所以了解它也是不错的。</p>
+<p>这个间隙主要是来源于inline元素之间的空格。所有空白都会变成一个空格。这个空格可以通过该方法反映，比如如果你想让两个inline元素紧挨着，然后给他们的宽度分别设置为50%，这里并没有足够的空间存放两个宽度为50%的元素以及一个空格。所以一行便会被破坏成两行。为了移除空隙，我需要移除空格，解决方案如下：</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/1169658073-552a41cb7252a.png" alt=""></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">&lt;!-- left mark-up --&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"half"</span>&gt;</span>50% wide<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"half"</span>&gt;</span>50% wide... and in next line<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="comment">&lt;!-- right mark-up --&gt;</span></div><div class="line">   <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"half"</span>&gt;</span>50% wide<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="comment">&lt;!--</span></div><div class="line">--&gt;<span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"half"</span>&gt;</span>50% wide<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">type</span>=<span class="string">"text/css"</span>&gt;</span><span class="undefined"></span></div><div class="line">  .half &#123; display: inline-block;</div><div class="line">          width: 50%; &#125;</div><div class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure>
+<h2 id="Vertical-align揭秘"><a href="#Vertical-align揭秘" class="headerlink" title="Vertical-align揭秘"></a>Vertical-align揭秘</h2><p>是的，对于你来说了解这些规则并不复杂。如果vertical-align不起作用，那么想想看这两个问题：</p>
+<ul>
+<li>line-box的baseline以及上下边缘位置在哪里？</li>
+<li>inline元素的baseline以及上下边缘在哪里？</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="stephenliu.site/2017/06/07/［译］关于vertical-align你应该知道的事/" data-id="cj3mos5f50000zd9q9zq2l7ey" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/07/［译］关于vertical-align你应该知道的事/">［译］关于vertical-align你应该知道的事</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 stephen<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
