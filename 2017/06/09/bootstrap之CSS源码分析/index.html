@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>bootstrap之CSS源码分析 | Stephen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="源码分析" />
+    
+    <meta name="description" content="前言Bootstrap作为到目前为止世界上最流行的CSS开发框架吸引了很多开发者。不过对于前端开发者来说，我觉得bootstrap的意义还是在于其代码设计理念以及思路。这篇post主要分析其中的部分CSS源码(版本是bootstrap-4.0.0-alpha，其中CSS具体数据可以通过css stats测得）。Bootstrap3版本之前是基于Less来编译的，但到了4.0-alpha版本就开始正">
+<meta name="keywords" content="源码分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bootstrap之CSS源码分析">
+<meta property="og:url" content="stephenliu.site/2017/06/09/bootstrap之CSS源码分析/index.html">
+<meta property="og:site_name" content="Stephen&#39;s Blog">
+<meta property="og:description" content="前言Bootstrap作为到目前为止世界上最流行的CSS开发框架吸引了很多开发者。不过对于前端开发者来说，我觉得bootstrap的意义还是在于其代码设计理念以及思路。这篇post主要分析其中的部分CSS源码(版本是bootstrap-4.0.0-alpha，其中CSS具体数据可以通过css stats测得）。Bootstrap3版本之前是基于Less来编译的，但到了4.0-alpha版本就开始正">
+<meta property="og:image" content="/images/bootstrap.png">
+<meta property="og:updated_time" content="2017-06-09T15:24:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="bootstrap之CSS源码分析">
+<meta name="twitter:description" content="前言Bootstrap作为到目前为止世界上最流行的CSS开发框架吸引了很多开发者。不过对于前端开发者来说，我觉得bootstrap的意义还是在于其代码设计理念以及思路。这篇post主要分析其中的部分CSS源码(版本是bootstrap-4.0.0-alpha，其中CSS具体数据可以通过css stats测得）。Bootstrap3版本之前是基于Less来编译的，但到了4.0-alpha版本就开始正">
+<meta name="twitter:image" content="/images/bootstrap.png">
+    
+
+    
+        <link rel="alternate" href="/" title="Stephen&#39;s Blog" type="application/atom+xml" />
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-100550379-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">Keep Calm And Love</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Technology/">Technology</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Technology/">Technology</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-bootstrap之CSS源码分析" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        bootstrap之CSS源码分析
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/06/09/bootstrap之CSS源码分析/" class="article-date">
+            <time datetime="2017-06-09T15:24:16.000Z" itemprop="datePublished">2017-06-09</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/源码分析/">源码分析</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Bootstrap作为到目前为止世界上最流行的CSS开发框架吸引了很多开发者。不过对于前端开发者来说，我觉得bootstrap的意义还是在于其代码设计理念以及思路。这篇post主要分析其中的部分CSS源码(版本是bootstrap-4.0.0-alpha，其中CSS具体数据可以通过<a href="http://www.cssstats.com/" target="_blank" rel="external">css stats</a>测得）。Bootstrap3版本之前是基于Less来编译的，但到了4.0-alpha版本就开始正式使用Sass。<br>我们可以看到scss目录结构大致是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">bootstrap/</div><div class="line">|– bootstrap.scss   # Manifest file </div><div class="line">|– _alerts.scss     # Component file </div><div class="line">|– _buttons.scss    # Component file </div><div class="line">|– _mixins.scss     # Mixin file – imports all files from mixins folder</div><div class="line">|–  ...             # Etc..</div><div class="line">|– mixins/</div><div class="line">|  |–  _alerts.scss # Alert mixin</div><div class="line">|  |– _buttons.scss # Button mixin</div><div class="line">|  |– ...           # Etc.</div></pre></td></tr></table></figure>
+<p>从整体的文件结构也可以看出bootstrap组件化以及层次化的特点。<br>接下来我将从三个方面进行分析：</p>
+<ul>
+<li>CSS Specificity Graph</li>
+<li>Grid源码分析</li>
+<li>Normalize.css</li>
+</ul>
+<h2 id="CSS-Specificity-Graph"><a href="#CSS-Specificity-Graph" class="headerlink" title="CSS Specificity Graph"></a>CSS Specificity Graph</h2><p>Bootstrap中CSS选择器的类型就有两千多种，我们知道在构建自己项目的时候，有一个问题我们必须十分注意：CSS Specificity。这时候我们可以利用一个可视化工具－－<a href="https://jonassebastianohlsson.com/specificity-graph/" target="_blank" rel="external">CSS Specificity Graph</a>来大致的查看整个项目的CSS Specificity。我认为Bootstrap中CSS Specificity分布还是比较合理的，从整体上看Bootstrap中CSS Specificity大致分布是这样的：</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202016-04-03%2011.59.37.png" alt=""></p>
+<p>曲线比较粗略的描绘了整个CSS Specificity的分布情况，x轴指的选择器，y轴是权重值。现在我们来分析一下这条曲线，整体上看权重值主要分布在中段（20～30），而最高值达到了60，最低值为1。<br>在前一小段，我们可以清楚的看到权重值普遍低于10，类似于这样类型的选择器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">//权重为1</div><div class="line">html </div><div class="line">body  </div><div class="line">article,</div><div class="line">aside,</div><div class="line">details,</div><div class="line">figcaption,</div><div class="line">figure,</div><div class="line">footer,</div><div class="line">header,</div><div class="line">hgroup,</div><div class="line">main,</div><div class="line">menu,</div><div class="line">....</div><div class="line">//权重为10左右</div><div class="line">html input[type=&quot;button&quot;], </div><div class="line">input[type=&quot;reset&quot;],</div><div class="line">input[type=&quot;submit&quot;],</div><div class="line">abbr[data-original-title]</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>也就是前部分基本上是一些元素或属性选择器。而到了中间有一段平缓区，这部分是栅格系统的选择器:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">.col-xs-1,.col-sm-1,.col-md-1,.col-lg-1,</div><div class="line">.col-xs-2,.col-sm-2,.col-md-2,.col-lg-2,</div><div class="line">.col-xs-3,.col-sm-3,.col-md-3,.col-lg-3,</div><div class="line">.col-xs-4,.col-sm-4,.col-md-4,.col-lg-4,</div><div class="line">.col-xs-5,.col-sm-5,.col-md-5,.col-lg-5,</div><div class="line">.col-xs-6,.col-sm-6,.col-md-6,.col-lg-6,</div><div class="line">.col-xs-7,.col-sm-7,.col-md-7,.col-lg-7,</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>随后就是相对复杂的各组件选择器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//最低达到10</div><div class="line">.btn,</div><div class="line">.btn-link,</div><div class="line">.form-control,</div><div class="line">....</div><div class="line">//最高达到60</div><div class="line">.btn-group &gt; .btn-group:last-child:not(:first-child) &gt; .btn:first-child</div><div class="line">.btn-group-vertical &gt; .btn-group:first-child:not(:last-child) &gt; .dropdown-toggle</div><div class="line">.btn-group &gt; .btn:not(:first-child):not(:last-child):not(.dropdown-toggle)</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>总体来说整个曲线是向上的趋势，不过问题也很明显，也就是曲线比较曲折，而我们说一个良好的权重曲线是平缓且向上趋势的，即把权重低的选择器放在最前面，高权重的选择器放在后面，也就是说我们希望曲线不会出现尖峰。由于bootstrap使用的是组件化的思想，所以我们再具体化分别对button、nav、list、table组件进行分析：</p>
+<p>button组件  nav组件</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/btn.png" alt=""><br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/nav.png" alt=""></p>
+<p>table组件   list组件</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/table.png" alt=""><br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/list.png" alt=""></p>
+<p>每个组件曲线依然是相对曲折的，不过我们发现CSS Specificity的分布具有一定周期性，尤其是button组件特别明显。原因其实也很简单－－组件中还分为更小的组件(也不完全叫做组件)，比如以button为例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//.btn还分为更小的部分</div><div class="line">...</div><div class="line">.btn-primary&#123;&#125;</div><div class="line">...</div><div class="line">.btn-danger&#123;&#125;</div><div class="line">...</div><div class="line">.btn-info&#123;&#125;</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>这也是为什么每到一个阶段就会出现一个最低点,我们以.btn-primary为例来看一下更为小的组件：</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/btn-primary.png" alt=""></p>
+<p>其中源代码为：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.btn-primary</span> &#123;</div><div class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</div><div class="line">  <span class="attribute">background-color</span>: <span class="number">#0275d8</span>;</div><div class="line">  <span class="attribute">border-color</span>: <span class="number">#0275d8</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-pseudo">:focus</span>,</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-class">.focus</span>,</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-pseudo">:active</span>,</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-class">.active</span>,</div><div class="line"><span class="selector-class">.open</span> &gt; <span class="selector-class">.btn-primary</span><span class="selector-class">.dropdown-toggle</span> &#123;</div><div class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</div><div class="line">  <span class="attribute">background-color</span>: <span class="number">#025aa5</span>;</div><div class="line">  <span class="attribute">border-color</span>: <span class="number">#01549b</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-pseudo">:hover</span> &#123;</div><div class="line">  <span class="attribute">color</span>: <span class="number">#fff</span>;</div><div class="line">  <span class="attribute">background-color</span>: <span class="number">#025aa5</span>;</div><div class="line">  <span class="attribute">border-color</span>: <span class="number">#01549b</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-pseudo">:active</span>,</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-class">.active</span>,</div><div class="line"><span class="selector-class">.open</span> &gt; <span class="selector-class">.btn-primary</span><span class="selector-class">.dropdown-toggle</span> &#123;</div><div class="line">  <span class="attribute">background-image</span>: none;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-class">.disabled</span><span class="selector-pseudo">:focus</span>,</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-class">.disabled</span><span class="selector-class">.focus</span>,</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-pseudo">:disabled</span><span class="selector-pseudo">:focus</span>,</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-pseudo">:disabled.focus</span>,</div><div class="line"><span class="selector-tag">fieldset</span><span class="selector-attr">[disabled]</span> <span class="selector-class">.btn-primary</span><span class="selector-pseudo">:focus</span>,</div><div class="line"><span class="selector-tag">fieldset</span><span class="selector-attr">[disabled]</span> <span class="selector-class">.btn-primary</span><span class="selector-class">.focus</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: <span class="number">#0275d8</span>;</div><div class="line">  <span class="attribute">border-color</span>: <span class="number">#0275d8</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-class">.disabled</span><span class="selector-pseudo">:hover</span>,</div><div class="line"><span class="selector-class">.btn-primary</span><span class="selector-pseudo">:disabled</span><span class="selector-pseudo">:hover</span>,</div><div class="line"><span class="selector-tag">fieldset</span><span class="selector-attr">[disabled]</span> <span class="selector-class">.btn-primary</span><span class="selector-pseudo">:hover</span> &#123;</div><div class="line">  <span class="attribute">background-color</span>: <span class="number">#0275d8</span>;</div><div class="line">  <span class="attribute">border-color</span>: <span class="number">#0275d8</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从曲线可以看到小组件的趋势是相对平缓且上升的，这也说明bootstrap的权重曲线设计是比较合理的。而我们在构建自己的项目的时候，最合适的模式就是使得项目的CSS Specificity曲线平缓且上升的趋势，避免出现尖峰的情况。<br>想了解更多有关css specificity graph，可以看<a href="http://csswizardry.com/2014/10/the-specificity-graph/" target="_blank" rel="external">这篇文章</a>。</p>
+<h2 id="Grid-System"><a href="#Grid-System" class="headerlink" title="Grid System"></a>Grid System</h2><p>在分析Bootstrap的Grid Systemt之前我们先看一下_variables.scss中所涉及的变量：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">//_variables.scss</div><div class="line">$grid-breakpoints: (</div><div class="line">  // Extra small screen / phone</div><div class="line">  xs: 0,</div><div class="line">  // Small screen / phone</div><div class="line">  sm: 34em,</div><div class="line">  // Medium screen / tablet</div><div class="line">  md: 48em,</div><div class="line">  // Large screen / desktop</div><div class="line">  lg: 62em,</div><div class="line">  // Extra large screen / wide desktop</div><div class="line">  xl: 75em</div><div class="line">) !default;</div><div class="line">// Grid containers</div><div class="line">// 对于不同的屏幕尺寸设置'.container'的最大宽度</div><div class="line">$container-max-widths: (</div><div class="line">  sm: 34rem,    // 480</div><div class="line">  md: 45rem,    // 720</div><div class="line">  lg: 60rem,    // 960</div><div class="line">  xl: 72.25rem  // 1140</div><div class="line">) !default;</div><div class="line">``` </div><div class="line"></div><div class="line">其中$grid-breakpoints的作用是当你选择哪种方式布局时，从而让Grid系统适应各种屏幕尺寸。我们都知道Grid总列数为12列，列与列的宽度为30px(30px分为两部分，分别应用与相邻的两列),这是通过以下变量定义：</div><div class="line"></div><div class="line">```css</div><div class="line">// Grid columns</div><div class="line">//</div><div class="line">// 设置列数以及列与列之间的间隔</div><div class="line">$grid-columns:               12 !default;</div><div class="line">$grid-gutter-width:          1.875rem !default; // 30px</div></pre></td></tr></table></figure>
+<p>Bootstrap提供两种布局：固定布局与流式布局,实际上就是在外面加了一个容器(container)，固定布局就是container的宽度时固定的，流式布局的container是自适应的。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">//_grid.scss</div><div class="line">// 设置container的固定宽度</div><div class="line">.container &#123;</div><div class="line">  @include make-container();</div><div class="line">  //对于不同的屏幕尺寸，通过媒体查询来定义每个container的最大宽度</div><div class="line">  @each $breakpoint, $container-max-width in $container-max-widths &#123;</div><div class="line">    @include media-breakpoint-up($breakpoint) &#123;</div><div class="line">      max-width: $container-max-width;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line">// Fluid container</div><div class="line">//</div><div class="line">//利用mixin的方法来设置流式布局</div><div class="line">.container-fluid &#123;</div><div class="line">  @include make-container();</div><div class="line">&#125;</div><div class="line">// Row</div><div class="line">//</div><div class="line">// 定义row并且清楚列与列之间的浮动</div><div class="line">.row &#123;</div><div class="line">  @include make-row();</div><div class="line">&#125;</div><div class="line">// Columns</div><div class="line">@include make-grid-columns();</div></pre></td></tr></table></figure>
+<p>再来看一下@mixin make-container和@mixin make-row:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">//_grid.scss/mixin</div><div class="line">@mixin make-container($gutter: $grid-gutter-width) &#123;</div><div class="line">  margin-right: auto;</div><div class="line">  margin-left: auto;</div><div class="line">  padding-left:  ($gutter / 2);</div><div class="line">  padding-right: ($gutter / 2);</div><div class="line">  @include clearfix();</div><div class="line">&#125;</div><div class="line">@mixin make-row($gutter: $grid-gutter-width) &#123;</div><div class="line">  @if $enable-flex &#123;</div><div class="line">    display: flex;</div><div class="line">    flex-wrap: wrap;</div><div class="line">  &#125; @else &#123;</div><div class="line">    @include clearfix();</div><div class="line">  &#125;</div><div class="line">  margin-left:  ($gutter / -2);</div><div class="line">  margin-right: ($gutter / -2);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>row中的负margin是对container的padding修正，为什么要这么做呢？我们可以看一下如何定义col的：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">@mixin make-col($gutter: $grid-gutter-width) &#123;</div><div class="line">  position: relative;</div><div class="line">  @if $enable-flex &#123;</div><div class="line">    // Do nothing</div><div class="line">  &#125; @else &#123;</div><div class="line">    float: left;</div><div class="line">  &#125;</div><div class="line">  min-height: 1px;</div><div class="line">  padding-left:  ($gutter / 2);</div><div class="line">  padding-right: ($gutter / 2);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里的col也设置了padding，我们都知道列可以嵌套列，也就是说col里面可以加一层row，这样就使得col相当于一个container，从而实现嵌套，是不是很微妙？具体可以看一下<a href="http://stephenlyao.github.io/2016/03/15/bootstrap-Grid-System-Magic/" target="_blank" rel="external">这篇文章</a> .<br>我们知道bootstrap的列示通过类似.col-xs-1,.col-sm-1,col-md-1,col-lg-1…这样的类名定义的，也就是说class被分为四种分辨率，每种分辨率有12个数字，这样就有48种类名，当然除去pull,push,offset，数量是十分多的。所以为了方便编码，sass用了迭代来产生css。首先通过一个占位符设置通用属性：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">// Common properties for all breakpoints</div><div class="line">%grid-column &#123;</div><div class="line">  position: relative;</div><div class="line">  // Prevent columns from collapsing when empty</div><div class="line">  min-height: 1px;</div><div class="line">  // Inner gutter via padding</div><div class="line">  padding-left: ($gutter / 2);</div><div class="line">  padding-right: ($gutter / 2);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后通过两层迭代来设置col：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@each $breakpoint in map-keys($breakpoints) &#123;</div><div class="line">  @for $i from 1 through $columns &#123;</div><div class="line">    .col-#&#123;$breakpoint&#125;-#&#123;$i&#125; &#123;</div><div class="line">      @extend %grid-column;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>输出结果为：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="selector-class">.col-xs-1</span>,<span class="selector-class">.col-sm-1</span>,<span class="selector-class">.col-md-1</span>,<span class="selector-class">.col-lg-1</span>,</div><div class="line"><span class="selector-class">.col-xs-2</span>,<span class="selector-class">.col-sm-2</span>,<span class="selector-class">.col-md-2</span>,<span class="selector-class">.col-lg-2</span>,</div><div class="line"><span class="selector-class">.col-xs-3</span>,<span class="selector-class">.col-sm-3</span>,<span class="selector-class">.col-md-3</span>,<span class="selector-class">.col-lg-3</span>,</div><div class="line"><span class="selector-class">.col-xs-4</span>,<span class="selector-class">.col-sm-4</span>,<span class="selector-class">.col-md-4</span>,<span class="selector-class">.col-lg-4</span>,</div><div class="line"><span class="selector-class">.col-xs-5</span>,<span class="selector-class">.col-sm-5</span>,<span class="selector-class">.col-md-5</span>,<span class="selector-class">.col-lg-5</span>,</div><div class="line"><span class="selector-class">.col-xs-6</span>,<span class="selector-class">.col-sm-6</span>,<span class="selector-class">.col-md-6</span>,<span class="selector-class">.col-lg-6</span>,</div><div class="line"><span class="selector-class">.col-xs-7</span>,<span class="selector-class">.col-sm-7</span>,<span class="selector-class">.col-md-7</span>,<span class="selector-class">.col-lg-7</span>,</div><div class="line"><span class="selector-class">.col-xs-8</span>,<span class="selector-class">.col-sm-8</span>,<span class="selector-class">.col-md-8</span>,<span class="selector-class">.col-lg-8</span>,</div><div class="line"><span class="selector-class">.col-xs-9</span>,<span class="selector-class">.col-sm-9</span>,<span class="selector-class">.col-md-9</span>,<span class="selector-class">.col-lg-9</span>,</div><div class="line"><span class="selector-class">.col-xs-10</span>,<span class="selector-class">.col-sm-10</span>,<span class="selector-class">.col-md-10</span>,<span class="selector-class">.col-lg-10</span>,</div><div class="line"><span class="selector-class">.col-xs-11</span>,<span class="selector-class">.col-sm-11</span>,<span class="selector-class">.col-md-11</span>,<span class="selector-class">.col-lg-11</span>,</div><div class="line"><span class="selector-class">.col-xs-12</span>,<span class="selector-class">.col-sm-12</span>,<span class="selector-class">.col-md-12</span>,<span class="selector-class">.col-lg-12</span> </div><div class="line">&#123;</div><div class="line">  <span class="attribute">position</span>: relative;</div><div class="line">  <span class="attribute">min-height</span>: <span class="number">1px</span>;</div><div class="line">  <span class="attribute">padding-right</span>: <span class="number">15px</span>;</div><div class="line">  <span class="attribute">padding-left</span>: <span class="number">15px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>提取出公共属性后，我们需要将其分配到不同分辨率，是怎么做的呢，这里十分巧妙：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">%grid-column &#123;</div><div class="line">   position: relative;</div><div class="line">   // Prevent columns from collapsing when empty</div><div class="line">   min-height: 1px;</div><div class="line">   // Inner gutter via padding</div><div class="line">   padding-left: ($gutter / 2);</div><div class="line">   padding-right: ($gutter / 2);</div><div class="line"> &#125;</div><div class="line"> @each $breakpoint in map-keys($breakpoints) &#123;</div><div class="line">   @for $i from 1 through $columns &#123;</div><div class="line">     .col-#&#123;$breakpoint&#125;-#&#123;$i&#125; &#123;</div><div class="line">       @extend %grid-column;</div><div class="line">     &#125;</div><div class="line">   &#125;</div><div class="line">   @include media-breakpoint-up($breakpoint) &#123;</div><div class="line">     // Work around cross-media @extend (https://github.com/sass/sass/issues/1050)</div><div class="line">     %grid-column-float-#&#123;$breakpoint&#125; &#123;</div><div class="line">       @if $enable-flex &#123;</div><div class="line">         // Do nothing</div><div class="line">       &#125; @else &#123;</div><div class="line">         float: left;</div><div class="line">       &#125;</div><div class="line">     &#125;</div><div class="line">     @for $i from 1 through $columns &#123;</div><div class="line">       .col-#&#123;$breakpoint&#125;-#&#123;$i&#125; &#123;</div><div class="line">         @extend %grid-column-float-#&#123;$breakpoint&#125;;</div><div class="line">         @include make-col-span($i, $columns);</div><div class="line">       &#125;</div><div class="line">     &#125;</div><div class="line">   &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>可以看出，它是在遍历分辨率尺寸的基础上，使用定义好的media-breakpoint-up的mixin再进行迭代，这里值得注意的一点是，由于之前我们已经生成了.col-#{$breakpoint}-#{$i}的基本属性，所以在进行查询媒体迭代时，@extend %grid-colum-float-#{$breakpoint}会附加在原有的基本属性上。这样就把各种类名分配到了相应的媒体查询上。<br>当然除此之外，还有push、pull、offset之类的其实也差不多，这里就不再重复了。除此之外有一点人们容易忽略的地方是，Grid系统是基于border-box，这点是实现Grid魔法的关键之一：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">html</span> &#123;</div><div class="line">  <span class="attribute">box-sizing</span>: border-box;</div><div class="line">&#125;</div><div class="line">*,</div><div class="line">*<span class="selector-pseudo">:before</span>,</div><div class="line">*<span class="selector-pseudo">:after</span> &#123;</div><div class="line">  <span class="attribute">box-sizing</span>: inherit;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="normalize-css"><a href="#normalize-css" class="headerlink" title="normalize.css"></a>normalize.css</h2><p>Bootstrap中使用<a href="https://github.com/necolas/normalize.css" target="_blank" rel="external">normalize.css</a>来初始化样式。之前我一直使用<a href="http://meyerweb.com/eric/tools/css/reset/" target="_blank" rel="external">reset.css</a>来重置浏览器的默认样式，而normalize.css是reset.css的一种替代方案。之所称其为替代方案，作者necolas介绍时已经把其说的很清楚了：</p>
+<ul>
+<li>保护有用的浏览器默认样式而不是完全去掉它们</li>
+<li>一般化的样式：为大部分HTML元素提供</li>
+<li>修复浏览器自身的bug并保证各浏览器的一致性</li>
+<li>优化CSS可用性：用一些小技巧</li>
+<li>解释代码：用注释和详细的文档来</li>
+</ul>
+<p>简单点说，它和reset.css不同之处在于：</p>
+<ul>
+<li>Reset是相对‘暴力’的，不管你有用没用，都重置成统一的样式，所有东西都必须一致。</li>
+<li>normalize.css却是相对‘平和’的，不求样式一致,尽量保留浏览器的默认样式，尽量不进行太多的重置。</li>
+</ul>
+<p>举个简单的栗子，对于简单的一个 h1 标签来说，reset.css可能会做很多事：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">//reset.css</div><div class="line">html, body, div, span, applet, object, iframe,</div><div class="line"> h1, h2, h3, h4, h5, h6, p, blockquote, pre,</div><div class="line"> a, abbr, acronym, address, big, cite, code,</div><div class="line"> del, dfn, em, img, ins, kbd, q, s, samp,</div><div class="line"> small, strike, strong, sub, sup, tt, var,</div><div class="line"> b, u, i, center,</div><div class="line"> dl, dt, dd, ol, ul, li,</div><div class="line"> fieldset, form, label, legend,</div><div class="line"> table, caption, tbody, tfoot, thead, tr, th, td,</div><div class="line"> article, aside, canvas, details, embed, </div><div class="line"> figure, figcaption, footer, header, hgroup, </div><div class="line"> menu, nav, output, ruby, section, summary,</div><div class="line"> time, mark, audio, video &#123;</div><div class="line"> 	margin: 0;</div><div class="line"> 	padding: 0;</div><div class="line"> 	border: 0;</div><div class="line"> 	font-size: 100%;</div><div class="line"> 	font: inherit;</div><div class="line"> 	vertical-align: baseline;</div><div class="line"> &#125;</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>而nomalize.css只是这样做：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// Address variable `h1` font-size and margin within `section` and `article`</div><div class="line">// contexts in Firefox 4+, Safari, and Chrome.</div><div class="line">//</div><div class="line">h1 &#123;</div><div class="line">  font-size: 2em;</div><div class="line">  margin: 0.67em 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>你可以很轻易的看出其中思想上的差别，也就是说，normalize.css的优势在于它保持了许多浏览器的默认样式，当一个元素在不同浏览器中有不同的默认值时，nomalize.css会让样式保持一致并且尽可能的与现代标准相符合；以及修复了常用的桌面端和移动端浏览器的bug，比如HTML5元素的显示设置、预格式化文字的font-size问题、在IE9中SVG的溢出、许多出现在各浏览器和操作系统中的与表单相关的bug。</p>
+<p>对于使用reset.css还是normalize.css，仁者见仁智者见智吧。</p>
+<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>Bootstrap在设计上是非常注重模块化以及层次化的，一方面是利于维护，另一方面提高了可复用性，这点非常值得学习。</p>
+
+        </div>
+        <footer class="article-footer">
+            
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/ccnuStephenLiu" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/stephenLYao" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://www.weibo.com/p/1005053103316530/home?from=page_100505&mod=TAB#place" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2017/06/08/Module-exports-vs-Exports-in-Node-js/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">Module.exports vs Exports in Node.js</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/06/09/bootstrap之CSS源码分析/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/bootstrap.png)" alt="bootstrap之CSS源码分析" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/06/09/bootstrap之CSS源码分析/" class="title">bootstrap之CSS源码分析</a></p>
+                            <p class="item-date"><time datetime="2017-06-09T15:24:16.000Z" itemprop="datePublished">2017-06-09</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/06/08/Module-exports-vs-Exports-in-Node-js/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/export.png)" alt="Module.exports vs Exports in Node.js" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/06/08/Module-exports-vs-Exports-in-Node-js/" class="title">Module.exports vs Exports in Node.js</a></p>
+                            <p class="item-date"><time datetime="2017-06-07T16:34:42.000Z" itemprop="datePublished">2017-06-08</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/06/07/［译］关于vertical-align你应该知道的事/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://christopheraue.net/images/background/windows.jpg)" alt="［译］关于vertical-align你应该知道的事" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/06/07/［译］关于vertical-align你应该知道的事/" class="title">［译］关于vertical-align你应该知道的事</a></p>
+                            <p class="item-date"><time datetime="2017-06-07T07:41:19.000Z" itemprop="datePublished">2017-06-07</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">tags</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodeJs/">nodeJs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translate/">translate</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码分析/">源码分析</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/nodeJs/" style="font-size: 10px;">nodeJs</a> <a href="/tags/translate/" style="font-size: 10px;">translate</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2017 stephen</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'stephenliu-site';
+    
+    
+    var disqus_url = 'stephenliu.site/2017/06/09/bootstrap之CSS源码分析/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
