@@ -3,24 +3,24 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Module.exports vs Exports in Node.js | Stephen&#39;s Blog</title>
+    <title>Understanding Event Loop in Javascript | Stephen&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-        <meta name="keywords" content="nodeJs" />
+        <meta name="keywords" content="js" />
     
-    <meta name="description" content="前言最近在折腾node.js的时候，经常会看到类似exports.xxx = yyy以及module.exports = yyy这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？关于两者的区别，了解了下面几点就会非常的清楚:  exports 是 module.exports 的一个引用 exports = module.">
-<meta name="keywords" content="nodeJs">
+    <meta name="description" content="前言前段时间看了 Philip Roberts 关于event-loop的演讲视频收获良多，本文主要是笔者对event loop模型的总结和整理。  传送门：YouTube: Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014  JavaScript Runtime我们知道web应用在浏览器中运行会涉及到">
+<meta name="keywords" content="js">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Module.exports vs Exports in Node.js">
-<meta property="og:url" content="stephenliu.site/2017/06/08/Module-exports-vs-Exports-in-Node-js/index.html">
+<meta property="og:title" content="Understanding Event Loop in Javascript">
+<meta property="og:url" content="stephenliu.site/2017/06/11/Understanding-Event-Loop-in-Javascript/index.html">
 <meta property="og:site_name" content="Stephen&#39;s Blog">
-<meta property="og:description" content="前言最近在折腾node.js的时候，经常会看到类似exports.xxx = yyy以及module.exports = yyy这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？关于两者的区别，了解了下面几点就会非常的清楚:  exports 是 module.exports 的一个引用 exports = module.">
-<meta property="og:image" content="/images/export.png">
-<meta property="og:updated_time" content="2017-06-07T16:38:47.000Z">
+<meta property="og:description" content="前言前段时间看了 Philip Roberts 关于event-loop的演讲视频收获良多，本文主要是笔者对event loop模型的总结和整理。  传送门：YouTube: Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014  JavaScript Runtime我们知道web应用在浏览器中运行会涉及到">
+<meta property="og:image" content="/images/event-loop.png">
+<meta property="og:updated_time" content="2017-06-11T14:38:08.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Module.exports vs Exports in Node.js">
-<meta name="twitter:description" content="前言最近在折腾node.js的时候，经常会看到类似exports.xxx = yyy以及module.exports = yyy这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？关于两者的区别，了解了下面几点就会非常的清楚:  exports 是 module.exports 的一个引用 exports = module.">
-<meta name="twitter:image" content="/images/export.png">
+<meta name="twitter:title" content="Understanding Event Loop in Javascript">
+<meta name="twitter:description" content="前言前段时间看了 Philip Roberts 关于event-loop的演讲视频收获良多，本文主要是笔者对event loop模型的总结和整理。  传送门：YouTube: Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014  JavaScript Runtime我们知道web应用在浏览器中运行会涉及到">
+<meta name="twitter:image" content="/images/event-loop.png">
     
 
     
@@ -148,14 +148,14 @@ ga('send', 'pageview');
     </h1>
 </div>
                         <div class="main-body-content">
-                            <article id="post-Module-exports-vs-Exports-in-Node-js" class="article article-single article-type-post" itemscope itemprop="blogPost">
+                            <article id="post-Understanding-Event-Loop-in-Javascript" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
             <header class="article-header">
                 
     
         <h1 class="article-title" itemprop="name">
-        Module.exports vs Exports in Node.js
+        Understanding Event Loop in Javascript
         </h1>
     
 
@@ -165,41 +165,57 @@ ga('send', 'pageview');
             <div class="article-meta">
                 
     <div class="article-date">
-        <a href="/2017/06/08/Module-exports-vs-Exports-in-Node-js/" class="article-date">
-            <time datetime="2017-06-07T16:34:42.000Z" itemprop="datePublished">2017-06-08</time>
+        <a href="/2017/06/11/Understanding-Event-Loop-in-Javascript/" class="article-date">
+            <time datetime="2017-06-11T14:37:38.000Z" itemprop="datePublished">2017-06-11</time>
         </a>
     </div>
 
                 
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/nodeJs/">nodeJs</a>
+        <a class="tag-link" href="/tags/js/">js</a>
     </div>
 
             </div>
         
         
         <div class="article-entry" itemprop="articleBody">
-            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在折腾node.js的时候，经常会看到类似exports.xxx = yyy以及module.exports = yyy这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？<br>关于两者的区别，了解了下面几点就会非常的清楚:</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前段时间看了 Philip Roberts 关于event-loop的演讲视频收获良多，本文主要是笔者对<code>event loop</code>模型的总结和整理。</p>
+<blockquote>
+<p>传送门：<br>YouTube: <a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ" target="_blank" rel="external">Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014</a></p>
+</blockquote>
+<h2 id="JavaScript-Runtime"><a href="#JavaScript-Runtime" class="headerlink" title="JavaScript Runtime"></a>JavaScript Runtime</h2><p>我们知道web应用在浏览器中运行会涉及到一系列比如JS runtime、event loop、dom、ajax等等技术，而在弄明白event loop之前我们必须先了解一下JS Runtime的基本作用。</p>
+<p>如今业内领头的JS Runtime非Chrome的V8莫属了，下图简要的概括了JS Runtime是个什么样子：</p>
+<p><img src="http://image.beekka.com/blog/2014/bg2014100802.png" alt=""></p>
+<p>其中heap、stack、callback queue、event loop是JS引擎基本的特征，而关于DOM、ajax、Timer等则属于Web APIs。</p>
+<h3 id="主线程"><a href="#主线程" class="headerlink" title="主线程"></a>主线程</h3><p>JS是单线程的，即只有一个主线程。而当主线程运行时，JS Runtime会产生heap和stack，其中：</p>
 <ul>
-<li>exports 是 module.exports 的一个引用 exports = module.exports = {}</li>
-<li>require()返回的是module.exports 而不是 exports</li>
-<li>exports.xxx 相当于在导出对象上挂属性，该属性对调用模块直接可见<br>exports =相当于给exports对象重新赋值，调用模块不能访问exports 对象及其属性</li>
-<li>如果此模块是一个类，就应该直接赋值给module.exports,这样调用者就是一个类构造器，可以直接使用new实例化；如果只导出简单的属性，可以直接挂载到exports上</li>
+<li><p>heap: 主要存放着一系列对象，表示的是内存中大未组织的区域，并且不同的浏览器提供不同的优化。</p>
+</li>
+<li><p>stack : 函数调用时形成的堆栈，我们知道栈这种数据结构是后进先出的，每当函数调用的时候，就将函数（称为帧）压入栈内，函数调用完则从栈内推出。一旦栈空，就会等待callback queue提供下一帧。比如:</p>
+</li>
 </ul>
-<p>比如以下代码计算圆的面积：</p>
-<h4 id="使用exports"><a href="#使用exports" class="headerlink" title="使用exports"></a>使用exports</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// circle.js</span></div><div class="line">exports.area = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125; ;</div><div class="line"><span class="comment">//app.js</span></div><div class="line"><span class="keyword">var</span> circle = <span class="built_in">require</span>(<span class="string">'./circle'</span>)</div><div class="line"><span class="built_in">console</span>.log(circle.area(<span class="number">2</span>))</div><div class="line"><span class="comment">//输出 '12'</span></div></pre></td></tr></table></figure>
-<h4 id="使用module-exports"><a href="#使用module-exports" class="headerlink" title="使用module.exports"></a>使用module.exports</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// area.js</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">//app.js</span></div><div class="line"><span class="keyword">var</span> area = <span class="built_in">require</span>(<span class="string">'./area'</span>)</div><div class="line"><span class="built_in">console</span>.log(area(<span class="number">2</span>))</div><div class="line"><span class="comment">//输出 '12'</span></div></pre></td></tr></table></figure>
-<p>两者输出是一样的，因为exports是module.exports的一个引用，所以两者指向的内存地址是一样的，可是如果你这样写:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// area.js</span></div><div class="line">exports = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">//app.js</span></div><div class="line"><span class="keyword">var</span> area = <span class="built_in">require</span>(<span class="string">'./area'</span>)</div><div class="line"><span class="built_in">console</span>.log(area(<span class="number">2</span>))</div><div class="line"><span class="comment">//输出 'TypeError: object is not a function'</span></div></pre></td></tr></table></figure>
-<p>我们可以看到是报错的，原因在于，之前说过require()返回的只是module.exports,而exports是module.exports的一个引用，上面代码给exports重新赋值，使其指向了新的内存地址，此时exports和module.exports毫无关系，也就是说此时module.exports的值为默认值{}，所以导出的是一个空对象。</p>
-<p>也就是说，module.exports才是关键，而exports只是起辅助的作用,最终导出来的是module.exports上挂载的对象，当module.exports没有任何值时，exports挂载的属性会赋值给module.exports, 当module.exports具有挂载的对象时，exports上的所有值会被忽略，比如以下代码只输出了module.exports所挂载的属性:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//rock.js</span></div><div class="line"><span class="built_in">module</span>.exports.name = <span class="string">'Stephen'</span></div><div class="line">exports.name = <span class="string">'Mike'</span></div><div class="line"><span class="comment">//app.js</span></div><div class="line"><span class="keyword">var</span> rock = <span class="built_in">require</span>(<span class="string">'./rock.js'</span>)</div><div class="line">rock.name</div><div class="line"><span class="comment">//输出</span></div><div class="line"><span class="string">'Stephen'</span></div></pre></td></tr></table></figure>
-<h3 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下:"></a>总结一下:</h3><ul>
-<li>如果要导出非对象接口（属性），可以直接使用exports</li>
-<li>如果要导出对象接口(类)，应该将其挂载到module.exports上面，从而可以直接让调用者new实例化对象</li>
-</ul>
-<h3 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h3><p><a href="https://cnodejs.org/topic/5231a630101e574521e45ef8" target="_blank" rel="external">exports 和 module.exports 的区别</a><br><a href="http://www.hacksparrow.com/node-js-exports-vs-module-exports.html" target="_blank" rel="external">node-js-exports-vs-module-exports</a><br><a href="http://www.ghostchina.com/module-exports-and-exports-in-node-js/" target="_blank" rel="external">module-exports-and-exports-in-node-js</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">multiply</span>(<span class="params">a,b</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> a * b</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">square</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> multiply(n,n)</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">printSquare</span>(<span class="params">n</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> squared = square(<span class="number">4</span>)</div><div class="line">  <span class="built_in">console</span>.log(squared)</div><div class="line">&#125;</div><div class="line">printSquare(<span class="number">4</span>)</div></pre></td></tr></table></figure>
+<p>首先调用printSquare()的时候，创建第一个堆栈帧，包含参数和局部变量，当printSquare()调用square()时，压入第二个堆栈帧，当square()调用multiply()的时候压入第三个堆栈帧，接着函数返回从栈中依次推出。将过程可视化为:</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/eventloop2.gif" alt=""></p>
+<p>这就是我们所说的调用栈（Call Stack），JS Runtime每次只是逐行执行代码。</p>
+<h3 id="Callback-Queue"><a href="#Callback-Queue" class="headerlink" title="Callback Queue"></a>Callback Queue</h3><p>我们知道任务主要分为同步任务（synchronous） 和 异步任务（asynchronous）。同步任务主要是在主线程中执行，而当JS引擎执行异步任务的时候(如setTimeout()、onclick())，浏览器内核相应模块（即WebAPIs）会处理相关的方法，达到触发条件后相关联的回调函数便会添加到Callback Queue中。当执行栈的代码执行完毕就会读取Callback Queue，依次执行相关的回调函数。</p>
+<h3 id="Event-loop"><a href="#Event-loop" class="headerlink" title="Event loop"></a>Event loop</h3><p>之所以称为Event loop，是因为JS运行时会创建类似于这样的循环:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(queue.waitForMessage())&#123;</div><div class="line">  queue.processNextMessage();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>每执行一次循环体称为一次Tick，每次Tick的过程就是查看Callback Queue中是否有待处理的Message，如果有则取出来放入执行栈中由主线程执行。</p>
+<h3 id="WebAPIs"><a href="#WebAPIs" class="headerlink" title="WebAPIs"></a>WebAPIs</h3><p>主要是一些异步操作，比如DOM Binding、ajax、timer，这些异步操作由浏览器内核的webcore来执行。</p>
+<h2 id="Block-amp-Non-Block"><a href="#Block-amp-Non-Block" class="headerlink" title="Block &amp; Non-Block"></a>Block &amp; Non-Block</h2><p>没有非常严格的定义什么是阻塞的什么是非阻塞的，不过我们知道JS执行代码是通过Call Stack这项技术，比如以下代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> foo = $.getSync(<span class="string">'//foo.com'</span>)</div><div class="line"><span class="keyword">var</span> bar = $.getSync(<span class="string">'//bar.com'</span>)</div><div class="line"><span class="keyword">var</span> qux = $.getSync(<span class="string">'//qux.com'</span>)</div><div class="line"><span class="built_in">console</span>.log(foo)</div><div class="line"><span class="built_in">console</span>.log(bar)</div><div class="line"><span class="built_in">console</span>.log(qux)</div></pre></td></tr></table></figure>
+<p>foo()压入栈内，调用完后出栈，接着bar压入栈内…</p>
+<p>熟悉JS的人都知道这段代码是阻塞的，一个请求完成才会去执行下一个请求。如果在浏览器内，一个页面进行热请求过长，页面其他部分就不能操作，显然这样的用户体验是非常差的，那么解决办法是什么？使用异步回调函数，比如使用setTimeout():</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'Hello'</span>)</div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   <span class="built_in">console</span>.log(<span class="string">'Here'</span>)&#125;, <span class="number">5000</span>)</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'World'</span>)</div><div class="line"><span class="comment">// 'Hello'</span></div><div class="line"><span class="comment">// 'World'</span></div><div class="line"><span class="comment">// 'Here'</span></div></pre></td></tr></table></figure>
+<p>这就是为什么JS不阻塞的原因了，当执行异步函数setTimeout()并不会阻塞下面函数的执行，等异步函数达到触发条件后(上面例子是500ms后)在执行回调函数。那这里就有一个问题，异步函数具体是怎么样工作的呢，调用异步函数后，相应的回调函数又是放在哪？问题的答案就是Event Loop模型。</p>
+<h3 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h3><p>这里可以使用Phi写的一个可视化工具<a href="https://github.com/latentflip/loupe" target="_blank" rel="external">loupe</a>，具体来看一下上面异步代码是怎么样运作的:</p>
+<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/eventloop3.gif" alt=""></p>
+<p>上图中，首先在Call Stack中压入console.log(‘Hello’)的方法，这只是一个普通方法，所以该方法会立即出栈执行。</p>
+<p>接着继续往下执行setTimeout()，这是一个WebAPIs的方法，也就是异步方法，JS runtime会将延迟函数交给浏览器内核相应模块处理(这里是timer模块)，然后立即继续往下执行代码。</p>
+<p>这时setTimeout()执行5秒后，timer模块检测到延时处理方法到达触发条件，于是将相应的回调函数加入任务队列。而这个时候Call Stack为空，所以通过event loop轮询检查任务队列是否有回调函数，检查到timeout()，将其压入Call Stack，接着检测到console.log(‘Here’)方法继续压入栈，最后出栈执行。</p>
+<p>DOM操作、ajax等都是一样的原理，这些都是由浏览器内核相应模块来处理。</p>
 
         </div>
         <footer class="article-footer">
@@ -320,20 +336,10 @@ ga('send', 'pageview');
         
 <nav id="article-nav">
     
-        <a href="/2017/06/09/bootstrap之CSS源码分析/" id="article-nav-newer" class="article-nav-link-wrap">
-        <strong class="article-nav-caption">newer</strong>
-        <p class="article-nav-title">
-        
-            bootstrap之CSS源码分析
-        
-        </p>
-        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
-    </a>
     
-    
-        <a href="/2017/06/07/［译］关于vertical-align你应该知道的事/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2017/06/10/Web-Real-time-Connection/" id="article-nav-older" class="article-nav-link-wrap">
         <strong class="article-nav-caption">older</strong>
-        <p class="article-nav-title">［译］关于vertical-align你应该知道的事</p>
+        <p class="article-nav-title">Web Real-time Connection</p>
         <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
         </a>
     
@@ -526,7 +532,7 @@ ga('send', 'pageview');
     var disqus_shortname = 'stephenliu-site';
     
     
-    var disqus_url = 'stephenliu.site/2017/06/08/Module-exports-vs-Exports-in-Node-js/';
+    var disqus_url = 'stephenliu.site/2017/06/11/Understanding-Event-Loop-in-Javascript/';
     
     (function() {
     var dsq = document.createElement('script');
