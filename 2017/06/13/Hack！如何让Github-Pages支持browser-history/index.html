@@ -3,24 +3,24 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Understanding Event Loop in Javascript | Stephen&#39;s Blog</title>
+    <title>Hack！如何让Github Pages支持browser history | Stephen&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
         <meta name="keywords" content="js" />
     
-    <meta name="description" content="前言前段时间看了 Philip Roberts 关于event-loop的演讲视频收获良多，本文主要是笔者对event loop模型的总结和整理。  传送门：YouTube: Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014  JavaScript Runtime我们知道web应用在浏览器中运行会涉及到">
+    <meta name="description" content="问题提出之前我在写一个日记生成器的时候，大致思路是抓取github issues上的文章，然后使用react + react-router搭建SPA，最后部署到github pages上。其中遇到一个很麻烦的问题就是，github pages原生是不支持SPA的，举个例子：比如我们前端路由是xxx.github.io/diary/post，一旦刷新页面，github pages就会返回404，因为">
 <meta name="keywords" content="js">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Understanding Event Loop in Javascript">
-<meta property="og:url" content="stephenliu.site/2017/06/11/Understanding-Event-Loop-in-Javascript/index.html">
+<meta property="og:title" content="Hack！如何让Github Pages支持browser history">
+<meta property="og:url" content="stephenliu.site/2017/06/13/Hack！如何让Github-Pages支持browser-history/index.html">
 <meta property="og:site_name" content="Stephen&#39;s Blog">
-<meta property="og:description" content="前言前段时间看了 Philip Roberts 关于event-loop的演讲视频收获良多，本文主要是笔者对event loop模型的总结和整理。  传送门：YouTube: Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014  JavaScript Runtime我们知道web应用在浏览器中运行会涉及到">
-<meta property="og:image" content="/images/event-loop.png">
-<meta property="og:updated_time" content="2017-06-11T14:38:08.000Z">
+<meta property="og:description" content="问题提出之前我在写一个日记生成器的时候，大致思路是抓取github issues上的文章，然后使用react + react-router搭建SPA，最后部署到github pages上。其中遇到一个很麻烦的问题就是，github pages原生是不支持SPA的，举个例子：比如我们前端路由是xxx.github.io/diary/post，一旦刷新页面，github pages就会返回404，因为">
+<meta property="og:image" content="/images/github-page.jpeg">
+<meta property="og:updated_time" content="2017-06-13T15:46:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Understanding Event Loop in Javascript">
-<meta name="twitter:description" content="前言前段时间看了 Philip Roberts 关于event-loop的演讲视频收获良多，本文主要是笔者对event loop模型的总结和整理。  传送门：YouTube: Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014  JavaScript Runtime我们知道web应用在浏览器中运行会涉及到">
-<meta name="twitter:image" content="/images/event-loop.png">
+<meta name="twitter:title" content="Hack！如何让Github Pages支持browser history">
+<meta name="twitter:description" content="问题提出之前我在写一个日记生成器的时候，大致思路是抓取github issues上的文章，然后使用react + react-router搭建SPA，最后部署到github pages上。其中遇到一个很麻烦的问题就是，github pages原生是不支持SPA的，举个例子：比如我们前端路由是xxx.github.io/diary/post，一旦刷新页面，github pages就会返回404，因为">
+<meta name="twitter:image" content="/images/github-page.jpeg">
     
 
     
@@ -148,14 +148,14 @@ ga('send', 'pageview');
     </h1>
 </div>
                         <div class="main-body-content">
-                            <article id="post-Understanding-Event-Loop-in-Javascript" class="article article-single article-type-post" itemscope itemprop="blogPost">
+                            <article id="post-Hack！如何让Github-Pages支持browser-history" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
             <header class="article-header">
                 
     
         <h1 class="article-title" itemprop="name">
-        Understanding Event Loop in Javascript
+        Hack！如何让Github Pages支持browser history
         </h1>
     
 
@@ -165,8 +165,8 @@ ga('send', 'pageview');
             <div class="article-meta">
                 
     <div class="article-date">
-        <a href="/2017/06/11/Understanding-Event-Loop-in-Javascript/" class="article-date">
-            <time datetime="2017-06-11T14:37:38.000Z" itemprop="datePublished">2017-06-11</time>
+        <a href="/2017/06/13/Hack！如何让Github-Pages支持browser-history/" class="article-date">
+            <time datetime="2017-06-13T15:44:04.000Z" itemprop="datePublished">2017-06-13</time>
         </a>
     </div>
 
@@ -180,42 +180,22 @@ ga('send', 'pageview');
         
         
         <div class="article-entry" itemprop="articleBody">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前段时间看了 Philip Roberts 关于event-loop的演讲视频收获良多，本文主要是笔者对<code>event loop</code>模型的总结和整理。</p>
+            <h2 id="问题提出"><a href="#问题提出" class="headerlink" title="问题提出"></a>问题提出</h2><p>之前我在写一个日记生成器的时候，大致思路是抓取github issues上的文章，然后使用react + react-router搭建SPA，最后部署到github pages上。其中遇到一个很麻烦的问题就是，github pages原生是不支持SPA的，举个例子：比如我们前端路由是<code>xxx.github.io/diary/post</code>，一旦刷新页面，github pages就会返回404，因为它并不知道这个路由<code>/post</code>，所以有什么解决办法呢？  </p>
+<h2 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h2><p>github上已经有人提供了一种hack的解决办法，具体<a href="https://github.com/rafrex/spa-github-pages" target="_blank" rel="external">源码</a>在这里。接下来我们一步一步说明这个hack的方法是如何解决这个问题的：  </p>
+<h3 id="404-html"><a href="#404-html" class="headerlink" title="404.html"></a>404.html</h3><p>首先我们需要提供一个404.html，当你刷新页面后，github pages是返回404的，所以这个404.html是为了覆盖原有的404页面。最关键的是，这个404页面需要提供一段脚本代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pathPrefix = <span class="literal">false</span>;</div><div class="line"><span class="keyword">var</span> l = <span class="built_in">window</span>.location;</div><div class="line">l.replace(</div><div class="line">    l.protocol + <span class="string">'//'</span> + l.hostname + (l.port ? <span class="string">':'</span> + l.port : <span class="string">''</span>) +</div><div class="line">    l.pathname.split(<span class="string">'/'</span>).slice(<span class="number">0</span>, <span class="number">2</span> * pathPrefix).join(<span class="string">'/'</span>) + <span class="string">'/?p=/'</span> +</div><div class="line">    l.pathname.slice(<span class="number">1</span>).split(<span class="string">'/'</span>).slice(pathPrefix).join(<span class="string">'/'</span>).replace(<span class="regexp">/&amp;/g</span>, <span class="string">'~and~'</span>) +</div><div class="line">    (l.search ? <span class="string">'&amp;q='</span> + l.search.slice(<span class="number">1</span>).replace(<span class="regexp">/&amp;/g</span>, <span class="string">'~and~'</span>) : <span class="string">''</span>) +</div><div class="line">    l.hash</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>这段代码啥意思呢？第一个pathPrefix我们先不管，看下面l.replace()，这个API是重载当前文档，并且不会产生新的历史纪录，即覆盖History对象中的当前纪录，后面的一段代码就是将当前的url转换成查询字符串以及hash片段，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ http://www.foo.tld/one/two?a=b&amp;c=d#qwe </div><div class="line"> -&gt;</div><div class="line">$ http://www.foo.tld/?p=/one/two&amp;q=a=b~and~c=d#qwe</div></pre></td></tr></table></figure>
+<p>再说说pathPrefix，如果你的页面不是使用自定义域名，而是<code>xxx.github.io/xxx</code>，则应该设置为true，不然就为false，举个例子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ https://username.github.io/repo-name/one/two?a=b&amp;c=d#qwe</div><div class="line"> -&gt; </div><div class="line">$ https://username.github.io/repo-name/?p=/one/two&amp;q=a=b~and~c=d#qwe</div></pre></td></tr></table></figure>
+<p>这是因为需要保留repo的名称。说了这么多，这个到底有什么用呢？不急，继续看下面。</p>
+<h3 id="index-html"><a href="#index-html" class="headerlink" title="index.html"></a>index.html</h3><p>Github pages在收到404.html新请求后（l.replace()重载文档会发送一个新请求，比如<code>/diary/post/2015</code>转换成了 <code>/diary/?p=/post/2015</code>），这时候会忽略查询参数和hash片段，返回index.html，相当于<code>/diary/index.html</code>，这时候魔法出现了，我们在index.html的头部加入以下代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">l</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (l.search) &#123;</div><div class="line">      <span class="keyword">var</span> q = &#123;&#125;;</div><div class="line">      l.search.slice(<span class="number">1</span>).split(<span class="string">'&amp;'</span>).forEach(<span class="function"><span class="keyword">function</span>(<span class="params">v</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> a = v.split(<span class="string">'='</span>);</div><div class="line">        q[a[<span class="number">0</span>]] = a.slice(<span class="number">1</span>).join(<span class="string">'='</span>).replace(<span class="regexp">/~and~/g</span>, <span class="string">'&amp;'</span>);</div><div class="line">      &#125;);</div><div class="line">      <span class="keyword">if</span> (q.p !== <span class="literal">undefined</span>) &#123;</div><div class="line">        <span class="built_in">window</span>.history.replaceState(<span class="literal">null</span>, <span class="literal">null</span>,</div><div class="line">          l.pathname.slice(<span class="number">0</span>, <span class="number">-1</span>) + (q.p || <span class="string">''</span>) +</div><div class="line">          (q.q ? (<span class="string">'?'</span> + q.q) : <span class="string">''</span>) +</div><div class="line">          l.hash</div><div class="line">        );</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">&#125;(<span class="built_in">window</span>.location))</div></pre></td></tr></table></figure>
 <blockquote>
-<p>传送门：<br>YouTube: <a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ" target="_blank" rel="external">Philip Roberts: What the heck is the event loop anyway? | JSConf EU 2014</a></p>
+<p>注意这段代码必须在SPA加载之前执行，就是放在打包出来的bundle.js之前</p>
 </blockquote>
-<h2 id="JavaScript-Runtime"><a href="#JavaScript-Runtime" class="headerlink" title="JavaScript Runtime"></a>JavaScript Runtime</h2><p>我们知道web应用在浏览器中运行会涉及到一系列比如JS runtime、event loop、dom、ajax等等技术，而在弄明白event loop之前我们必须先了解一下JS Runtime的基本作用。</p>
-<p>如今业内领头的JS Runtime非Chrome的V8莫属了，下图简要的概括了JS Runtime是个什么样子：</p>
-<p><img src="http://image.beekka.com/blog/2014/bg2014100802.png" alt=""></p>
-<p>其中heap、stack、callback queue、event loop是JS引擎基本的特征，而关于DOM、ajax、Timer等则属于Web APIs。</p>
-<h3 id="主线程"><a href="#主线程" class="headerlink" title="主线程"></a>主线程</h3><p>JS是单线程的，即只有一个主线程。而当主线程运行时，JS Runtime会产生heap和stack，其中：</p>
-<ul>
-<li><p>heap: 主要存放着一系列对象，表示的是内存中大未组织的区域，并且不同的浏览器提供不同的优化。</p>
-</li>
-<li><p>stack : 函数调用时形成的堆栈，我们知道栈这种数据结构是后进先出的，每当函数调用的时候，就将函数（称为帧）压入栈内，函数调用完则从栈内推出。一旦栈空，就会等待callback queue提供下一帧。比如:</p>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">multiply</span>(<span class="params">a,b</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> a * b</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">square</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> multiply(n,n)</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">printSquare</span>(<span class="params">n</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> squared = square(<span class="number">4</span>)</div><div class="line">  <span class="built_in">console</span>.log(squared)</div><div class="line">&#125;</div><div class="line">printSquare(<span class="number">4</span>)</div></pre></td></tr></table></figure>
-<p>首先调用printSquare()的时候，创建第一个堆栈帧，包含参数和局部变量，当printSquare()调用square()时，压入第二个堆栈帧，当square()调用multiply()的时候压入第三个堆栈帧，接着函数返回从栈中依次推出。将过程可视化为:</p>
-<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/eventloop2.gif" alt=""></p>
-<p>这就是我们所说的调用栈（Call Stack），JS Runtime每次只是逐行执行代码。</p>
-<h3 id="Callback-Queue"><a href="#Callback-Queue" class="headerlink" title="Callback Queue"></a>Callback Queue</h3><p>我们知道任务主要分为同步任务（synchronous） 和 异步任务（asynchronous）。同步任务主要是在主线程中执行，而当JS引擎执行异步任务的时候(如setTimeout()、onclick())，浏览器内核相应模块（即WebAPIs）会处理相关的方法，达到触发条件后相关联的回调函数便会添加到Callback Queue中。当执行栈的代码执行完毕就会读取Callback Queue，依次执行相关的回调函数。</p>
-<h3 id="Event-loop"><a href="#Event-loop" class="headerlink" title="Event loop"></a>Event loop</h3><p>之所以称为Event loop，是因为JS运行时会创建类似于这样的循环:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>(queue.waitForMessage())&#123;</div><div class="line">  queue.processNextMessage();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>每执行一次循环体称为一次Tick，每次Tick的过程就是查看Callback Queue中是否有待处理的Message，如果有则取出来放入执行栈中由主线程执行。</p>
-<h3 id="WebAPIs"><a href="#WebAPIs" class="headerlink" title="WebAPIs"></a>WebAPIs</h3><p>主要是一些异步操作，比如DOM Binding、ajax、timer，这些异步操作由浏览器内核的webcore来执行。</p>
-<h2 id="Block-amp-Non-Block"><a href="#Block-amp-Non-Block" class="headerlink" title="Block &amp; Non-Block"></a>Block &amp; Non-Block</h2><p>没有非常严格的定义什么是阻塞的什么是非阻塞的，不过我们知道JS执行代码是通过Call Stack这项技术，比如以下代码:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> foo = $.getSync(<span class="string">'//foo.com'</span>)</div><div class="line"><span class="keyword">var</span> bar = $.getSync(<span class="string">'//bar.com'</span>)</div><div class="line"><span class="keyword">var</span> qux = $.getSync(<span class="string">'//qux.com'</span>)</div><div class="line"><span class="built_in">console</span>.log(foo)</div><div class="line"><span class="built_in">console</span>.log(bar)</div><div class="line"><span class="built_in">console</span>.log(qux)</div></pre></td></tr></table></figure>
-<p>foo()压入栈内，调用完后出栈，接着bar压入栈内…</p>
-<p>熟悉JS的人都知道这段代码是阻塞的，一个请求完成才会去执行下一个请求。如果在浏览器内，一个页面进行热请求过长，页面其他部分就不能操作，显然这样的用户体验是非常差的，那么解决办法是什么？使用异步回调函数，比如使用setTimeout():</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'Hello'</span>)</div><div class="line">setTimeout(<span class="function"><span class="keyword">function</span> <span class="title">timeout</span>(<span class="params"></span>)</span>&#123;</div><div class="line">   <span class="built_in">console</span>.log(<span class="string">'Here'</span>)&#125;, <span class="number">5000</span>)</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'World'</span>)</div><div class="line"><span class="comment">// 'Hello'</span></div><div class="line"><span class="comment">// 'World'</span></div><div class="line"><span class="comment">// 'Here'</span></div></pre></td></tr></table></figure>
-<p>这就是为什么JS不阻塞的原因了，当执行异步函数setTimeout()并不会阻塞下面函数的执行，等异步函数达到触发条件后(上面例子是500ms后)在执行回调函数。那这里就有一个问题，异步函数具体是怎么样工作的呢，调用异步函数后，相应的回调函数又是放在哪？问题的答案就是Event Loop模型。</p>
-<h3 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h3><p>这里可以使用Phi写的一个可视化工具<a href="https://github.com/latentflip/loupe" target="_blank" rel="external">loupe</a>，具体来看一下上面异步代码是怎么样运作的:</p>
-<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/eventloop3.gif" alt=""></p>
-<p>上图中，首先在Call Stack中压入console.log(‘Hello’)的方法，这只是一个普通方法，所以该方法会立即出栈执行。</p>
-<p>接着继续往下执行setTimeout()，这是一个WebAPIs的方法，也就是异步方法，JS runtime会将延迟函数交给浏览器内核相应模块处理(这里是timer模块)，然后立即继续往下执行代码。</p>
-<p>这时setTimeout()执行5秒后，timer模块检测到延时处理方法到达触发条件，于是将相应的回调函数加入任务队列。而这个时候Call Stack为空，所以通过event loop轮询检查任务队列是否有回调函数，检查到timeout()，将其压入Call Stack，接着检测到console.log(‘Here’)方法继续压入栈，最后出栈执行。</p>
-<p>DOM操作、ajax等都是一样的原理，这些都是由浏览器内核相应模块来处理。</p>
+<p>这段代码做了什么呢，第一是将url还原，即<code>/diary/?p=/post/2015</code> 还原为<code>/diary/post/2015</code>，然后使用history.replaceState()这个API添加到history对象中，不过注意这时候浏览器不会刷新页面，简单说把history想象成盒子，把url放到history盒子里去，但是不会加载这个url，只有等页面刷新，也就是SPA的js文件加载执行后，才会使用这个url，于是等SPA页面加载后，就会根据之前的url加载相应页面，也就解决了咱们的问题。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总体来说整个hack的过程是： 提供404.html -&gt; 加载脚本并请求index.html -&gt; 还原url并且加载应用。</p>
 
         </div>
         <footer class="article-footer">
@@ -336,20 +316,10 @@ ga('send', 'pageview');
         
 <nav id="article-nav">
     
-        <a href="/2017/06/13/［译］什么时候“不要”用箭头函数/" id="article-nav-newer" class="article-nav-link-wrap">
-        <strong class="article-nav-caption">newer</strong>
-        <p class="article-nav-title">
-        
-            ［译］什么时候“不要”用箭头函数
-        
-        </p>
-        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
-    </a>
     
-    
-        <a href="/2017/06/10/Web-Real-time-Connection/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2017/06/13/深入浅出throttle和debounce/" id="article-nav-older" class="article-nav-link-wrap">
         <strong class="article-nav-caption">older</strong>
-        <p class="article-nav-title">Web Real-time Connection</p>
+        <p class="article-nav-title">深入浅出throttle和debounce</p>
         <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
         </a>
     
@@ -542,7 +512,7 @@ ga('send', 'pageview');
     var disqus_shortname = 'stephenliu-site';
     
     
-    var disqus_url = 'stephenliu.site/2017/06/11/Understanding-Event-Loop-in-Javascript/';
+    var disqus_url = 'stephenliu.site/2017/06/13/Hack！如何让Github-Pages支持browser-history/';
     
     (function() {
     var dsq = document.createElement('script');
