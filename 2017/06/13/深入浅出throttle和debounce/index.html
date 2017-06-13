@@ -3,16 +3,24 @@
 <head>
     <meta charset="utf-8">
     
-    <title>About Me | Stephen&#39;s Blog</title>
+    <title>深入浅出throttle和debounce | Stephen&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta property="og:type" content="website">
-<meta property="og:title" content="About Me">
-<meta property="og:url" content="stephenliu.site/about/index.html">
+        <meta name="keywords" content="js" />
+    
+    <meta name="description" content="前言之前我在写一个获取github用户信息小应用的时候，遇到了一个问题： 由于我在input上绑定了keyup的监听事件并且回调执行ajax请求，每按下一次键盘键就会发出一次ajax请求，显然频繁的网络请求会造成很大的性能问题。这里的解决办法就是用函数去抖(debounce)。那么什么是函数去抖？他的基友函数节流(throttle)又是什么？他们有什么区别？他们应用的场景有分别是什么？下面一一来解">
+<meta name="keywords" content="js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入浅出throttle和debounce">
+<meta property="og:url" content="stephenliu.site/2017/06/13/深入浅出throttle和debounce/index.html">
 <meta property="og:site_name" content="Stephen&#39;s Blog">
-<meta property="og:updated_time" content="2017-06-07T13:24:21.000Z">
+<meta property="og:description" content="前言之前我在写一个获取github用户信息小应用的时候，遇到了一个问题： 由于我在input上绑定了keyup的监听事件并且回调执行ajax请求，每按下一次键盘键就会发出一次ajax请求，显然频繁的网络请求会造成很大的性能问题。这里的解决办法就是用函数去抖(debounce)。那么什么是函数去抖？他的基友函数节流(throttle)又是什么？他们有什么区别？他们应用的场景有分别是什么？下面一一来解">
+<meta property="og:image" content="/images/throttle-debounce.jpeg">
+<meta property="og:updated_time" content="2017-06-13T15:39:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="About Me">
+<meta name="twitter:title" content="深入浅出throttle和debounce">
+<meta name="twitter:description" content="前言之前我在写一个获取github用户信息小应用的时候，遇到了一个问题： 由于我在input上绑定了keyup的监听事件并且回调执行ajax请求，每按下一次键盘键就会发出一次ajax请求，显然频繁的网络请求会造成很大的性能问题。这里的解决办法就是用函数去抖(debounce)。那么什么是函数去抖？他的基友函数节流(throttle)又是什么？他们有什么区别？他们应用的场景有分别是什么？下面一一来解">
+<meta name="twitter:image" content="/images/throttle-debounce.jpeg">
     
 
     
@@ -136,27 +144,67 @@ ga('send', 'pageview');
                         <div class="main-body-header">
     <h1 class="header">
     
-    <em class="page-title-link" data-url="/about/index.html">About Me</em>
+    <a class="page-title-link" href="/categories/Technology/">Technology</a>
     </h1>
 </div>
                         <div class="main-body-content">
-                            <article id="page-undefined" class="article article-single article-type-page" itemscope itemprop="blogPost">
+                            <article id="post-深入浅出throttle和debounce" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
             <header class="article-header">
                 
     
         <h1 class="article-title" itemprop="name">
-        About Me
+        深入浅出throttle和debounce
         </h1>
     
 
             </header>
         
         
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/06/13/深入浅出throttle和debounce/" class="article-date">
+            <time datetime="2017-06-13T15:37:57.000Z" itemprop="datePublished">2017-06-13</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/js/">js</a>
+    </div>
+
+            </div>
+        
         
         <div class="article-entry" itemprop="articleBody">
-            
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前我在写一个获取github用户信息小应用的时候，遇到了一个问题： 由于我在input上绑定了keyup的监听事件并且回调执行ajax请求，每按下一次键盘键就会发出一次ajax请求，显然频繁的网络请求会造成很大的性能问题。这里的解决办法就是用函数去抖(debounce)。那么什么是函数去抖？他的基友函数节流(throttle)又是什么？他们有什么区别？他们应用的场景有分别是什么？下面一一来解答。</p>
+<h2 id="函数去抖"><a href="#函数去抖" class="headerlink" title="函数去抖"></a>函数去抖</h2><p>简单来说，函数去抖背后的思想指的是 <strong>某函数只有在过完一段时间后并且该段时间内不被调用才会被执行</strong>。一旦在指定的时间间隔内调用该函数，该函数就不会被执行。拿上面例子来说，在没有去抖之前:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">ajax</span>(<span class="params">content</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'ajax request '</span> + content)</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> input = <span class="built_in">document</span>.getElementById(<span class="string">'search'</span>)</div><div class="line">input.addEventListener(<span class="string">'keyup'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">  ajax(e.target.value)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><img src="https://cloud.githubusercontent.com/assets/11830681/23156778/4974f46e-f853-11e6-8394-7eb41b62ca3a.png" alt=""></p>
+<p>可以看到，每按下一次键盘键就会发送一次ajax请求。现在用debounce()方法来改进：</p>
+<p><a href="https://jsbin.com/wajexuboya/edit?js,console,output" target="_blank" rel="external">jsbin</a><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">debounce</span>(<span class="params">func, delay</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">args</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> _this = <span class="keyword">this</span></div><div class="line">    <span class="keyword">var</span> _args = args</div><div class="line">    clearTimeout(func.id)</div><div class="line">    func.id = setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      func.call(_this, _args)</div><div class="line">    &#125;, delay)</div><div class="line"> &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">ajax</span>(<span class="params">value</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'ajax request '</span> + value)</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> debounceAjax = debounce(ajax, <span class="number">1000</span>)</div><div class="line"><span class="keyword">var</span> input = <span class="built_in">document</span>.getElementById(<span class="string">'search'</span>)</div><div class="line">input.addEventListener(<span class="string">'keyup'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">  debounceAjax(e.target.value)</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p><img src="https://cloud.githubusercontent.com/assets/11830681/23156749/2c8f6e7e-f853-11e6-8d8b-0b5b22d05258.gif" alt=""></p>
+<p>可以看到当你键入值的时候，并不会发送ajax请求，当停止输入并且在指定间隔内没有输入的时候，才会执行相应的回调函数。下面我们来讲讲他的好基友，函数节流(throttle)。</p>
+<h2 id="函数节流"><a href="#函数节流" class="headerlink" title="函数节流"></a>函数节流</h2><p>函数节流指的是 <strong>某函数在指定的一个时间段周期性的间断执行</strong>。 什么意思呢，举上面的例子，当在input中不断键入数值的时候，debounce是在你停止输入一段时间后执行回调函数，而throttle则是在你输入过程中每隔一段固定的时间就执行回调函数。</p>
+<p><a href="https://jsbin.com/nifeyicava/edit?js,console,output" target="_blank" rel="external">jsbin</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">throttle</span>(<span class="params">func, delay</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> last, deferTimer</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> _this = <span class="keyword">this</span></div><div class="line">    <span class="keyword">var</span> _args = <span class="built_in">arguments</span></div><div class="line">    <span class="keyword">var</span> now = +<span class="keyword">new</span> <span class="built_in">Date</span>()</div><div class="line">    <span class="keyword">if</span>(last &amp;&amp; now &lt; last + delay) &#123;</div><div class="line">      clearTimeout(deferTimer)</div><div class="line">      deferTimer = setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        last = now</div><div class="line">        func.apply(_this, _args)</div><div class="line">      &#125;, delay)</div><div class="line">    &#125;<span class="keyword">else</span> &#123;</div><div class="line">      last = now</div><div class="line">      func.apply(_this, _args)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">ajax</span>(<span class="params">value</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'ajax request '</span> + value)</div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> throttleAjax = throttle(ajax, <span class="number">1000</span>)</div><div class="line"><span class="keyword">var</span> input = <span class="built_in">document</span>.getElementById(<span class="string">'search'</span>)</div><div class="line">input.addEventListener(<span class="string">'keyup'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">  throttleAjax(e.target.value)</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p><img src="https://cloud.githubusercontent.com/assets/11830681/23156788/53ac021a-f853-11e6-98e9-4c81a0c2a797.gif" alt=""></p>
+<p>可以看出，当我在input中不断键入值时，ajax回调函数每过1s执行一次。</p>
+<h2 id="异同"><a href="#异同" class="headerlink" title="异同"></a>异同</h2><p>从上面的内容可以知道，函数去抖和函数分流都是解决某一事件频繁触发的问题，比如input的ajax请求、scroll事件等等。即使如此，他们的实现原理却大相庭径，简单来说，函数去抖在一段时间只执行一次，而函数节流则是间隔时间段执行。比如，小明吃饼干，有两种吃法，第一种是每过一段时间间隔吃一块饼干，这是函数节流，第二种是第一块饼干吃完后得过一段时间才能吃第二块饼干，期间不能吃饼干，这是函数去抖。</p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><ul>
+<li>发送一个ajax表单，给一个button绑定click事件，并且监听触发ajax请求。如果是debounce，则用户不管点多少次，都只会发送一次请求；如果是throttle，不断点击的过程中会间隔发送请求。这时候最好使用debounce.</li>
+<li>监听滚动事件判断是否到页面底部自动加载更多，如果是debounce，则只有在用户停止滚动的时候的才会判断是否到了底部，如果是throttle，则页面滚动的过程中会间隔判断是否到达底部。 此时最好使用throttle<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3></li>
+<li>DOM 元素的拖拽功能实现（mousemove）</li>
+<li>射击游戏的 mousedown/keydown 事件（单位时间只能发射一颗子弹）</li>
+<li>计算鼠标移动的距离（mousemove）</li>
+<li>Canvas 模拟画板功能（mousemove）</li>
+<li>搜索联想（keyup）</li>
+</ul>
+<p>参考: <a href="https://github.com/hanzichi/underscore-analysis/issues/20" target="_blank" rel="external">https://github.com/hanzichi/underscore-analysis/issues/20</a></p>
+
         </div>
         <footer class="article-footer">
             
@@ -272,6 +320,19 @@ ga('send', 'pageview');
             
         </ul>
     </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2017/06/13/最小编辑距离问题（Edit-Distance/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">最小编辑距离问题(Edit Distance)</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
     
     <div class="widgets-container">
         
@@ -459,7 +520,7 @@ ga('send', 'pageview');
     var disqus_shortname = 'stephenliu-site';
     
     
-    var disqus_url = 'stephenliu.site/about/index.html';
+    var disqus_url = 'stephenliu.site/2017/06/13/深入浅出throttle和debounce/';
     
     (function() {
     var dsq = document.createElement('script');

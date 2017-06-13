@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>［译］什么时候“不要”用箭头函数 | Stephen&#39;s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="translate" />
+    
+    <meta name="description" content="本文翻译于 https://rainsoft.io/when-not-to-use-arrow-functions-in-javascript/  看到你写的编程语言每天都在进化更新，是一件非常值得高兴的事情，通过从错误中学习、发现更好的解决办法以及创造出新的特性，来让这个过程不断的版本迭代。 近几年这些都发生在Javascrpit身上，尤其是ECMAScript6的出现给这门语言带来了更高的实">
+<meta name="keywords" content="translate">
+<meta property="og:type" content="article">
+<meta property="og:title" content="［译］什么时候“不要”用箭头函数">
+<meta property="og:url" content="stephenliu.site/2017/06/13/［译］什么时候“不要”用箭头函数/index.html">
+<meta property="og:site_name" content="Stephen&#39;s Blog">
+<meta property="og:description" content="本文翻译于 https://rainsoft.io/when-not-to-use-arrow-functions-in-javascript/  看到你写的编程语言每天都在进化更新，是一件非常值得高兴的事情，通过从错误中学习、发现更好的解决办法以及创造出新的特性，来让这个过程不断的版本迭代。 近几年这些都发生在Javascrpit身上，尤其是ECMAScript6的出现给这门语言带来了更高的实">
+<meta property="og:image" content="/images/arrow-function.png">
+<meta property="og:updated_time" content="2017-06-13T15:13:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="［译］什么时候“不要”用箭头函数">
+<meta name="twitter:description" content="本文翻译于 https://rainsoft.io/when-not-to-use-arrow-functions-in-javascript/  看到你写的编程语言每天都在进化更新，是一件非常值得高兴的事情，通过从错误中学习、发现更好的解决办法以及创造出新的特性，来让这个过程不断的版本迭代。 近几年这些都发生在Javascrpit身上，尤其是ECMAScript6的出现给这门语言带来了更高的实">
+<meta name="twitter:image" content="/images/arrow-function.png">
+    
+
+    
+        <link rel="alternate" href="/" title="Stephen&#39;s Blog" type="application/atom+xml" />
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-100550379-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">Keep Calm And Love</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Home</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Technology/">Technology</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">About</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Technology/">Technology</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-［译］什么时候“不要”用箭头函数" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        ［译］什么时候“不要”用箭头函数
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/06/13/［译］什么时候“不要”用箭头函数/" class="article-date">
+            <time datetime="2017-06-13T15:12:35.000Z" itemprop="datePublished">2017-06-13</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/translate/">translate</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <blockquote>
+<p>本文翻译于 <a href="https://rainsoft.io/when-not-to-use-arrow-functions-in-javascript/" target="_blank" rel="external">https://rainsoft.io/when-not-to-use-arrow-functions-in-javascript/</a></p>
+</blockquote>
+<p>看到你写的编程语言每天都在进化更新，是一件非常值得高兴的事情，通过从错误中学习、发现更好的解决办法以及创造出新的特性，来让这个过程不断的版本迭代。</p>
+<p>近几年这些都发生在Javascrpit身上，尤其是<a href="http://www.ecma-international.org/ecma-262/6.0/" target="_blank" rel="external">ECMAScript6</a>的出现给这门语言带来了更高的实用性： 箭头函数、类以及<a href="https://github.com/lukehoban/es6features#introduction" target="_blank" rel="external">更多</a>，这是非常棒的！</p>
+<p>其中最有价值的特性之一便是箭头函数。同时有大量的文章来描述它的上下文透明性以及短语法。如果你是新接触ES6的话，可以从<a href="https://strongloop.com/strongblog/an-introduction-to-javascript-es6-arrow-functions/" target="_blank" rel="external">这篇文章</a>来了解箭头函数。</p>
+<p>但是水能载舟，也能覆舟。许多时候新特性会介绍的非常混乱，其中之一就是箭头函数被误用。</p>
+<p>这篇文章通过情景引导你哪里需要绕过箭头函数，使用更合适的旧的<a href="https://developer.mozilla.org/en/docs/web/JavaScript/Reference/Operators/function" target="_blank" rel="external">函数表达式</a>或新的短语法。同时对<a href="https://developer.mozilla.org/en/docs/web/JavaScript/Reference/Operators/function" target="_blank" rel="external">短语法</a>有个心理准备，因为它会影响你代码的可读性。</p>
+<h2 id="1-在对象上定义方法"><a href="#1-在对象上定义方法" class="headerlink" title="1.在对象上定义方法"></a>1.在对象上定义方法</h2><p>在javascript中，方法是储存在对象一个属性里的一个函数。当调用该方法的时候，<code>this</code>指向的是方法所属的对象。</p>
+<h3 id="1a-对象字面量"><a href="#1a-对象字面量" class="headerlink" title="1a.对象字面量"></a>1a.对象字面量</h3><p>自从箭头函数有了短语法，使用它来定义方法变得更加吸引人，让我们尝试一下：</p>
+<p><a href="http://jsbin.com/nisalub/1/edit?js,console" target="_blank" rel="external">使用JS Bin尝试</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> calculate = &#123;  </div><div class="line">  <span class="attr">array</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">  <span class="attr">sum</span>: <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span> === <span class="built_in">window</span>); <span class="comment">// =&gt; true</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.array.reduce(<span class="function">(<span class="params">result, item</span>) =&gt;</span> result + item);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span> === <span class="built_in">window</span>); <span class="comment">// =&gt; true  </span></div><div class="line"><span class="comment">// Throws "TypeError: Cannot read property 'reduce' of undefined"</span></div><div class="line">calculate.sum();</div></pre></td></tr></table></figure>
+<p><code>calculate.sum</code>方法是使用箭头函数定义的，但是在调用<code>calculate.sum</code>的时候却抛出<code>TypeError</code>的错误，这是因为<code>this.array</code>的值是<code>undefined</code>.<br>当调用calculate对象上的<code>sum()</code>方法的时候，上下文依然是window,原因是箭头函数绑定了window对象的词法上下文。<br>执行this.array相当于执行<code>window.array</code>，它的值是<code>undefined</code>.</p>
+<p>解决办法是使用函数表达式或者短语法（ECMAScript 6中可用）来定义方法。在这种情况下this指向的是调用对象，而不是邻近上下文。让我们来看看修改的版本:</p>
+<p><a href="http://jsbin.com/nemorup/2/edit?js,console" target="_blank" rel="external">使用JS Bin尝试</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> calculate = &#123;  </div><div class="line">  <span class="attr">array</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</div><div class="line">  sum() &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span> === calculate); <span class="comment">// =&gt; true</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.array.reduce(<span class="function">(<span class="params">result, item</span>) =&gt;</span> result + item);</div><div class="line">  &#125;</div><div class="line">&#125;;</div><div class="line">calculate.sum(); <span class="comment">// =&gt; 6</span></div></pre></td></tr></table></figure>
+<p>因为sum是一个普通函数，调用<code>calculate.sum()</code>其中的<code>this</code>指向的是calculate对象，<code>this.array</code>便是array的一个引用，所以元素之和计算正确： 6 。</p>
+<h3 id="1b-对象原型"><a href="#1b-对象原型" class="headerlink" title="1b.对象原型"></a>1b.对象原型</h3><p>相同的规则也适用于通过原型对象来定义方法。如下面例子，如果使用箭头函数来定义sayCatName方法，会指向一个不正确的上下文window：</p>
+<p><a href="http://jsbin.com/yumira/2/edit?js,console" target="_blank" rel="external">使用JS Bin尝试</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyCat</span>(<span class="params">name</span>) </span>&#123;  </div><div class="line">  <span class="keyword">this</span>.catName = name;</div><div class="line">&#125;</div><div class="line">MyCat.prototype.sayCatName = <span class="function"><span class="params">()</span> =&gt;</span> &#123;  </div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span> === <span class="built_in">window</span>); <span class="comment">// =&gt; true</span></div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.catName;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> MyCat(<span class="string">'Mew'</span>);  </div><div class="line">cat.sayCatName(); <span class="comment">// =&gt; undefined</span></div></pre></td></tr></table></figure>
+<p>使用保守派的函数表达式:</p>
+<p><a href="http://jsbin.com/betara/3/edit?js,console" target="_blank" rel="external">使用JS Bin尝试</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyCat</span>(<span class="params">name</span>) </span>&#123;  </div><div class="line">  <span class="keyword">this</span>.catName = name;</div><div class="line">&#125;</div><div class="line">MyCat.prototype.sayCatName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span> === cat); <span class="comment">// =&gt; true</span></div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>.catName;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> cat = <span class="keyword">new</span> MyCat(<span class="string">'Mew'</span>);  </div><div class="line">cat.sayCatName(); <span class="comment">// =&gt; 'Mew'</span></div></pre></td></tr></table></figure>
+<p>当你调用<code>cat.sayCatName()</code>方法的时候，sayCatName这个普通函数将上下文改变成了cat对象。</p>
+<h2 id="2-结合动态上下文的回调函数"><a href="#2-结合动态上下文的回调函数" class="headerlink" title="2.结合动态上下文的回调函数"></a>2.结合动态上下文的回调函数</h2><p>this是javascript中一个非常强大的特性。它允许通过函数调用的方式来改变上下文。通常来说，使上下文为函数调用时候的目标对象，会让代码更加自然化，也就是说“让事情发生在对象上”。</p>
+<p>然而，箭头函数在声明的时候是静态的绑定上下文，不可能是动态的。这种情况下this是不必要的。</p>
+<p>在客户端编程中，给DOM元素绑定监听事件是一个十分常见的事情，一个事件以this作为目标元素去触发事件处理函数，是动态上下文最简便的用法。</p>
+<p>下面的例子是使用箭头函数来作为事件处理函数：</p>
+<p><a href="http://jsbin.com/sesoda/2/edit?html,js,console,output" target="_blank" rel="external">使用JS Bin尝试</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.getElementById(<span class="string">'myButton'</span>);  </div><div class="line">button.addEventListener(<span class="string">'click'</span>, () =&gt; &#123;  </div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span> === <span class="built_in">window</span>); <span class="comment">// =&gt; true</span></div><div class="line">  <span class="keyword">this</span>.innerHTML = <span class="string">'Clicked button'</span>;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>上面的例子中，箭头函数中的this指向的是window，也就是被定义在了全局的上下文。当一个点击事件发生时，浏览器尝试去调用button上下文中的事件处理函数，但是此时箭头函数并没有改变它之前定义的上下文（译者注：也就是window）。</p>
+<p>所以，<code>this.innerHTML</code>的值和<code>window.innerHTML</code>的相等，这是没意义的。</p>
+<p>你不得不使用函数表达式，来允许你改变this所指向的上下文。</p>
+<p><a href="http://jsbin.com/hafibi/4/edit?html,js,console,output" target="_blank" rel="external">使用JS Bin尝试</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> button = <span class="built_in">document</span>.getElementById(<span class="string">'myButton'</span>);  </div><div class="line">button.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;  </div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span> === button); <span class="comment">// =&gt; true</span></div><div class="line">  <span class="keyword">this</span>.innerHTML = <span class="string">'Clicked button'</span>;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>当用户点击按钮，事件处理函数中的this指向的是button。所以<code>this.innnerHTML = &#39;Click Button&#39;</code>正确的的修改了按钮的文本，并且反映了点击的状态。</p>
+<h2 id="3-调用构造器"><a href="#3-调用构造器" class="headerlink" title="3. 调用构造器"></a>3. 调用构造器</h2><p>this在构造调用中会指向一个新创建的对象。当执行new MyFunction()的时候，构造函数MyFunction的上下文是一个新的对象： <code>this instanceof MyFunction === true.</code><br>注意到箭头函数不能用在构造器上，Javascript会通过抛出异常来隐式的预防这个。<br>无论如何，this会指向邻近的上下文而不是新创建的对象。换句话说，一个箭头函数的构造器并没有什么意义，相反可能会造成歧义。<br>让我们来看看如果使用箭头函数构造器:</p>
+<p><a href="http://jsbin.com/dazadiw/2/edit?js,console" target="_blank" rel="external">使用JS Bin尝试</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Message = <span class="function">(<span class="params">text</span>) =&gt;</span> &#123;  </div><div class="line">  <span class="keyword">this</span>.text = text;</div><div class="line">&#125;;</div><div class="line"><span class="comment">// Throws "TypeError: Message is not a constructor"</span></div><div class="line"><span class="keyword">var</span> helloMessage = <span class="keyword">new</span> Message(<span class="string">'Hello World!'</span>);</div></pre></td></tr></table></figure>
+<p>Message是一个箭头函数，如果执行<code>new Message(&#39;Hello World!&#39;)</code> ，Javascript会抛出一个<code>TypeError</code>，也就是说Message不能当做构造器。<br>我认为相对于之前javascript版本的静默失败，ECMAScript 6 在这种情况下提供提供包含错误信息的失败提示会是更佳高效的实践。</p>
+<p>上面的例子可以通过一个<a href="https://developer.mozilla.org/en/docs/web/JavaScript/Reference/Operators/function" target="_blank" rel="external">函数表达式</a>来修正，这是一种正确的方式（包括<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/function" target="_blank" rel="external">函数声明</a>）来创建构造器：</p>
+<p><a href="http://jsbin.com/qogemo/2/edit?js,console" target="_blank" rel="external">使用JS Bin尝试</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Message = <span class="function"><span class="keyword">function</span>(<span class="params">text</span>) </span>&#123;  </div><div class="line">  <span class="keyword">this</span>.text = text;</div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> helloMessage = <span class="keyword">new</span> Message(<span class="string">'Hello World!'</span>);  </div><div class="line"><span class="built_in">console</span>.log(helloMessage.text); <span class="comment">// =&gt; 'Hello World!'</span></div></pre></td></tr></table></figure>
+<h2 id="4-最短语法"><a href="#4-最短语法" class="headerlink" title="4.最短语法"></a>4.最短语法</h2><p>箭头函数有个非常棒的属性，即可以省略参数的括号，如果函数体只有一条语句，可以省略代码块的花括号{}以及return。这可以帮助你写更短的函数。</p>
+<p>曾经我的大学编程老师给学生布置了一个非常有趣的任务：使用C语言通过一个最短的函数来计算字符串的长度。这是学习和探索新语言一个非常好的途径。</p>
+<p>尽管如此在现实世界中你的应用代码会被许多开发者阅读。最短语法不是一直都适合给你的同事快速理解函数的意思。</p>
+<p>某种程度上来说，压缩函数会让阅读变得更为困难，所以别在这里投入太大的热情。让我们来看看这个例子：</p>
+<p><a href="http://jsbin.com/xumavu/2/edit?js,console" target="_blank" rel="external">使用JS Bin尝试</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> multiply = <span class="function">(<span class="params">a, b</span>) =&gt;</span> b === <span class="literal">undefined</span> ? <span class="function"><span class="params">b</span> =&gt;</span> a * b : a * b;  </div><div class="line"><span class="keyword">let</span> double = multiply(<span class="number">2</span>);  </div><div class="line">double(<span class="number">3</span>);      <span class="comment">// =&gt; 6  </span></div><div class="line">multiply(<span class="number">2</span>, <span class="number">3</span>); <span class="comment">// =&gt; 6</span></div></pre></td></tr></table></figure>
+<p>multiply返回了两个数字相乘的结果或者说为了接下来的运算，关联了第一个参数的闭包。<br>函数运行良好并且看起来非常短，但是它可能在第一眼看的时候比较难的理解。</p>
+<p>为了让它的可读性更高，可以给箭头函数添加可选的花括号和return语句或者用一些普通函数：</p>
+<p><a href="http://jsbin.com/huhikem/2/edit?js,console" target="_blank" rel="external">使用JS Bin尝试</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">multiply</span>(<span class="params">a, b</span>) </span>&#123;  </div><div class="line">  <span class="keyword">if</span> (b === <span class="literal">undefined</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">b</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> a * b;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> a * b;</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> double = multiply(<span class="number">2</span>);  </div><div class="line">double(<span class="number">3</span>);      <span class="comment">// =&gt; 6  </span></div><div class="line">multiply(<span class="number">2</span>, <span class="number">3</span>); <span class="comment">// =&gt; 6</span></div></pre></td></tr></table></figure>
+<p>最好的方式就是在短和长之间寻找一个平衡点来让你Javascript代码更为简单。</p>
+<h2 id="5-结论"><a href="#5-结论" class="headerlink" title="5.结论"></a>5.结论</h2><p>毫无疑问，箭头函数是一个非常棒的增强特性。如果使用正确的话，它能在很多地方带来便利，比如早期你不得不使用 .bind() 或者试图去捕获上下文。同时它也让代码变得更加轻便。</p>
+<p>在一些情况下，优势和劣势是并存的。当要求动态上下文的时候，你就不能使用箭头函数，比如定义方法，用构造器创建对象，当要处理事件时用 this 获取目标。</p>
+<h3 id="一些参考文章"><a href="#一些参考文章" class="headerlink" title="一些参考文章"></a>一些参考文章</h3><p><a href="http://rainsoft.io/gentle-explanation-of-this-in-javascript/" target="_blank" rel="external">Gentle explanation of ‘this’ keyword in JavaScript</a><br><a href="http://rainsoft.io/javascript-hoisting-in-details/" target="_blank" rel="external">JavaScript variables hoisting in details </a><br><a href="http://rainsoft.io/the-legend-of-javascript-equality-operator/" target="_blank" rel="external">The legend of JavaScript equality operator</a></p>
+
+        </div>
+        <footer class="article-footer">
+            
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+
+    
+    </section>
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>follow:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="https://twitter.com/ccnuStephenLiu" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/stephenLYao" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="http://www.weibo.com/p/1005053103316530/home?from=page_100505&mod=TAB#place" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/06/13/最小编辑距离问题（Edit-Distance/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">newer</strong>
+        <p class="article-nav-title">
+        
+            最小编辑距离问题(Edit Distance)
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2017/06/11/Understanding-Event-Loop-in-Javascript/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">older</strong>
+        <p class="article-nav-title">Understanding Event Loop in Javascript</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">recents</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/06/13/深入浅出throttle和debounce/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/throttle-debounce.jpeg)" alt="深入浅出throttle和debounce" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/06/13/深入浅出throttle和debounce/" class="title">深入浅出throttle和debounce</a></p>
+                            <p class="item-date"><time datetime="2017-06-13T15:37:57.000Z" itemprop="datePublished">2017-06-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/06/13/最小编辑距离问题（Edit-Distance/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/edit-distance.png)" alt="最小编辑距离问题(Edit Distance)" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/06/13/最小编辑距离问题（Edit-Distance/" class="title">最小编辑距离问题(Edit Distance)</a></p>
+                            <p class="item-date"><time datetime="2017-06-13T15:26:04.000Z" itemprop="datePublished">2017-06-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/06/13/［译］什么时候“不要”用箭头函数/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/arrow-function.png)" alt="［译］什么时候“不要”用箭头函数" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/06/13/［译］什么时候“不要”用箭头函数/" class="title">［译］什么时候“不要”用箭头函数</a></p>
+                            <p class="item-date"><time datetime="2017-06-13T15:12:35.000Z" itemprop="datePublished">2017-06-13</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/06/11/Understanding-Event-Loop-in-Javascript/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/event-loop.png)" alt="Understanding Event Loop in Javascript" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/06/11/Understanding-Event-Loop-in-Javascript/" class="title">Understanding Event Loop in Javascript</a></p>
+                            <p class="item-date"><time datetime="2017-06-11T14:37:38.000Z" itemprop="datePublished">2017-06-11</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/06/10/Web-Real-time-Connection/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/web-real-time.png)" alt="Web Real-time Connection" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/06/10/Web-Real-time-Connection/" class="title">Web Real-time Connection</a></p>
+                            <p class="item-date"><time datetime="2017-06-10T15:57:09.000Z" itemprop="datePublished">2017-06-10</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">tags</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithm/">algorithm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/js/">js</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodeJs/">nodeJs</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/translate/">translate</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/源码分析/">源码分析</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/algorithm/" style="font-size: 10px;">algorithm</a> <a href="/tags/js/" style="font-size: 20px;">js</a> <a href="/tags/nodeJs/" style="font-size: 20px;">nodeJs</a> <a href="/tags/translate/" style="font-size: 20px;">translate</a> <a href="/tags/源码分析/" style="font-size: 10px;">源码分析</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2017 stephen</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+    
+    <script>
+    var disqus_shortname = 'stephenliu-site';
+    
+    
+    var disqus_url = 'stephenliu.site/2017/06/13/［译］什么时候“不要”用箭头函数/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
