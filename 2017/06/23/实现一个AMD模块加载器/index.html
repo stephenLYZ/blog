@@ -3,24 +3,19 @@
 <head>
     <meta charset="utf-8">
     
-    <title>最小编辑距离问题(Edit Distance) | Stephen&#39;s Blog</title>
+    <title>实现一个AMD模块加载器 | Stephen&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-        <meta name="keywords" content="algorithm" />
+        <meta name="keywords" content="js" />
     
-    <meta name="description" content="前言最近在研究react-diff算法的时候，遇到了两个Virtual DOM列表的Diff，其实就是典型的最小编辑距离(Edit Distance)问题，于是抱着强烈的好奇心去研究了一番并做个总结。 定义什么是编辑距离？简单来说就是两个字符串之间，一个转成另一个的最少编辑操作次数，也就是说编辑距离是衡量两个字符串相似性的度量方法，距离越小相似度越大，而其中允许编辑的操作有：插入（insert），">
-<meta name="keywords" content="algorithm">
+    <meta name="keywords" content="js">
 <meta property="og:type" content="article">
-<meta property="og:title" content="最小编辑距离问题(Edit Distance)">
-<meta property="og:url" content="stephenliu.site/2017/06/13/最小编辑距离问题（Edit-Distance/index.html">
+<meta property="og:title" content="实现一个AMD模块加载器">
+<meta property="og:url" content="stephenliu.site/2017/06/23/实现一个AMD模块加载器/index.html">
 <meta property="og:site_name" content="Stephen&#39;s Blog">
-<meta property="og:description" content="前言最近在研究react-diff算法的时候，遇到了两个Virtual DOM列表的Diff，其实就是典型的最小编辑距离(Edit Distance)问题，于是抱着强烈的好奇心去研究了一番并做个总结。 定义什么是编辑距离？简单来说就是两个字符串之间，一个转成另一个的最少编辑操作次数，也就是说编辑距离是衡量两个字符串相似性的度量方法，距离越小相似度越大，而其中允许编辑的操作有：插入（insert），">
-<meta property="og:image" content="/images/edit-distance.png">
-<meta property="og:updated_time" content="2017-06-13T15:27:17.000Z">
+<meta property="og:updated_time" content="2017-06-23T10:39:22.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="最小编辑距离问题(Edit Distance)">
-<meta name="twitter:description" content="前言最近在研究react-diff算法的时候，遇到了两个Virtual DOM列表的Diff，其实就是典型的最小编辑距离(Edit Distance)问题，于是抱着强烈的好奇心去研究了一番并做个总结。 定义什么是编辑距离？简单来说就是两个字符串之间，一个转成另一个的最少编辑操作次数，也就是说编辑距离是衡量两个字符串相似性的度量方法，距离越小相似度越大，而其中允许编辑的操作有：插入（insert），">
-<meta name="twitter:image" content="/images/edit-distance.png">
+<meta name="twitter:title" content="实现一个AMD模块加载器">
     
 
     
@@ -148,14 +143,14 @@ ga('send', 'pageview');
     </h1>
 </div>
                         <div class="main-body-content">
-                            <article id="post-最小编辑距离问题（Edit-Distance" class="article article-single article-type-post" itemscope itemprop="blogPost">
+                            <article id="post-实现一个AMD模块加载器" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
             <header class="article-header">
                 
     
         <h1 class="article-title" itemprop="name">
-        最小编辑距离问题(Edit Distance)
+        实现一个AMD模块加载器
         </h1>
     
 
@@ -165,68 +160,22 @@ ga('send', 'pageview');
             <div class="article-meta">
                 
     <div class="article-date">
-        <a href="/2017/06/13/最小编辑距离问题（Edit-Distance/" class="article-date">
-            <time datetime="2017-06-13T15:26:04.000Z" itemprop="datePublished">2017-06-13</time>
+        <a href="/2017/06/23/实现一个AMD模块加载器/" class="article-date">
+            <time datetime="2017-06-23T10:38:56.000Z" itemprop="datePublished">2017-06-23</time>
         </a>
     </div>
 
                 
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/algorithm/">algorithm</a>
+        <a class="tag-link" href="/tags/js/">js</a>
     </div>
 
             </div>
         
         
         <div class="article-entry" itemprop="articleBody">
-            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在研究<code>react-diff</code>算法的时候，遇到了两个Virtual DOM列表的Diff，其实就是典型的最小编辑距离(Edit Distance)问题，于是抱着强烈的好奇心去研究了一番并做个总结。</p>
-<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p>什么是编辑距离？简单来说就是两个字符串之间，一个转成另一个的最少编辑操作次数，也就是说编辑距离是衡量两个字符串相似性的度量方法，距离越小相似度越大，而其中允许编辑的操作有：插入（insert），删除（delete）以及替换（substitution）。</p>
-<p>这里可以看具体问题的描述（摘自<a href="https://leetcode.com/problems/edit-distance/" target="_blank" rel="external">leetcode</a>）：</p>
-<blockquote>
-<p>Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.)<br>You have the following 3 operations permitted on a word:<br>a) Insert a character<br>b) Delete a character<br>c) Replace a character</p>
-</blockquote>
-<h2 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h2><p>具体思路如下图：<br><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance.png" alt=""><br>假设字符串X的长度为N,字符串Y的长度为M，<code>D(i,j)</code>表示字符串<code>X[1...i]</code>转换为<code>Y[1...j]</code>的编辑距离：</p>
-<blockquote>
-<p>注意： 其中X[i]和Y[j]表示字符串X和Y的最后一位</p>
-<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化:"></a>初始化:</h4></blockquote>
-<p>D(i,0) = i，表示Y字符串为空，X[1…i]全部删除，所以编辑距离为i<br>D(0,j) = j，表示X字符串为空，新插入Y[1…j]，所以编辑距离为j</p>
-<h4 id="递归关系"><a href="#递归关系" class="headerlink" title="递归关系:"></a>递归关系:</h4><blockquote>
-<p>例子中 &gt;&gt; 定义为字符串转换</p>
-</blockquote>
-<ul>
-<li>当X[i]与Y[j]相等时，此时D(i,j) = D(i-1,j-1)，比如 xyz &gt;&gt; thz 与 xy &gt;&gt; th 的编辑距离相等。</li>
-<li>当X[i]与Y[j]不相等时，取下面三项的最小值：<ul>
-<li>D(i-1,j) + 1，即删除X[i]，编辑距离+1，比如xyz &gt;&gt; thx = xy &gt;&gt; thx + 1</li>
-<li>D(i,j-1) + 1，即插入Y[j]，转换后编辑距离+1，比如 xyz &gt;&gt; thx = xyzx &gt;&gt; thx + 1 = xyz &gt;&gt; th + 1</li>
-<li>D(i-1,j-1) + 2，即X[i]替换成Y[j]，比如xyz &gt;&gt; thx = xyx &gt;&gt; thx + 2 = xy &gt;&gt; th + 2</li>
-</ul>
-</li>
-</ul>
-<p>最后求的这三项的最小值就是编辑距离。</p>
-<h3 id="递归算法"><a href="#递归算法" class="headerlink" title="递归算法"></a>递归算法</h3><p>我们按照上面的思路用代码实现：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> editDistance = (</div><div class="line">  word1,</div><div class="line">  word2,</div><div class="line">  i,</div><div class="line">  j </div><div class="line">) =&gt; &#123;</div><div class="line">  <span class="keyword">const</span> len1 = word1.length</div><div class="line">  <span class="keyword">const</span> len2 = word2.length</div><div class="line">  <span class="keyword">const</span> d = []</div><div class="line">  <span class="keyword">if</span>(len1 === <span class="number">0</span>) &#123;</div><div class="line">    <span class="keyword">return</span> len2</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(len2 === <span class="number">0</span>) &#123;</div><div class="line">    <span class="keyword">return</span> len1</div><div class="line">  &#125;<span class="keyword">else</span> <span class="keyword">if</span>(word1[i<span class="number">-1</span>] === word2[j<span class="number">-1</span>])&#123;</div><div class="line">    <span class="keyword">return</span> editDistance(word1,word2,i<span class="number">-1</span>,j<span class="number">-1</span>)</div><div class="line">  &#125;<span class="keyword">else</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.min(editDistance(word1,word2,i<span class="number">-1</span>,j) + <span class="number">1</span>,</div><div class="line">      		    editDistance(word1,word2,i,j<span class="number">-1</span>) + <span class="number">1</span>,</div><div class="line">      		    editDistance(word1,word2,i<span class="number">-1</span>,j<span class="number">-1</span>) + <span class="number">2</span></div><div class="line">      		    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>显然这样写的代码，性能是一个很大的问题，时间复杂度是随指数增长的，所以解决该问题的办法是使用动态规划求解。</p>
-<h3 id="动态规划算法"><a href="#动态规划算法" class="headerlink" title="动态规划算法"></a>动态规划算法</h3><p>我们可以用动态规划的方法来优化时间复杂度<br>以word1为<code>‘sot’</code>，word2为<code>‘stop’</code>为例，我们首先创建一个矩阵：</p>
-<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance1.png" alt=""></p>
-<p>计算 <code>i=1,j=1</code>:</p>
-<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance3.png" alt=""></p>
-<p>得到: </p>
-<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance2.png" alt=""></p>
-<p>计算<code>i=1,j=2</code>:</p>
-<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance5.png" alt=""></p>
-<p>得到：</p>
-<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance4.png" alt=""></p>
-<p>最终得到</p>
-<p><img src="http://7xl0rs.com1.z0.glb.clouddn.com/editdistance6.png" alt=""></p>
-<p>于是可以得到最短编辑距离为<code>d[m][n] = 3</code>，现在时间复杂度控制在了O(mn)。</p>
-<p>具体算法如下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> editDistance = (</div><div class="line">  word1,</div><div class="line">  word2</div><div class="line">) =&gt; &#123;</div><div class="line">  <span class="keyword">const</span> len1 = word1.length</div><div class="line">  <span class="keyword">const</span> len2 = word2.length</div><div class="line">  <span class="keyword">let</span> d = []</div><div class="line">  <span class="keyword">let</span> i,j</div><div class="line">  </div><div class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= len1; i++)&#123;</div><div class="line">    d[i] = []	</div><div class="line">    d[i][<span class="number">0</span>] = i  </div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">for</span>(j = <span class="number">0</span>; j &lt;= len2; j++)&#123;</div><div class="line">    d[<span class="number">0</span>][j] = j</div><div class="line">  &#125;</div><div class="line">  </div><div class="line">  <span class="keyword">for</span>(i = <span class="number">1</span>; i&lt;= len1; i++)&#123;</div><div class="line">    <span class="keyword">for</span>(j = <span class="number">1</span>; j &lt;= len2; j++)&#123;</div><div class="line">      <span class="keyword">if</span>(word1[i<span class="number">-1</span>] == word2[j<span class="number">-1</span>])&#123;</div><div class="line">        d[i][j] = d[i<span class="number">-1</span>][j<span class="number">-1</span>]</div><div class="line">      &#125;<span class="keyword">else</span>&#123;</div><div class="line">        d[i][j] = <span class="built_in">Math</span>.min(d[i<span class="number">-1</span>][j]+<span class="number">1</span>,d[i][j<span class="number">-1</span>]+<span class="number">1</span>,d[i<span class="number">-1</span>][j<span class="number">-1</span>]+<span class="number">2</span>)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> d[len1][len2]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
-<li><a href="https://web.stanford.edu/class/cs124/lec/med.pdf" target="_blank" rel="external">stanford - Minimum&amp;Edit&amp;Distance</a></li>
-<li><a href="http://ccl.pku.edu.cn/doubtfire/Course/Computational%20Linguistics/contents/Minimum%20Edit%20Distance.pdf" target="_blank" rel="external">最小编辑距离算法</a></li>
-</ul>
-
+            
         </div>
         <footer class="article-footer">
             
@@ -346,20 +295,20 @@ ga('send', 'pageview');
         
 <nav id="article-nav">
     
-        <a href="/2017/06/13/深入浅出throttle和debounce/" id="article-nav-newer" class="article-nav-link-wrap">
+        <a href="/2017/07/06/实现一个Promise/" id="article-nav-newer" class="article-nav-link-wrap">
         <strong class="article-nav-caption">newer</strong>
         <p class="article-nav-title">
         
-            深入浅出throttle和debounce
+            实现一个Promise
         
         </p>
         <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
     </a>
     
     
-        <a href="/2017/06/13/［译］什么时候“不要”用箭头函数/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2017/06/17/探索javascript异步编程/" id="article-nav-older" class="article-nav-link-wrap">
         <strong class="article-nav-caption">older</strong>
-        <p class="article-nav-title">［译］什么时候“不要”用箭头函数</p>
+        <p class="article-nav-title">探索javascript异步编程</p>
         <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
         </a>
     
@@ -552,7 +501,7 @@ ga('send', 'pageview');
     var disqus_shortname = 'stephenliu-site';
     
     
-    var disqus_url = 'stephenliu.site/2017/06/13/最小编辑距离问题（Edit-Distance/';
+    var disqus_url = 'stephenliu.site/2017/06/23/实现一个AMD模块加载器/';
     
     (function() {
     var dsq = document.createElement('script');
