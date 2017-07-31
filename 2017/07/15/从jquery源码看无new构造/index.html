@@ -3,24 +3,24 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Module.exports vs Exports in Node.js | Stephen&#39;s Blog</title>
+    <title>从jquery源码看无new构造 | Stephen&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-        <meta name="keywords" content="nodeJs" />
+        <meta name="keywords" content="源码分析" />
     
-    <meta name="description" content="前言最近在折腾node.js的时候，经常会看到类似exports.xxx = yyy以及module.exports = yyy这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？关于两者的区别，了解了下面几点就会非常的清楚:  exports 是 module.exports 的一个引用 exports = module.">
-<meta name="keywords" content="nodeJs">
+    <meta name="description" content="前言无new构造是怎么一回事呢？我们知道，jquery中可以通过以下两种方式来构造对象： 12345// 无new$(&apos;#id&apos;).context(&apos;hello world&apos;) // 有newvar id = new $(&apos;#id&apos;)id.context(&apos;hello world&apos;) 显然，我们用得最多就是第一种无new的构造方式，那这种方式内部又是怎么实现的呢？下面我们一步步来实现这样的效果。j">
+<meta name="keywords" content="源码分析">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Module.exports vs Exports in Node.js">
-<meta property="og:url" content="stephenliu.site/2017/06/08/Module-exports-vs-Exports-in-Node-js/index.html">
+<meta property="og:title" content="从jquery源码看无new构造">
+<meta property="og:url" content="stephenliu.site/2017/07/15/从jquery源码看无new构造/index.html">
 <meta property="og:site_name" content="Stephen&#39;s Blog">
-<meta property="og:description" content="前言最近在折腾node.js的时候，经常会看到类似exports.xxx = yyy以及module.exports = yyy这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？关于两者的区别，了解了下面几点就会非常的清楚:  exports 是 module.exports 的一个引用 exports = module.">
-<meta property="og:image" content="/images/export.png">
-<meta property="og:updated_time" content="2017-06-07T16:38:47.000Z">
+<meta property="og:description" content="前言无new构造是怎么一回事呢？我们知道，jquery中可以通过以下两种方式来构造对象： 12345// 无new$(&apos;#id&apos;).context(&apos;hello world&apos;) // 有newvar id = new $(&apos;#id&apos;)id.context(&apos;hello world&apos;) 显然，我们用得最多就是第一种无new的构造方式，那这种方式内部又是怎么实现的呢？下面我们一步步来实现这样的效果。j">
+<meta property="og:image" content="/images/jquey.png">
+<meta property="og:updated_time" content="2017-07-31T17:08:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Module.exports vs Exports in Node.js">
-<meta name="twitter:description" content="前言最近在折腾node.js的时候，经常会看到类似exports.xxx = yyy以及module.exports = yyy这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？关于两者的区别，了解了下面几点就会非常的清楚:  exports 是 module.exports 的一个引用 exports = module.">
-<meta name="twitter:image" content="/images/export.png">
+<meta name="twitter:title" content="从jquery源码看无new构造">
+<meta name="twitter:description" content="前言无new构造是怎么一回事呢？我们知道，jquery中可以通过以下两种方式来构造对象： 12345// 无new$(&apos;#id&apos;).context(&apos;hello world&apos;) // 有newvar id = new $(&apos;#id&apos;)id.context(&apos;hello world&apos;) 显然，我们用得最多就是第一种无new的构造方式，那这种方式内部又是怎么实现的呢？下面我们一步步来实现这样的效果。j">
+<meta name="twitter:image" content="/images/jquey.png">
     
 
     
@@ -148,14 +148,14 @@ ga('send', 'pageview');
     </h1>
 </div>
                         <div class="main-body-content">
-                            <article id="post-Module-exports-vs-Exports-in-Node-js" class="article article-single article-type-post" itemscope itemprop="blogPost">
+                            <article id="post-从jquery源码看无new构造" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
             <header class="article-header">
                 
     
         <h1 class="article-title" itemprop="name">
-        Module.exports vs Exports in Node.js
+        从jquery源码看无new构造
         </h1>
     
 
@@ -165,41 +165,38 @@ ga('send', 'pageview');
             <div class="article-meta">
                 
     <div class="article-date">
-        <a href="/2017/06/08/Module-exports-vs-Exports-in-Node-js/" class="article-date">
-            <time datetime="2017-06-07T16:34:42.000Z" itemprop="datePublished">2017-06-08</time>
+        <a href="/2017/07/15/从jquery源码看无new构造/" class="article-date">
+            <time datetime="2017-07-14T17:04:36.000Z" itemprop="datePublished">2017-07-15</time>
         </a>
     </div>
 
                 
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/nodeJs/">nodeJs</a>
+        <a class="tag-link" href="/tags/源码分析/">源码分析</a>
     </div>
 
             </div>
         
         
         <div class="article-entry" itemprop="articleBody">
-            <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近在折腾node.js的时候，经常会看到类似exports.xxx = yyy以及module.exports = yyy这样的代码，可实际上如果通过require()函数来引用模块就会有报错的情况，所以到底是什么原因造成的呢？这两者又有什么区别？<br>关于两者的区别，了解了下面几点就会非常的清楚:</p>
-<ul>
-<li>exports 是 module.exports 的一个引用 exports = module.exports = {}</li>
-<li>require()返回的是module.exports 而不是 exports</li>
-<li>exports.xxx 相当于在导出对象上挂属性，该属性对调用模块直接可见<br>exports =相当于给exports对象重新赋值，调用模块不能访问exports 对象及其属性</li>
-<li>如果此模块是一个类，就应该直接赋值给module.exports,这样调用者就是一个类构造器，可以直接使用new实例化；如果只导出简单的属性，可以直接挂载到exports上</li>
-</ul>
-<p>比如以下代码计算圆的面积：</p>
-<h4 id="使用exports"><a href="#使用exports" class="headerlink" title="使用exports"></a>使用exports</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// circle.js</span></div><div class="line">exports.area = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125; ;</div><div class="line"><span class="comment">//app.js</span></div><div class="line"><span class="keyword">var</span> circle = <span class="built_in">require</span>(<span class="string">'./circle'</span>)</div><div class="line"><span class="built_in">console</span>.log(circle.area(<span class="number">2</span>))</div><div class="line"><span class="comment">//输出 '12'</span></div></pre></td></tr></table></figure>
-<h4 id="使用module-exports"><a href="#使用module-exports" class="headerlink" title="使用module.exports"></a>使用module.exports</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// area.js</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">//app.js</span></div><div class="line"><span class="keyword">var</span> area = <span class="built_in">require</span>(<span class="string">'./area'</span>)</div><div class="line"><span class="built_in">console</span>.log(area(<span class="number">2</span>))</div><div class="line"><span class="comment">//输出 '12'</span></div></pre></td></tr></table></figure>
-<p>两者输出是一样的，因为exports是module.exports的一个引用，所以两者指向的内存地址是一样的，可是如果你这样写:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// area.js</span></div><div class="line">exports = <span class="function"><span class="keyword">function</span>(<span class="params">r</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> r*r*<span class="number">3</span></div><div class="line">&#125;;</div><div class="line"><span class="comment">//app.js</span></div><div class="line"><span class="keyword">var</span> area = <span class="built_in">require</span>(<span class="string">'./area'</span>)</div><div class="line"><span class="built_in">console</span>.log(area(<span class="number">2</span>))</div><div class="line"><span class="comment">//输出 'TypeError: object is not a function'</span></div></pre></td></tr></table></figure>
-<p>我们可以看到是报错的，原因在于，之前说过require()返回的只是module.exports,而exports是module.exports的一个引用，上面代码给exports重新赋值，使其指向了新的内存地址，此时exports和module.exports毫无关系，也就是说此时module.exports的值为默认值{}，所以导出的是一个空对象。</p>
-<p>也就是说，module.exports才是关键，而exports只是起辅助的作用,最终导出来的是module.exports上挂载的对象，当module.exports没有任何值时，exports挂载的属性会赋值给module.exports, 当module.exports具有挂载的对象时，exports上的所有值会被忽略，比如以下代码只输出了module.exports所挂载的属性:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//rock.js</span></div><div class="line"><span class="built_in">module</span>.exports.name = <span class="string">'Stephen'</span></div><div class="line">exports.name = <span class="string">'Mike'</span></div><div class="line"><span class="comment">//app.js</span></div><div class="line"><span class="keyword">var</span> rock = <span class="built_in">require</span>(<span class="string">'./rock.js'</span>)</div><div class="line">rock.name</div><div class="line"><span class="comment">//输出</span></div><div class="line"><span class="string">'Stephen'</span></div></pre></td></tr></table></figure>
-<h3 id="总结一下"><a href="#总结一下" class="headerlink" title="总结一下:"></a>总结一下:</h3><ul>
-<li>如果要导出非对象接口（属性），可以直接使用exports</li>
-<li>如果要导出对象接口(类)，应该将其挂载到module.exports上面，从而可以直接让调用者new实例化对象</li>
-</ul>
-<h3 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h3><p><a href="https://cnodejs.org/topic/5231a630101e574521e45ef8" target="_blank" rel="external">exports 和 module.exports 的区别</a><br><a href="http://www.hacksparrow.com/node-js-exports-vs-module-exports.html" target="_blank" rel="external">node-js-exports-vs-module-exports</a><br><a href="http://www.ghostchina.com/module-exports-and-exports-in-node-js/" target="_blank" rel="external">module-exports-and-exports-in-node-js</a></p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>无new构造是怎么一回事呢？我们知道，jquery中可以通过以下两种方式来构造对象：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 无new</span></div><div class="line">$(<span class="string">'#id'</span>).context(<span class="string">'hello world'</span>) </div><div class="line"><span class="comment">// 有new</span></div><div class="line"><span class="keyword">var</span> id = <span class="keyword">new</span> $(<span class="string">'#id'</span>)</div><div class="line">id.context(<span class="string">'hello world'</span>)</div></pre></td></tr></table></figure>
+<p>显然，我们用得最多就是第一种无new的构造方式，那这种方式内部又是怎么实现的呢？下面我们一步步来实现这样的效果。<br>js中函数是一等公民，我们在用oop形式编程的时候，很容易的会使用类来实例化对象：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 构造函数</span></div><div class="line"><span class="keyword">var</span> cQuery = <span class="function"><span class="keyword">function</span>(<span class="params">selector, contex</span>)</span>&#123;</div><div class="line">&#125;</div><div class="line">cQuery.prototype = &#123;</div><div class="line">	<span class="attr">setName</span>: <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.name = name</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">name</span>: <span class="string">'stephen'</span>,</div><div class="line">	<span class="attr">age</span>: <span class="number">20</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">var</span> c = <span class="keyword">new</span> cQuery()</div><div class="line">c.age  <span class="comment">// 20</span></div></pre></td></tr></table></figure>
+<p>如果我们想通过无new来构造对象的话，我们第一反应可能是这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cQuery = <span class="function"><span class="keyword">function</span>(<span class="params">selector, contex</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">new</span> cQuery()</div><div class="line">&#125;</div><div class="line">cQuery.prototype = &#123;</div><div class="line">	<span class="attr">setName</span>: <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.name = name</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">name</span>: <span class="string">'stephen'</span>,</div><div class="line">	<span class="attr">age</span>: <span class="number">20</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们会发现这样就陷入了一个无穷的循环之中，显然是不行的。我们其实可以把cQuery类当作一个工厂方法来创建实例，把这个方法放cQuery.prototye原型对象中:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cQuery = <span class="function"><span class="keyword">function</span>(<span class="params">selector, contex</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">new</span> cQuery.prototype.init()</div><div class="line">&#125;</div><div class="line">cQuery.prototype = &#123;</div><div class="line">	<span class="attr">init</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span></div><div class="line">	&#125;,</div><div class="line">	<span class="attr">setName</span>: <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.name = name</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">name</span>: <span class="string">'stephen'</span>,</div><div class="line">	<span class="attr">age</span>: <span class="number">20</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看起来似乎解决了我们的问题，但是如果我们想在init使用this呢？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> cQuery = <span class="function"><span class="keyword">function</span>(<span class="params">selector, contex</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">new</span> cQuery.prototype.init()</div><div class="line">&#125;</div><div class="line">cQuery.prototype = &#123;</div><div class="line">	<span class="attr">init</span>: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">		<span class="keyword">this</span>.age = <span class="number">18</span></div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span></div><div class="line">	&#125;,</div><div class="line">	<span class="attr">setName</span>: <span class="function"><span class="keyword">function</span>(<span class="params">name</span>)</span>&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">this</span>.name = name</div><div class="line">	&#125;,</div><div class="line">	<span class="attr">name</span>: <span class="string">'stephen'</span>,</div><div class="line">	<span class="attr">age</span>: <span class="number">20</span></div><div class="line">&#125;</div><div class="line">cQuery().age  <span class="comment">//18</span></div><div class="line">cQuery().name  <span class="comment">//undefined</span></div></pre></td></tr></table></figure>
+<p>显然，这时候由于是实例init()函数，所以this和原来cQuery的this作用域分离了，age会指向init中的age，而name由于init中未定义，所以为undefine。 这显然不是我们要的效果，那我们该解决呢？ 其实很简单：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cQuery.prototype.init.prototype = cQuery.prototype</div></pre></td></tr></table></figure>
+<p>这便是最精妙的地方，将cQuery的prototype的属性赋给init的prototype，这样就保证了this虽然指向init，但仍然继承aQuery上的属性。<br>上面内容其实就是jquery中实现无new构造的方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">window, undefined</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span></div><div class="line">    <span class="comment">// ...</span></div><div class="line">　　jQuery = <span class="function"><span class="keyword">function</span>(<span class="params">selector, context</span>) </span>&#123;</div><div class="line">        <span class="comment">// The jQuery object is actually just the init constructor 'enhanced'</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> jQuery.fn.init(selector, context, rootjQuery);</div><div class="line">    &#125;,</div><div class="line">    jQuery.fn = jQuery.prototype = &#123;</div><div class="line">        <span class="attr">init</span>: <span class="function"><span class="keyword">function</span>(<span class="params">selector, context, rootjQuery</span>) </span>&#123;</div><div class="line">            <span class="comment">// ...</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    jQuery.fn.init.prototype = jQuery.fn;</div><div class="line">&#125;)(<span class="built_in">window</span>);</div></pre></td></tr></table></figure>
+<p>最后在谈谈underscore中的无new构造，放上源码注释：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> _ = <span class="function"><span class="keyword">function</span> (<span class="params">obj</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span> (obj <span class="keyword">instanceof</span> _) <span class="keyword">return</span> obj;  </div><div class="line">        <span class="comment">// 如果Obj已经是underscore对象，则原样返回</span></div><div class="line">        <span class="keyword">if</span> (!(<span class="keyword">this</span> <span class="keyword">instanceof</span> _)) <span class="keyword">return</span> <span class="keyword">new</span> _(obj); </div><div class="line">        <span class="comment">// 采用这种写法即使没用new操作符也可以构造新undersocre对象</span></div><div class="line">        <span class="keyword">this</span>._wrapped = obj; </div><div class="line">        <span class="comment">// underscore对象有实例属性_wrapped，保存着obj（用户传入的待处理的数据）</span></div><div class="line">      &#125;;</div><div class="line">      </div><div class="line">root._ = _</div></pre></td></tr></table></figure>
+<p>其实也很简单，判断是否为underscore的对象，是就直接返回，不是就new一下（注意： 这里不会造成死循环的原因是因为第一个判断的存在 。</p>
 
         </div>
         <footer class="article-footer">
@@ -320,20 +317,20 @@ ga('send', 'pageview');
         
 <nav id="article-nav">
     
-        <a href="/2017/06/09/bootstrap之CSS源码分析/" id="article-nav-newer" class="article-nav-link-wrap">
+        <a href="/2017/07/31/LazyMan的几种解法/" id="article-nav-newer" class="article-nav-link-wrap">
         <strong class="article-nav-caption">newer</strong>
         <p class="article-nav-title">
         
-            bootstrap之CSS源码分析
+            LazyMan的几种解法
         
         </p>
         <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
     </a>
     
     
-        <a href="/2017/06/07/［译］关于vertical-align你应该知道的事/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2017/07/06/实现一个Promise/" id="article-nav-older" class="article-nav-link-wrap">
         <strong class="article-nav-caption">older</strong>
-        <p class="article-nav-title">［译］关于vertical-align你应该知道的事</p>
+        <p class="article-nav-title">实现一个Promise</p>
         <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
         </a>
     
@@ -526,7 +523,7 @@ ga('send', 'pageview');
     var disqus_shortname = 'stephenliu-site';
     
     
-    var disqus_url = 'stephenliu.site/2017/06/08/Module-exports-vs-Exports-in-Node-js/';
+    var disqus_url = 'stephenliu.site/2017/07/15/从jquery源码看无new构造/';
     
     (function() {
     var dsq = document.createElement('script');
