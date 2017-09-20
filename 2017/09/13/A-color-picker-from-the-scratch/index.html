@@ -3,24 +3,24 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Hack！如何让Github Pages支持browser history | Stephen&#39;s Blog</title>
+    <title>手把手实现一个 Color-Picker | Stephen&#39;s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
         <meta name="keywords" content="js" />
     
-    <meta name="description" content="问题提出之前我在写一个日记生成器的时候，大致思路是抓取github issues上的文章，然后使用react + react-router搭建SPA，最后部署到github pages上。其中遇到一个很麻烦的问题就是，github pages原生是不支持SPA的，举个例子：比如我们前端路由是xxx.github.io/diary/post，一旦刷新页面，github pages就会返回404，因为">
+    <meta name="description" content="前言Color-Picker 组件在富文本编辑器、画图类等应用中十分常见，通过获取当前选中颜色的值来更新其他视图，本文基于 ES6 的语法手把手实现一个 Color-Picker 组件，demo 可以点击这里。在实现之前，先简单的分析一下组件整个的结构，Color-Picker 主要由三部分构成：color-label、color-options、color-field  color-label:">
 <meta name="keywords" content="js">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hack！如何让Github Pages支持browser history">
-<meta property="og:url" content="stephenliu.site/2017/06/13/Hack！如何让Github-Pages支持browser-history/index.html">
+<meta property="og:title" content="手把手实现一个 Color-Picker">
+<meta property="og:url" content="stephenliu.site/2017/09/13/A-color-picker-from-the-scratch/index.html">
 <meta property="og:site_name" content="Stephen&#39;s Blog">
-<meta property="og:description" content="问题提出之前我在写一个日记生成器的时候，大致思路是抓取github issues上的文章，然后使用react + react-router搭建SPA，最后部署到github pages上。其中遇到一个很麻烦的问题就是，github pages原生是不支持SPA的，举个例子：比如我们前端路由是xxx.github.io/diary/post，一旦刷新页面，github pages就会返回404，因为">
-<meta property="og:image" content="/images/github-page.jpeg">
-<meta property="og:updated_time" content="2017-06-13T15:46:10.000Z">
+<meta property="og:description" content="前言Color-Picker 组件在富文本编辑器、画图类等应用中十分常见，通过获取当前选中颜色的值来更新其他视图，本文基于 ES6 的语法手把手实现一个 Color-Picker 组件，demo 可以点击这里。在实现之前，先简单的分析一下组件整个的结构，Color-Picker 主要由三部分构成：color-label、color-options、color-field  color-label:">
+<meta property="og:image" content="/images/color-picker.png">
+<meta property="og:updated_time" content="2017-09-20T08:34:55.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hack！如何让Github Pages支持browser history">
-<meta name="twitter:description" content="问题提出之前我在写一个日记生成器的时候，大致思路是抓取github issues上的文章，然后使用react + react-router搭建SPA，最后部署到github pages上。其中遇到一个很麻烦的问题就是，github pages原生是不支持SPA的，举个例子：比如我们前端路由是xxx.github.io/diary/post，一旦刷新页面，github pages就会返回404，因为">
-<meta name="twitter:image" content="/images/github-page.jpeg">
+<meta name="twitter:title" content="手把手实现一个 Color-Picker">
+<meta name="twitter:description" content="前言Color-Picker 组件在富文本编辑器、画图类等应用中十分常见，通过获取当前选中颜色的值来更新其他视图，本文基于 ES6 的语法手把手实现一个 Color-Picker 组件，demo 可以点击这里。在实现之前，先简单的分析一下组件整个的结构，Color-Picker 主要由三部分构成：color-label、color-options、color-field  color-label:">
+<meta name="twitter:image" content="/images/color-picker.png">
     
 
     
@@ -148,14 +148,14 @@ ga('send', 'pageview');
     </h1>
 </div>
                         <div class="main-body-content">
-                            <article id="post-Hack！如何让Github-Pages支持browser-history" class="article article-single article-type-post" itemscope itemprop="blogPost">
+                            <article id="post-A-color-picker-from-the-scratch" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
             <header class="article-header">
                 
     
         <h1 class="article-title" itemprop="name">
-        Hack！如何让Github Pages支持browser history
+        手把手实现一个 Color-Picker
         </h1>
     
 
@@ -165,8 +165,8 @@ ga('send', 'pageview');
             <div class="article-meta">
                 
     <div class="article-date">
-        <a href="/2017/06/13/Hack！如何让Github-Pages支持browser-history/" class="article-date">
-            <time datetime="2017-06-13T15:44:04.000Z" itemprop="datePublished">2017-06-13</time>
+        <a href="/2017/09/13/A-color-picker-from-the-scratch/" class="article-date">
+            <time datetime="2017-09-13T08:01:35.000Z" itemprop="datePublished">2017-09-13</time>
         </a>
     </div>
 
@@ -180,22 +180,31 @@ ga('send', 'pageview');
         
         
         <div class="article-entry" itemprop="articleBody">
-            <h2 id="问题提出"><a href="#问题提出" class="headerlink" title="问题提出"></a>问题提出</h2><p>之前我在写一个日记生成器的时候，大致思路是抓取github issues上的文章，然后使用react + react-router搭建SPA，最后部署到github pages上。其中遇到一个很麻烦的问题就是，github pages原生是不支持SPA的，举个例子：比如我们前端路由是<code>xxx.github.io/diary/post</code>，一旦刷新页面，github pages就会返回404，因为它并不知道这个路由<code>/post</code>，所以有什么解决办法呢？  </p>
-<h2 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h2><p>github上已经有人提供了一种hack的解决办法，具体<a href="https://github.com/rafrex/spa-github-pages" target="_blank" rel="external">源码</a>在这里。接下来我们一步一步说明这个hack的方法是如何解决这个问题的：  </p>
-<h3 id="404-html"><a href="#404-html" class="headerlink" title="404.html"></a>404.html</h3><p>首先我们需要提供一个404.html，当你刷新页面后，github pages是返回404的，所以这个404.html是为了覆盖原有的404页面。最关键的是，这个404页面需要提供一段脚本代码：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pathPrefix = <span class="literal">false</span>;</div><div class="line"><span class="keyword">var</span> l = <span class="built_in">window</span>.location;</div><div class="line">l.replace(</div><div class="line">    l.protocol + <span class="string">'//'</span> + l.hostname + (l.port ? <span class="string">':'</span> + l.port : <span class="string">''</span>) +</div><div class="line">    l.pathname.split(<span class="string">'/'</span>).slice(<span class="number">0</span>, <span class="number">2</span> * pathPrefix).join(<span class="string">'/'</span>) + <span class="string">'/?p=/'</span> +</div><div class="line">    l.pathname.slice(<span class="number">1</span>).split(<span class="string">'/'</span>).slice(pathPrefix).join(<span class="string">'/'</span>).replace(<span class="regexp">/&amp;/g</span>, <span class="string">'~and~'</span>) +</div><div class="line">    (l.search ? <span class="string">'&amp;q='</span> + l.search.slice(<span class="number">1</span>).replace(<span class="regexp">/&amp;/g</span>, <span class="string">'~and~'</span>) : <span class="string">''</span>) +</div><div class="line">    l.hash</div><div class="line">);</div></pre></td></tr></table></figure>
-<p>这段代码啥意思呢？第一个pathPrefix我们先不管，看下面l.replace()，这个API是重载当前文档，并且不会产生新的历史纪录，即覆盖History对象中的当前纪录，后面的一段代码就是将当前的url转换成查询字符串以及hash片段，比如：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ http://www.foo.tld/one/two?a=b&amp;c=d#qwe </div><div class="line"> -&gt;</div><div class="line">$ http://www.foo.tld/?p=/one/two&amp;q=a=b~and~c=d#qwe</div></pre></td></tr></table></figure>
-<p>再说说pathPrefix，如果你的页面不是使用自定义域名，而是<code>xxx.github.io/xxx</code>，则应该设置为true，不然就为false，举个例子:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ https://username.github.io/repo-name/one/two?a=b&amp;c=d#qwe</div><div class="line"> -&gt; </div><div class="line">$ https://username.github.io/repo-name/?p=/one/two&amp;q=a=b~and~c=d#qwe</div></pre></td></tr></table></figure>
-<p>这是因为需要保留repo的名称。说了这么多，这个到底有什么用呢？不急，继续看下面。</p>
-<h3 id="index-html"><a href="#index-html" class="headerlink" title="index.html"></a>index.html</h3><p>Github pages在收到404.html新请求后（l.replace()重载文档会发送一个新请求，比如<code>/diary/post/2015</code>转换成了 <code>/diary/?p=/post/2015</code>），这时候会忽略查询参数和hash片段，返回index.html，相当于<code>/diary/index.html</code>，这时候魔法出现了，我们在index.html的头部加入以下代码:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params">l</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (l.search) &#123;</div><div class="line">      <span class="keyword">var</span> q = &#123;&#125;;</div><div class="line">      l.search.slice(<span class="number">1</span>).split(<span class="string">'&amp;'</span>).forEach(<span class="function"><span class="keyword">function</span>(<span class="params">v</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> a = v.split(<span class="string">'='</span>);</div><div class="line">        q[a[<span class="number">0</span>]] = a.slice(<span class="number">1</span>).join(<span class="string">'='</span>).replace(<span class="regexp">/~and~/g</span>, <span class="string">'&amp;'</span>);</div><div class="line">      &#125;);</div><div class="line">      <span class="keyword">if</span> (q.p !== <span class="literal">undefined</span>) &#123;</div><div class="line">        <span class="built_in">window</span>.history.replaceState(<span class="literal">null</span>, <span class="literal">null</span>,</div><div class="line">          l.pathname.slice(<span class="number">0</span>, <span class="number">-1</span>) + (q.p || <span class="string">''</span>) +</div><div class="line">          (q.q ? (<span class="string">'?'</span> + q.q) : <span class="string">''</span>) +</div><div class="line">          l.hash</div><div class="line">        );</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">&#125;(<span class="built_in">window</span>.location))</div></pre></td></tr></table></figure>
-<blockquote>
-<p>注意这段代码必须在SPA加载之前执行，就是放在打包出来的bundle.js之前</p>
-</blockquote>
-<p>这段代码做了什么呢，第一是将url还原，即<code>/diary/?p=/post/2015</code> 还原为<code>/diary/post/2015</code>，然后使用history.replaceState()这个API添加到history对象中，不过注意这时候浏览器不会刷新页面，简单说把history想象成盒子，把url放到history盒子里去，但是不会加载这个url，只有等页面刷新，也就是SPA的js文件加载执行后，才会使用这个url，于是等SPA页面加载后，就会根据之前的url加载相应页面，也就解决了咱们的问题。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总体来说整个hack的过程是： 提供404.html -&gt; 加载脚本并请求index.html -&gt; 还原url并且加载应用。</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Color-Picker 组件在富文本编辑器、画图类等应用中十分常见，通过获取当前选中颜色的值来更新其他视图，本文基于 ES6 的语法手把手实现一个 Color-Picker 组件，demo 可以点击<a href="stephenliu.site/Doooosth/ColorPicker/">这里</a>。在实现之前，先简单的分析一下组件整个的结构，Color-Picker 主要由三部分构成：color-label、color-options、color-field<br><img src="/media/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-09-20%2016.06.50.png" alt="屏幕快照 2017-09-20 16.06.50"></p>
+<ul>
+<li>color-label: 点击展开颜色面板，当选中某颜色值时，背景颜色需要同时更新</li>
+<li>color-options: 颜色面板，由一个个 color-item 组成</li>
+<li>color-field: 颜色十六进制展示面板</li>
+</ul>
+<p>下面我们就一步步实现这样的一个组件。</p>
+<h2 id="组件实现"><a href="#组件实现" class="headerlink" title="组件实现"></a>组件实现</h2><p>首先我们先定义一个 ColorPicker 的类以及基本的一些方法:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ColorPicker</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(options)&#123;</div><div class="line">    <span class="keyword">this</span>.options = <span class="built_in">Object</span>.assign(&#123;&#125;, ColorPicker.DEFAULT, options)</div><div class="line">    <span class="keyword">this</span>.el = <span class="built_in">document</span>.querySelector(<span class="keyword">this</span>.options.el)</div><div class="line">    <span class="keyword">this</span>.colors = <span class="keyword">this</span>.options.colors || []</div><div class="line">    <span class="keyword">this</span>.handler = <span class="keyword">this</span>.options.handler || <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">    <span class="keyword">this</span>.selectedColor = <span class="keyword">this</span>.options.default</div><div class="line">    <span class="keyword">this</span>.container = <span class="built_in">document</span>.createElement(<span class="string">'span'</span>)</div><div class="line">    <span class="keyword">this</span>.el.appendChild(<span class="keyword">this</span>.container)</div><div class="line">    <span class="keyword">this</span>.buildPicker()</div><div class="line">    <span class="keyword">this</span>.label.addEventListener(<span class="string">'mousedown'</span>, () =&gt; &#123;</div><div class="line">        <span class="keyword">this</span>.container.classList.toggle(<span class="string">'expanded'</span>)</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">  buildLabel() &#123;</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">  buildItem() &#123;</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">  buildOptions() &#123;</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">  buildField() &#123;</div><div class="line">    ...</div><div class="line">  &#125;</div><div class="line">  buildPicker() &#123;</div><div class="line">    <span class="keyword">this</span>.container.classList.add(<span class="string">'picker'</span>)</div><div class="line">    <span class="keyword">this</span>.label = <span class="keyword">this</span>.buildLabel()</div><div class="line">    <span class="keyword">this</span>.options = <span class="keyword">this</span>.buildOptions()</div><div class="line">    <span class="keyword">this</span>.field = <span class="keyword">this</span>.buildField()    </div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>构造函数里初始化一些传入的参数，这里我们默认的 options 组成是这样的:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">ColorPicker.DEFAULT = &#123;</div><div class="line">    <span class="attr">el</span>: <span class="string">'#container'</span>,</div><div class="line">    <span class="attr">default</span>: <span class="string">"#000000"</span>,</div><div class="line">    <span class="attr">colors</span>: [</div><div class="line">        <span class="string">"#000000"</span>, <span class="string">"#e60000"</span>, <span class="string">"#ff9900"</span>, <span class="string">"#ffff00"</span>, <span class="string">"#008a00"</span>, <span class="string">"#0066cc"</span>, <span class="string">"#9933ff"</span>,</div><div class="line">        <span class="string">"#ffffff"</span>, <span class="string">"#facccc"</span>, <span class="string">"#ffebcc"</span>, <span class="string">"#ffffcc"</span>, <span class="string">"#cce8cc"</span>, <span class="string">"#cce0f5"</span>, <span class="string">"#ebd6ff"</span>,</div><div class="line">        <span class="string">"#bbbbbb"</span>, <span class="string">"#f06666"</span>, <span class="string">"#ffc266"</span>, <span class="string">"#ffff66"</span>, <span class="string">"#66b966"</span>, <span class="string">"#66a3e0"</span>, <span class="string">"#c285ff"</span>,</div><div class="line">        <span class="string">"#888888"</span>, <span class="string">"#a10000"</span>, <span class="string">"#b26b00"</span>, <span class="string">"#b2b200"</span>, <span class="string">"#006100"</span>, <span class="string">"#0047b2"</span>, <span class="string">"#6b24b2"</span>,</div><div class="line">        <span class="string">"#444444"</span>, <span class="string">"#5c0000"</span>, <span class="string">"#663d00"</span>, <span class="string">"#666600"</span>, <span class="string">"#003700"</span>, <span class="string">"#002966"</span>, <span class="string">"#3d1466"</span></div><div class="line">    ],</div><div class="line">    <span class="attr">handler</span>: <span class="function"><span class="keyword">function</span>(<span class="params">color</span>) </span>&#123;</div><div class="line">        <span class="keyword">let</span> display = <span class="built_in">document</span>.querySelector(<span class="string">'.display'</span>)</div><div class="line">        display.innerHTML = color</div><div class="line">        display.style.color = color</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中 el 是绑定的元素， default 是默认的颜色，colors 是色板数组， handler 是选中颜色时执行的回调。可以看到，我们在构造函数里创建了一个 container 将其与 el 绑定起来，同时监听 label 的 mousedown 事件来控制展开颜色面板，下面我们分别实现组件元素的 build。</p>
+<p>构建 color-label:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> buildLabel() &#123;</div><div class="line">    <span class="keyword">let</span> label = <span class="built_in">document</span>.createElement(<span class="string">'span'</span>)</div><div class="line">    label.classList.add(<span class="string">'picker-label'</span>)</div><div class="line">    label.style.backgroundColor = <span class="keyword">this</span>.options.default</div><div class="line">    <span class="keyword">this</span>.container.appendChild(label)</div><div class="line">    <span class="keyword">return</span> label</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>构建 color-item:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">buildItem(option) &#123;</div><div class="line">    <span class="keyword">let</span> item = <span class="built_in">document</span>.createElement(<span class="string">'span'</span>)</div><div class="line">    item.classList.add(<span class="string">'picker-item'</span>)</div><div class="line">    item.setAttribute(<span class="string">'data-value'</span>, option)</div><div class="line">    item.style.backgroundColor = option</div><div class="line">    item.addEventListener(<span class="string">'click'</span>, () =&gt; <span class="keyword">this</span>.selectItem(item, <span class="literal">true</span>))</div><div class="line">    <span class="keyword">return</span> item</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里给每个 item 加上一个 data-value 的属性，方便我们拿到当前选中的颜色值，同时监听每个 item 的 click，然后执行 selectItem 更新其他部分（下面会说到）。</p>
+<p>构建 color-options:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">buildOptions() &#123;</div><div class="line">    <span class="keyword">let</span> options = <span class="built_in">document</span>.createElement(<span class="string">'span'</span>)</div><div class="line">    options.classList.add(<span class="string">'picker-options'</span>)</div><div class="line">    <span class="keyword">this</span>.colors.forEach(<span class="function">(<span class="params">option</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">let</span> item = <span class="keyword">this</span>.buildItem(option)</div><div class="line">        options.appendChild(item)</div><div class="line">    &#125;)</div><div class="line">    <span class="keyword">this</span>.container.append(options)</div><div class="line">    <span class="keyword">return</span> options</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>构建 color-field:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">buildField() &#123;</div><div class="line">    <span class="keyword">let</span> field = <span class="built_in">document</span>.createElement(<span class="string">'span'</span>)</div><div class="line">    field.classList.add(<span class="string">'picker-field'</span>)</div><div class="line">    field.innerHTML = <span class="keyword">this</span>.selectedColor</div><div class="line">    <span class="keyword">this</span>.options.appendChild(field)</div><div class="line">    <span class="keyword">return</span> field</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>组成元素构建完成后就只剩下，每次点击元素后更新对应元素的状态，同时执行传入的回调，我们通过 selectItem 实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">selectItem(item, triggle = <span class="literal">false</span>) &#123;</div><div class="line">    <span class="keyword">let</span> selected = <span class="keyword">this</span>.container.querySelector(<span class="string">'.selected'</span>)</div><div class="line">    <span class="keyword">if</span> (item === selected) <span class="keyword">return</span></div><div class="line">    <span class="keyword">if</span> (selected != <span class="literal">null</span>) selected.classList.remove(<span class="string">'selected'</span>)</div><div class="line">    <span class="keyword">if</span> (item == <span class="literal">null</span>) <span class="keyword">return</span></div><div class="line">    item.classList.add(<span class="string">'selected'</span>)</div><div class="line">    <span class="keyword">if</span> (item.hasAttribute(<span class="string">'data-value'</span>)) &#123;</div><div class="line">        <span class="keyword">this</span>.selectedColor = item.getAttribute(<span class="string">'data-value'</span>)</div><div class="line">        <span class="keyword">this</span>.label.style.backgroundColor = <span class="keyword">this</span>.selectedColor</div><div class="line">        <span class="keyword">this</span>.field.innerHTML = <span class="keyword">this</span>.selectedColor</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (triggle) &#123;</div><div class="line">        value &amp;&amp; <span class="keyword">this</span>.handler(value)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到，这里我们通过拿到选中 item 的 data-value 的值来分别更新 color-label、color-field 的值，同时执行相应的回调。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>至此一个简单的 Color-Picker 组件就完成了，实现也很简单，具体源码放在我的 <a href="https://github.com/stephenLYao/Doooosth/blob/gh-pages/ColorPicker/index.html" target="_blank" rel="external">github</a>。</p>
 
         </div>
         <footer class="article-footer">
@@ -316,20 +325,10 @@ ga('send', 'pageview');
         
 <nav id="article-nav">
     
-        <a href="/2017/06/17/Rethinking Asynchronous Programming in Javascript/" id="article-nav-newer" class="article-nav-link-wrap">
-        <strong class="article-nav-caption">newer</strong>
-        <p class="article-nav-title">
-        
-            Rethinking Asynchronous Programming in Javascript
-        
-        </p>
-        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
-    </a>
     
-    
-        <a href="/2017/06/13/深入浅出throttle和debounce/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2017/07/31/LazyMan的几种解法/" id="article-nav-older" class="article-nav-link-wrap">
         <strong class="article-nav-caption">older</strong>
-        <p class="article-nav-title">深入浅出throttle和debounce</p>
+        <p class="article-nav-title">LazyMan的几种解法</p>
         <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
         </a>
     
@@ -522,7 +521,7 @@ ga('send', 'pageview');
     var disqus_shortname = 'stephenliu-site';
     
     
-    var disqus_url = 'stephenliu.site/2017/06/13/Hack！如何让Github-Pages支持browser-history/';
+    var disqus_url = 'stephenliu.site/2017/09/13/A-color-picker-from-the-scratch/';
     
     (function() {
     var dsq = document.createElement('script');
