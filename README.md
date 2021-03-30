@@ -1,4 +1,4 @@
-## My Blog
+## Blog
 
 - [Build Your Own 2D Game Engine](https://github.com/stephenLYZ/blog/issues/22)
 - [手把手实现一个 Color-Picker](https://github.com/stephenLYZ/blog/issues/21)
