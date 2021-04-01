@@ -3,7 +3,7 @@
 - [Build Your Own 2D Game Engine](https://github.com/stephenLYZ/blog/issues/22)
 - [手把手实现一个 Color-Picker](https://github.com/stephenLYZ/blog/issues/21)
 - [LazyMan的几种解法](https://github.com/stephenLYZ/blog/issues/20)
-- [Hack！如何让Github Pages支持browser history](https://github.com/stephenLYZ/blog/issues/18)
+- [如何让Github Pages支持browser history](https://github.com/stephenLYZ/blog/issues/18)
 - [深入浅出throttle和debounce](https://github.com/stephenLYZ/blog/issues/17)
 - [最小编辑距离问题（Edit Distance）](https://github.com/stephenLYZ/blog/issues/15)
 - [实现一个VirtualDOM的轮子](https://github.com/stephenLYZ/blog/issues/14)
